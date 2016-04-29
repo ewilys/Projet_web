@@ -15,7 +15,7 @@
 				<label for="pswrd">Mot de passe : </label>
 				<input type="password" name="pswrd" id="pswrd" />
 				<br />
-				<button id="btnConnexion" type="submit">Connexion</button>
+				<button id="connexion" type="submit">Connexion</button>
 			</p>
 		</form>
 		<p>

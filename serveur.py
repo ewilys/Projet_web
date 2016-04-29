@@ -1,0 +1,142 @@
+# ............................................................................................... #
+
+from flask  import *
+from sqlalchemy import *
+from markdown import markdown
+import os, hashlib
+
+# ............................................................................................... #
+
+app = Flask(__name__)
+app.secret_key = os.urandom(256)        
+
+SALT = 'foo#BAR_{baz}^666'       #permet de tatouer le mot de passe   ,modif l'info    
+
+# ............................................................................................... #
+#gestion base de donnees
+
+engine = create_engine('sqlite:///wiki.db', echo=True)
+metadata = MetaData()
+
+accounts = Table('accounts', metadata,
+    Column('login', String, primary_key=true),
+    Column('password_hash', String, nullable=False))    
+
+pages = Table('pages', metadata,
+    Column('name', String, primary_key=true),
+    Column('text', String))# contenu brut de la page
+
+metadata.create_all(engine)
+
+def page_content(name):
+    db = engine.connect()
+    try:
+        row = db.execute(select([pages.c.text]).where(pages.c.name == name)).fetchone()
+        if row is None:
+            return '**(This page is empty or does not exist.)**'
+        return row[0]
+    finally:
+        db.close()
+
+def indexation():
+    db = engine.connect()
+    try:
+        row=list()
+        for i in db.execute("select name from pages") :
+        	row.append(i)
+        	print(row)
+        	return row
+    finally:
+        db.close()
+        
+        
+def update_page(name, text):
+    db = engine.connect()
+    try:
+        row = db.execute(select([pages.c.name]).where(pages.c.name == name)).fetchone()
+        if row is None:
+            db.execute(pages.insert().values(name=name,text=text))
+        else :
+            db.execute(pages.update().values(text=text).where(pages.c.name==name))
+    finally:
+        db.close()
+     
+
+def delete_page(name, text):
+	db = engine.connect()
+    	try:
+    		if db.execute(select([pages.c.name]).where(pages.c.name == name)).fetchone() != None:
+    			db.execute(pages.delete().where(pages.c.name == name))       	
+    	finally:
+        	db.close() 
+        
+def hash_for(password): #hashage du password 
+	salted = '%s @ %s' % (SALT, password)
+	return hashlib.sha256(salted).hexdigest()       
+
+
+def authenticate_or_create(login, password):
+    db = engine.connect()
+    hash_pass=hash_for(password)
+    try:
+        if db.execute(select([accounts.c.login]).where(accounts.c.login == login)).fetchone() is None:
+            db.execute(accounts.insert().values(login=login,password_hash=hash_pass))
+            return True
+        else: 
+        	  s=select([accounts.c.login]).where(
+        			and_(
+        				accounts.c.login ==login,
+        				accounts.c.password_hash == hash_pass
+        			)
+        		)
+        	  return db.execute(s).fetchone() != None
+    finally:
+        db.close()
+  
+
+# ............................................................................................... #
+#gestion des url
+
+@app.route('/')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	if request.method =='POST' : 
+		# read the posted values from the UI
+		login = request.form['userID']
+   	 	password = request.form['pswrd']
+ 
+	    # validate the received values
+	    	if login and password :
+	    		flash("all fiels good! ")
+		    	return redirect(url_for("main"))
+	    	else:
+			flash("Invalid password for login : "+request.form['login']+ "or invalid login ")
+		    	return redirect(url_for('connexion'))
+	else:
+		return render_template('connexion.html')  
+
+
+@app.route('/logout')
+def logout():
+	from_page = request.args.get('from', 'main')
+	session.clear()
+	return redirect('/connexion')
+
+@app.route('/inscription/club')
+def club():
+	return render_template('inscription-club.html')
+
+
+@app.route('/inscription/membre')
+def membre():
+	return render_template('inscription-membre.html')
+
+@app.route('/main')
+def main():
+	return "MAIN"
+# ............................................................................................... #
+#lancement appli
+if __name__ == '__main__':
+    app.run(debug=True)
+
+# ............................................................................................... #
