@@ -2,7 +2,7 @@
 
 from flask  import *
 from sqlalchemy import *
-from markdown import markdown
+
 import os, hashlib
 
 # ............................................................................................... #
