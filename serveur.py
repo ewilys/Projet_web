@@ -109,10 +109,10 @@ def login():
  		
 	    			# validate the received values
 	    		if login and password :
-	    			#flash("all fiels good! ")
+	    			flash("all fiels good! ")
 		    		return redirect(url_for("main"))
 			else :
-	    			#flash("Invalid password for login : "+request.form['login']+ "or invalid login ")
+				flash("Invalid password for login :"+login)
 	    			return redirect('/login')
 	    	elif request.form['subBtn'] == 'Club':
     			return redirect(url_for('club'))
@@ -120,7 +120,6 @@ def login():
     			return redirect(url_for('membre'))
        		
 	else:
-		flash("all fiels good! ")
 		return render_template('connexion.html')  
 
 
