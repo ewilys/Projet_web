@@ -6,7 +6,7 @@
 	</head>
 	
 	<body>
-		<form>
+		<form method ='POST' action='/login'>
 			<h1>Connexion</h1>
 			<p>
 				<label for="userID">Identifiant : </label>
@@ -15,12 +15,18 @@
 				<label for="pswrd">Mot de passe : </label>
 				<input type="password" name="pswrd" id="pswrd" />
 				<br />
-				<button id="btnConnexion" type="submit">Connexion</button>
+				<input type="submit" name="subBtn" value="Connexion"/>
 			</p>
-		</form>
-		<p>
+		
+		
+			<p>
 			<label for="inscription">Première connexion : </label>
-			<button id="btnInsMem" type="submit"> Membre </button>
-			<button type="submit" class="btn btn-primary" id="btnInsClub" >Club</button>
+			<input type="submit" name= "subBtn" value="Membre"  />
+			<input type="submit" name= "subBtn"  value="Club" />
+			</p>
+		</form>		
+		
+		
+			
 	</body>
 </html>

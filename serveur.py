@@ -101,18 +101,26 @@ def authenticate_or_create(login, password):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if request.method =='POST' : 
-		# read the posted values from the UI
-		login = request.form['userID']
-   	 	password = request.form['pswrd']
- 
-	    # validate the received values
-	    	if login and password :
-	    		flash("all fiels good! ")
-		    	return redirect(url_for("main"))
-	    	else:
-			flash("Invalid password for login : "+request.form['login']+ "or invalid login ")
-		    	return redirect(url_for('connexion'))
+		
+    		if request.form['subBtn'] == 'Connexion':
+       			# read the posted values from the UI
+			login = request.form['userID']
+   	 		password = request.form['pswrd']
+ 		
+	    			# validate the received values
+	    		if login and password :
+	    			#flash("all fiels good! ")
+		    		return redirect(url_for("main"))
+			else :
+	    			#flash("Invalid password for login : "+request.form['login']+ "or invalid login ")
+	    			return redirect('/login')
+	    	elif request.form['subBtn'] == 'Club':
+    			return redirect(url_for('club'))
+    		elif request.form['subBtn'] == 'Membre':
+    			return redirect(url_for('membre'))
+       		
 	else:
+		flash("all fiels good! ")
 		return render_template('connexion.html')  
 
 
