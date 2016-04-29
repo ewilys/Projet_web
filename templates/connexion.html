@@ -6,14 +6,14 @@
 	</head>
 	
 	<body>
-		<form method ='POST' action='/login'>
+		<form method ='POST' action={{ url_for('login')}}>
 			<h1>Connexion</h1>
 			<p>
 				<label for="userID">Identifiant : </label>
-				<input type="text" name="userID" id="userID"/>
+				<input type="text" name="userID" id="userID" required/>
 				<br />
 				<label for="pswrd">Mot de passe : </label>
-				<input type="password" name="pswrd" id="pswrd" />
+				<input type="password" name="pswrd" id="pswrd" required />
 				<br />
 				<input type="submit" name="subBtn" value="Connexion"/>
 			</p>

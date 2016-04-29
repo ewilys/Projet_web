@@ -3,11 +3,11 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Inscription</title>
-		<script language="javascript" src="scripts.js"></script>
+		
 	</head>
 	
 	<body>
-		<form>
+		<form method=POST action={{ url_for('club') }} >
 		<h1>Inscription</h1>
 		<p>
 			<label for="username">Nom : </label>
@@ -29,6 +29,8 @@
 			<input type="text" name="pswrd" id="pswrd" required/>
 			<br />
 		</p>
+		<p> 
+			<input type="submit" name="
 		</form>
 	</body>
 </html>
