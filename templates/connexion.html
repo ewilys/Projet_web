@@ -15,6 +15,21 @@
 				<label for="pswrd">Mot de passe : </label>
 				<input type="password" name="pswrd" id="pswrd" required />
 				<br />
+				
+				<div class="container" style="min-height:100% width:80%">
+					{% with messages = get_flashed_messages() %}
+					  {% if messages %}
+	 	  				 {% for message in messages %}
+		  		<div class="alert alert-warning alert-dismissible" role="alert">
+						{{message}}
+		 		 </div>
+					{% endfor %}
+	 					{% endif %}
+						{% endwith %}
+	
+					{% block body %}{% endblock %}
+				</div>	
+				
 				<input type="submit" name="subBtn" value="Connexion"/>
 			</p>
 		
@@ -25,8 +40,5 @@
 			<input type="submit" name= "subBtn"  value="Club" />
 			</p>
 		</form>		
-		
-		
-			
 	</body>
 </html>
