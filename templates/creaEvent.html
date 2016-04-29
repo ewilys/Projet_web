@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Créer un évènement</title>
+	</head>
+	<body>
+		<h1>Votre évènement</h1>
+		<form>
+			<h2>Description de l'évènement</h2>
+			<p>
+				<label for="nom">Nom de l'évènement : </label>
+				<input type="text" name="nom" id="nom" required>
+				<br/>
+				<label for="categorie">Catégorie : </label>
+			<select name="categorie" id="categorie" required>
+				<option value="all">Toutes catégories</option>
+				<option value="poussin">Moins de 10 ans</option>
+				<option value="ado">10-18 ans</option>
+				<option value="jeune">19-25 ans</option>
+				<option value="seniors">Plus de 25 ans</option>
+			</select>
+			<br/>
+			<label for="nbPlace">Nombre de places : </label>
+			<input type="number" name="nbPlace" id="nbPlace" required />
+			<br/>
+			<label for="desc">Description : </label>
+			<textarea name="desc" id="desc" placeholder="Décrivez votre évènement : toutes les informations sont bonnes à prendre !"></textarea>
+			</p>
+			<h2>Infos pratiques</h2>
+			<p>
+				<label for="ville">Ville : </label>
+				<input type="text" name="ville" id="ville" required>
+				<br/>
+				<label for="rue">Numéro et rue : </label>
+				<input type="text" name="rue" id="rue" required>
+				<label for="debut" title="jj/mm/aaaa">Du : </label>
+				<input type="text" name="debut" id="debut" placeholder="jj/mm/aaaa" required>
+				<label for="fin" title="jj/mm/aaaa"> au : </label>
+				<input type="text" name="fin" id="fin" placeholder="jj/mm/aaaa" required>
+				<br/>
+				<label for="heure">A : </label>
+				<input type="text" name="heure" id="heure" placeholder="Ex : 14h30" required>
+			</p>
+			<p>
+			 <input type="submit" value="Soumettre" />
+			</p>
+		</form>
+	</body>
+</html>
