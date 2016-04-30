@@ -133,9 +133,25 @@ def logout():
 def club():
 	return render_template('inscription-club.html')
 
+@app.route('/createEnvent')
+def creaEvent():
+	return render_template('creaEvent.html')
+
+@app.route('/search')
+def search():
+	return render_template('recherche.html')
 
 @app.route('/inscription/membre')
 def membre():
+	if request.method == 'POST':
+		#username= request.form('username') 
+		#userFirstName = request.form('userfirstname')
+		#bday=request.form('bday')
+		#usermail= request.form('usermail')
+		#userNo= request.form('userNo')
+		#login=request.form('login')
+		#pswrd= request.form('pswrd')
+		return redirect(url_for('main'))
 	return render_template('inscription-membre.html')
 
 @app.route('/main')

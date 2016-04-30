@@ -6,7 +6,7 @@
 	</head>
 	
 	<body>
-		<form>
+		<form method= 'POST' action = '/inscription/membre'>
 			<h1>Inscription</h1>
 			<p>
 				<label for="username">Nom : </label>
@@ -29,6 +29,10 @@
 				<br />
 				<label for="pswrd">Mot de passe : </label>
 				<input type="text" name="pswrd" id="pswrd" required/>
+				
+				<? BOUTON SUBMIT : /> 
+				<br />
+				<input type="submit" name="subBtn" value="Envoyer"/>
 			</p>
 		</form>
 	</body>
