@@ -129,8 +129,16 @@ def logout():
 	session.clear()
 	return redirect('/connexion')
 
-@app.route('/inscription/club')
+@app.route('/inscription/club', methods=['GET', 'POST'])
 def club():
+	if request.method=='POST':
+		#username= request.form('username') 
+		#ville=request.form('ville')
+		#email= request.form('email')
+		#nofederation= request.form('nofederation')
+		#login=request.form('login')
+		#pswrd= request.form('pswrd')
+		return redirect('main')
 	return render_template('inscription-club.html')
 
 @app.route('/createEnvent')
@@ -141,7 +149,7 @@ def creaEvent():
 def search():
 	return render_template('recherche.html')
 
-@app.route('/inscription/membre')
+@app.route('/inscription/membre', methods=['GET', 'POST'])
 def membre():
 	if request.method == 'POST':
 		#username= request.form('username') 
@@ -151,7 +159,7 @@ def membre():
 		#userNo= request.form('userNo')
 		#login=request.form('login')
 		#pswrd= request.form('pswrd')
-		return redirect(url_for('main'))
+		return redirect( 'main' )
 	return render_template('inscription-membre.html')
 
 @app.route('/main')
