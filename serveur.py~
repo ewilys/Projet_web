@@ -140,6 +140,19 @@ def club():
 		#pswrd= request.form('pswrd')
 		return redirect('main')
 	return render_template('inscription-club.html')
+	
+@app.route('/inscription/membre', methods=['GET', 'POST'])
+def membre():
+	if request.method == 'POST':
+		#username= request.form('username') 
+		#userFirstName = request.form('userfirstname')
+		#bday=request.form('bday')
+		#usermail= request.form('usermail')
+		#userNo= request.form('userNo')
+		#login=request.form('login')
+		#pswrd= request.form('pswrd')
+		return redirect( url_for('main'))
+	return render_template('inscription-membre.html')
 
 @app.route('/home')
 def home(): 
@@ -157,23 +170,9 @@ def ins_licensed():
 def search (): 
 	return render_template('recherche.html')
 
-@app.route('/home/createEnvent')
+@app.route('/home/creaEnvent')
 def creaEvent():
 	return render_template('creaEvent.html')
-
-
-@app.route('/inscription/membre', methods=['GET', 'POST'])
-def membre():
-	if request.method == 'POST':
-		#username= request.form('username') 
-		#userFirstName = request.form('userfirstname')
-		#bday=request.form('bday')
-		#usermail= request.form('usermail')
-		#userNo= request.form('userNo')
-		#login=request.form('login')
-		#pswrd= request.form('pswrd')
-		return redirect( url_for('main'))
-	return render_template('inscription-membre.html')
 
 @app.route('/main')
 def main():
