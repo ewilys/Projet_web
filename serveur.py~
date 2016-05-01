@@ -157,7 +157,7 @@ def ins_licensed():
 def search (): 
 	return render_template('recherche.html')
 
-@app.route('/home/creaEnvent')
+@app.route('/home/createEnvent')
 def creaEvent():
 	return render_template('creaEvent.html')
 
