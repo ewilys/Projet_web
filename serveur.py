@@ -19,9 +19,27 @@ conn= sqlite3.connect('dtb.db')
 c= conn.cursor()
 c.execute('SELECT * FROM MEMBRES')
 
-for row in c.execute('SELECT LOGIN_MEMRES FROM MEMBRES'):
-	print(row)
+def hash_for(password): #hashage du password 
+	salted = '%s @ %s' % (SALT, password)
+	return hashlib.sha256(salted).hexdigest()       
 
+def authenticate_or_create(login, password):
+    db = sqlite3.connect('dtb.db')
+    hash_pass=hash_for(password)
+    try:
+        if db.execute(select([accounts.c.login]).where(accounts.c.login == login)).fetchone() is None:
+            db.execute(accounts.insert().values(login=login,password_hash=hash_pass))
+            return True
+        else: 
+        	s=select([accounts.c.login]).where(
+        			and_(
+        				accounts.c.login ==login,
+        				accounts.c.password_hash == hash_pass
+        			)
+        		)
+        	  return db.execute(s).fetchone() != None
+    finally:
+        db.close()
 
 
 
@@ -123,12 +141,12 @@ def login():
 	    			flash("all fiels good! ")
 		    		return redirect(url_for("main"))
 			else :
-				flash("Invalid password for login :"+login)
+				flash("Invalid password or login :"+login)
 	    			return redirect('/login')
-	    	elif request.form['subBtn'] == 'Club':
+	    	elif request.form['subBtn'] == 'registerClub':
     			return redirect(url_for('club'))
     		elif request.form['subBtn'] == 'Membre':
-    			return redirect(url_for('membre'))
+    			return redirect(url_for('registerMember'))
        		
 	else:
 		return render_template('login.html')  
