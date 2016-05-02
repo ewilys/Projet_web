@@ -120,7 +120,7 @@ def login():
     			return redirect(url_for('membre'))
        		
 	else:
-		return render_template('connexion.html')  
+		return render_template('login.html')  
 
 
 @app.route('/logout')
@@ -129,8 +129,8 @@ def logout():
 	session.clear()
 	return redirect('/login')
 
-@app.route('/inscription/club', methods=['GET', 'POST'])
-def club():
+@app.route('/register/club', methods=['GET', 'POST'])
+def registerClub():
 	if request.method=='POST':
 		#username= request.form('username') 
 		#ville=request.form('ville')
@@ -139,10 +139,10 @@ def club():
 		#login=request.form('login')
 		#pswrd= request.form('pswrd')
 		return redirect('main')
-	return render_template('inscription-club.html')
+	return render_template('registerClub.html')
 	
 @app.route('/inscription/membre', methods=['GET', 'POST'])
-def membre():
+def registerMember():
 	if request.method == 'POST':
 		#username= request.form('username') 
 		#userFirstName = request.form('userfirstname')
@@ -152,7 +152,7 @@ def membre():
 		#login=request.form('login')
 		#pswrd= request.form('pswrd')
 		return redirect( url_for('main'))
-	return render_template('inscription-membre.html')
+	return render_template('registerMember.html')
 
 @app.route('/home')
 def home(): 
@@ -162,17 +162,17 @@ def home():
 def profil(): 
 	return render_template('profile.html')
 
-@app.route('/home/profile/insc_licensed')
-def ins_licensed(): 
-	return render_template('insc_licensed.html')
+@app.route('/home/profile/addLicense')
+def addLicense(): 
+	return render_template('addLicense.html')
 
 @app.route('/home/search')
 def search (): 
-	return render_template('recherche.html')
+	return render_template('search.html')
 
 @app.route('/home/creaEnvent')
-def creaEvent():
-	return render_template('creaEvent.html')
+def createEvent():
+	return render_template('createEvent.html')
 
 @app.route('/main')
 def main():
