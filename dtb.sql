@@ -16,7 +16,8 @@ create table Clubs (
     email text) ;
     
 create table Evenements (
-    ev_id text primary key,
+    ev_id integer primary key AUTOINCREMENT,
+    nom_ev text,
     club_id text,
     categorie text,
     date_e text,
@@ -32,6 +33,8 @@ create table Inscriptions (
     ev_id text,
     FOREIGN KEY(license) REFERENCES Membres(license),
     FOREIGN KEY(ev_id) REFERENCES Evenements(ev_id) );
+
+
     
 create table Suivits (
     license text,
@@ -61,22 +64,29 @@ create table Connex_Membre (
 .schema table
 
 insert into Membres(license,nom,prenom,date_n,email,club_id)
-values ("12345678","olivier", "rger","01021994","hgjhegf@gmail.com",1234567) ;
+values ("50123456","olivier", "rger","01021994","hgjhegf@gmail.com",1234567) ; /*nom des catégories all poussinado jeune senior */
+
 
 insert into Membres(license,nom,prenom,date_n,email,club_id)
-values ("987654","jean-louis", "jhgjh","020318995","hffx@gmail.com",123);
-
-insert into Clubs(club_id,nom,ville,email)
-values ("1a","martiniclub","lyon",martiniclub@gmail.com);
+values ("89987654","jean-louis", "jhgjh","020318995","hffx@gmail.com",123);
 
 insert into Clubs(club_id,nom_club,ville,email)
-values ("1b","cecileclub","paris",cecileclub@gmail.com);
+values ("568423","martiniclub","lyon","martiniclub@gmail.com");
+
+insert into Clubs(club_id,nom_club,ville,email)
+values ("547634","cecileclub","paris","cecileclub@gmail.com");
+
+
+insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description)
+values ("coupe normandie handball","martiniclub","all","19022017","1600","50","disponible","30, avenue de gaulle,Havre"," événement handball organisé par martiniclub accès publique");
+
+
+insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description)
+values("equitation trophy","cecileclub","jeune",15062016,"1200","15","complet","2, rue des arts villeurbanneé","compétition déquitation sur le campus de la DOUA");
 
 
 
-
-
-
+  
 
 
 

@@ -15,7 +15,7 @@ SALT = 'foo#BAR_{baz}^666'       #permet de tatouer le mot de passe   ,modif l'i
 # ............................................................................................... #
 #gestion base de donnees
 
-engine = create_engine('sqlite:///wiki.db', echo=True)
+engine = create_engine('sqlite:///dtb.db', echo=True)
 metadata = MetaData()
 
 accounts = Table('accounts', metadata,
