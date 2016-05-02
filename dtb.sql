@@ -36,12 +36,12 @@ create table Inscriptions (
 
 
     
-create table Suivits (
+create table Suivis (
     license text,
     club_id text,
      FOREIGN KEY(license) REFERENCES Membres(license),
     FOREIGN KEY(club_id) REFERENCES Membres(club_id)) ;
-    
+ 																					
 create table Categories (
     license text,
     groupe_id text primary key,
@@ -84,18 +84,32 @@ values ("coupe normandie handball","martiniclub","all","19022017","1600","50","d
 insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description)
 values("equitation trophy","cecileclub","jeune",15062016,"1200","15","complet","2, rue des arts villeurbanneé","compétition déquitation sur le campus de la DOUA");
 
+insert into Inscriptions(license,ev_id)
+values ("89987654","2");
 
 
-  
+insert into Inscriptions(license,ev_id)
+values ("50123456","1");
+
+insert into Inscriptions(license,ev_id)
+values ("50123456","2");
+
+insert into Suivis(license,club_id)
+values("50123456","547634");
 
 
+insert into Suivis(license,club_id)
+values("50123456","568423");
 
 
+insert into Suivis(license,club_id)
+values("89987654","568423");
 
+insert into Categories(license,groupe_id)
+values("89987654","jeune");
 
-
-
-
+insert into Categories(license,groupe_id)
+values("50123456","senior");
 
 
 
