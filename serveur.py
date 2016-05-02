@@ -19,7 +19,7 @@ conn= sqlite3.connect('dtb.db')
 c= conn.cursor()
 c.execute('SELECT * FROM MEMBRES')
 
-for row in c.execute('SELECT LOGIN FROM MEMBRES'):
+for row in c.execute('SELECT LOGIN_MEMRES FROM MEMBRES'):
 	print(row)
 
 
