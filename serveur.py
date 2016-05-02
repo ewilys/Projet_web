@@ -4,7 +4,7 @@ from flask  import *
 from sqlalchemy import *
 
 import os, hashlib
-
+import sqlite3 
 # ............................................................................................... #
 
 app = Flask(__name__)
@@ -15,10 +15,21 @@ SALT = 'foo#BAR_{baz}^666'       #permet de tatouer le mot de passe   ,modif l'i
 # ............................................................................................... #
 #gestion base de donnees
 
+conn= sqlite3.connect('dtb.db')
+c= conn.cursor()
+c.execute('SELECT * FROM MEMBRES')
+
+for row in c.execute('SELECT LOGIN FROM MEMBRES'):
+	print(row)
+
+
+
+
+"""
 engine = create_engine('sqlite:///dtb.db', echo=True)
 metadata = MetaData()
 
-accounts = Table('accounts', metadata,
+accounts = Table('membre_connex', metadata,
     Column('login', String, primary_key=true),
     Column('password_hash', String, nullable=False))    
 
@@ -92,7 +103,7 @@ def authenticate_or_create(login, password):
         	  return db.execute(s).fetchone() != None
     finally:
         db.close()
-  
+"""
 
 # ............................................................................................... #
 #gestion des url
