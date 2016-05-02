@@ -1,10 +1,9 @@
 
-
-function inscription-membre() {
-    $('#btnConnexion').click(function() {
- 
+function connexion() {
+    $('#Connexion').click(function() {
+ 	var login = $("#userID").val();
         $.ajax({
-            url: '/connexion',
+            url: '/login',
             data: $('form').serialize(),
             type: 'POST',
             success: function(response) {

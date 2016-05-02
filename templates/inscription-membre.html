@@ -6,6 +6,7 @@
 	</head>
 	
 	<body>
+
 		<form method=POST action={{ url_for('membre') }} >
 			<h1>Inscription</h1>
 			<p>
@@ -29,6 +30,10 @@
 				<br />
 				<label for="pswrd">Mot de passe : </label>
 				<input type="text" name="pswrd" id="pswrd" required/>
+				
+				<? BOUTON SUBMIT : /> 
+				<br />
+				<input type="submit" name="subBtn" value="Envoyer"/>
 			</p>
 		</form>
 	</body>

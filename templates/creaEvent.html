@@ -11,6 +11,7 @@
 			<p>
 				<label for="nom">Nom de l'évènement : </label>
 				<input type="text" name="nom" id="nom" required>
+				<span id="test_duplicate_name"></span>
 				<br/>
 				<label for="categorie">Catégorie : </label>
 			<select name="categorie" id="categorie" required>
@@ -36,11 +37,14 @@
 				<input type="text" name="rue" id="rue" required>
 				<label for="debut" title="jj/mm/aaaa">Du : </label>
 				<input type="text" name="debut" id="debut" placeholder="jj/mm/aaaa" required>
+				<span id="test_format_start_date"></span>
 				<label for="fin" title="jj/mm/aaaa"> au : </label>
 				<input type="text" name="fin" id="fin" placeholder="jj/mm/aaaa" required>
+				<span id="test_format_end_date"></span>
 				<br/>
 				<label for="heure">A : </label>
 				<input type="text" name="heure" id="heure" placeholder="Ex : 14h30" required>
+				<span id="test_format_hours"></span>
 			</p>
 			<p>
 			 <input type="submit" value="Soumettre" />
