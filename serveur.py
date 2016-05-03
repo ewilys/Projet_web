@@ -123,12 +123,11 @@ def login():
 	    			else: 
 	    				flash("Invalid password or login")
 	    				return redirect('/login')
-		    		return redirect(url_for("main"))
 			else :
 				flash("Please enter a login or password ")
 	    			return redirect('/login')
-	    	elif request.form['subBtn'] == 'registerClub':
-    			return redirect(url_for('club'))
+	    	elif request.form['subBtn'] == 'Club':
+    			return redirect(url_for('registerclub'))
     		elif request.form['subBtn'] == 'Membre':
     			return redirect(url_for('registerMember'))
        		
@@ -154,7 +153,7 @@ def registerClub():
 		return redirect('main')
 	return render_template('registerClub.html')
 	
-@app.route('/inscription/membre', methods=['GET', 'POST'])
+@app.route('/register/member', methods=['GET', 'POST'])
 def registerMember():
 	if request.method == 'POST':
 		#username= request.form('username') 
