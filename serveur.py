@@ -5,13 +5,11 @@ from sqlalchemy import *
 import server_function
 import os, hashlib
 import sqlite3 
+
 # ............................................................................................... #
 app = Flask(__name__)
-
-
+app.secret_key = os.urandom(256)   
 # ............................................................................................... #
-#gestion base de donnees
-
 
 """
 engine = create_engine('sqlite:///dtb.db', echo=True)
@@ -111,6 +109,7 @@ def login():
 	    			exists= server_function.sign_in(login,password)
 	    			print(exists) 
 	    			if exists== True: 
+	    				session['username']=request.form['login'] 
 	    				return redirect(url_for("main"))
 	    			else: 
 	    				flash("Invalid password or login")
@@ -122,7 +121,6 @@ def login():
     			return redirect(url_for('registerClub'))
     		elif request.form['subBtn'] == 'Membre':
     			return redirect(url_for('registerMember'))
-       		
 	else:
 		return render_template('login.html')  
 
@@ -136,12 +134,7 @@ def logout():
 @app.route('/register/club', methods=['GET', 'POST'])
 def registerClub():
 	if request.method=='POST':
-		#username= request.form('username') 
-		#ville=request.form('ville')
-		#email= request.form('email')
-		#nofederation= request.form('nofederation')
-		#login=request.form('login')
-		#pswrd= request.form('pswrd')
+		server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation'])
 		return redirect('main')
 	return render_template('registerClub.html')
 	
