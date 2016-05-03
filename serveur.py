@@ -7,12 +7,11 @@ import os, hashlib
 import sqlite3 
 # ............................................................................................... #
 app = Flask(__name__)
-app.secret_key = os.urandom(256)        
 
-SALT = 'foo#BAR_{baz}^666'       #permet de tatouer le mot de passe   ,modif l'info    
 
 # ............................................................................................... #
 #gestion base de donnees
+
 
 """
 engine = create_engine('sqlite:///dtb.db', echo=True)
