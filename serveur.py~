@@ -120,7 +120,7 @@ def login():
 				flash("Please enter a login or password ")
 	    			return redirect('/login')
 	    	elif request.form['subBtn'] == 'Club':
-    			return redirect(url_for('registerclub'))
+    			return redirect(url_for('registerClub'))
     		elif request.form['subBtn'] == 'Membre':
     			return redirect(url_for('registerMember'))
        		
