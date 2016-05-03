@@ -1,0 +1,34 @@
+﻿Requêtes SQL :
+-Vérifier que le login existe avec le mot de passe pour un user :
+row = cursor.fetchone()
+cursor.execute (“SELECT login, mdp FROM membre_connex WHERE login = ‘login’ AND mdp = ‘mdp’”)
+IF row IS NOT None
+code pour la connexion…
+ELSE
+code d’erreur...
+
+-Vérifier que le login existe avec le mot de passe pour un club :
+row = cursor.fetchone()
+cursor.execute (“SELECT login, mdp FROM club_connex WHERE login = ‘login’ AND mdp = ‘mdp’”)
+IF row IS NOT None
+code pour la connexion…
+ELSE
+code d’erreur...
+
+-Afficher le profil (nom, ville, email) du club :
+SELECT nom, ville, email FROM clubs AS c, club_connex AS cc WHERE c.club_id = cc.club_id AND cc.login=’login’
+
+-Afficher le nombre de licenciés :
+SELECT COUNT(license) FROM membres AS m, clubs AS c WHERE c.club_id=’club_id’ AND m.club_id=c.club_id
+
+-Afficher le profil (nom, prenom, catégorie, club, email) du membre :
+SELECT membres.nom, membres.prenom, categorie.groupe_id, clubs.nom, membres.email FROM membres AS m, categorie AS ca, clubs AS c, membre_connex AS mc WHERE m.license=ca.license AND m.club_id=c.club_id AND m.license=mc.license AND mc.login=’login’
+
+-Afficher les clubs suivis par un membre :
+SELECT clubs.nom, COUNT(suivis.club_id) FROM clubs AS c, membres AS m, suivis AS s, membre_connex AS mc WHERE m.license=s.license AND s.club_id=c.club_id AND mc.login=’login’
+
+-Inscription club :
+INSERT INTO clubs (club_id, nom_club, ville, email)
+VALUES
+('club_id', 'nom_club', 'ville', ‘email’)
+
