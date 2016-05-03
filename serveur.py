@@ -2,11 +2,10 @@
 
 from flask  import *
 from sqlalchemy import *
-
+import server_function
 import os, hashlib
 import sqlite3 
 # ............................................................................................... #
-
 app = Flask(__name__)
 app.secret_key = os.urandom(256)        
 
@@ -14,34 +13,6 @@ SALT = 'foo#BAR_{baz}^666'       #permet de tatouer le mot de passe   ,modif l'i
 
 # ............................................................................................... #
 #gestion base de donnees
-
-conn= sqlite3.connect('dtb.db')
-c= conn.cursor()
-c.execute('SELECT * FROM MEMBRES')
-
-def hash_for(password): #hashage du password 
-	salted = '%s @ %s' % (SALT, password)
-	return hashlib.sha256(salted).hexdigest()       
-
-def authenticate_or_create(login, password):
-    db = sqlite3.connect('dtb.db')
-    hash_pass=hash_for(password)
-    try:
-        if db.execute(select([accounts.c.login]).where(accounts.c.login == login)).fetchone() is None:
-            db.execute(accounts.insert().values(login=login,password_hash=hash_pass))
-            return True
-        else: 
-        	s=select([accounts.c.login]).where(
-        			and_(
-        				accounts.c.login ==login,
-        				accounts.c.password_hash == hash_pass
-        			)
-        		)
-        	  return db.execute(s).fetchone() != None
-    finally:
-        db.close()
-
-
 
 """
 engine = create_engine('sqlite:///dtb.db', echo=True)
@@ -136,12 +107,18 @@ def login():
 			login = request.form['userID']
    	 		password = request.form['pswrd']
  		
-	    			# validate the received values
+	    		# validate the received values
 	    		if login and password :
-	    			flash("all fiels good! ")
+	    			exists= server_function.sign_in(login,password)
+	    			print(exists) 
+	    			if exists== True: 
+	    				return redirect(url_for("main"))
+	    			else: 
+	    				flash("Invalid password or login")
+	    				return redirect('/login')
 		    		return redirect(url_for("main"))
 			else :
-				flash("Invalid password or login :"+login)
+				flash("Please enter a login or password ")
 	    			return redirect('/login')
 	    	elif request.form['subBtn'] == 'registerClub':
     			return redirect(url_for('club'))
@@ -188,7 +165,7 @@ def home():
 	return render_template('home.html')
 
 @app.route('/home/profile')
-def profil(): 
+def profile(): 
 	return render_template('profile.html')
 
 @app.route('/home/profile/addLicense')
