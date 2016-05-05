@@ -132,7 +132,7 @@ def logout():
 def registerClub():
 	if request.method=='POST':
 		server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation'])
-		return redirect('main')
+		return redirect(url_for('profileClub'))
 	return render_template('registerClub.html')
 	
 @app.route('/register/member', methods=['GET', 'POST'])
@@ -152,9 +152,14 @@ def registerMember():
 def home(): 
 	return render_template('home.html')
 
-@app.route('/home/profile')
-def profile(): 
-	return render_template('profile.html')
+@app.route('/home/profileClub')
+def profileClub(): 
+	
+	return render_template('profileClub.html')
+	
+@app.route('/home/profileMember')
+def profileMember(): 
+	return render_template('profileMember.html')
 
 @app.route('/home/profile/addLicense')
 def addLicense(): 
