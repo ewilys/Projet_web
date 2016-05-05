@@ -10,13 +10,14 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 def insert(table, fields=(), values=()):
-	print("Je passe dans al fonction")
 	db = sqlite3.connect('dtb.db')
 	#cur = db.cursor()
+
 	query = 'INSERT INTO %s (%s) VALUES (%s)' % (
 		table,
 		', '.join(fields),
 		', '.join(['?'] * len(values))
+
 	)
 	try: 
 		db.execute(query, values)
@@ -26,6 +27,24 @@ def insert(table, fields=(), values=()):
 	finally: 
 		db.close()
 
+
+
+def checklog (login):
+	db= sqlite3.connect('dtb.db')
+	
+	try: 
+		row = db.execute('SELECT login_membre FROM Connex_Membre WHERE login_membre=:who', {"who": login}).fetchone()
+		if row is None: 
+			return False
+		else :
+			return True
+	except: 
+		print("login error")
+	finally: 
+		db.close()
+	
+	
+		
 #Returns True if login and password are correct and exist in database, False if not
 def sign_in (login, password):
 	db= sqlite3.connect('dtb.db')

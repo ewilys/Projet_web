@@ -78,6 +78,8 @@ values ("568423","martiniclub","lyon","martiniclub@gmail.com");
 insert into Clubs(club_id,nom_club,ville,email)
 values ("547634","cecileclub","paris","cecileclub@gmail.com");
 
+insert into Connex_Membre(login_membre, mdp_membre, license)
+values ("lisa", "moi", "12345678");
 
 insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description)
 values ("coupe normandie handball","martiniclub","all","19022017","1600","50","disponible","30, avenue de gaulle,Havre"," événement handball organisé par martiniclub accès publique");

@@ -99,14 +99,29 @@ def authenticate_or_create(login, password):
 def login():
 	if request.method =='POST' : 
 		
+		if request.json :
+			log_user=request.json["login"]
+			psw=request.json["pswrd"]
+			if server_function.checklog(log_user) == True : 
+				user= " Le login est valide ! Well done !"
+			else :
+				user= " login inconnu "
+			if psw != "" : 
+				if server_function.sign_in(log_user,psw) == True:
+					psw= "le mot de passe est le bon ! bonne memoire"
+				else :
+					psw="mot de passe incorrect"		
+			return jsonify({'user': user, 'psw' : psw})
+			
     		if request.form['subBtn'] == 'Connexion':
        			# read the posted values from the UI
 			login = request.form['userID']
    	 		password = request.form['pswrd']
  		
 	    		# validate the received values
+
 	    		exists= server_function.sign_in(login,password)
-	    		print(exists) 
+	    		
 	    		if exists== True: 
 	    			session['username']=login 
 	    			return redirect(url_for("createEvent"))
@@ -152,6 +167,7 @@ def registerMember():
 def home(): 
 	return render_template('home.html')
 
+
 @app.route('/home/profileClub')
 def profileClub(): 
 	
@@ -160,6 +176,7 @@ def profileClub():
 @app.route('/home/profileMember')
 def profileMember(): 
 	return render_template('profileMember.html')
+
 
 @app.route('/home/profile/addLicense')
 def addLicense(): 
