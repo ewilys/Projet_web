@@ -10,19 +10,23 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 def insert(table, fields=(), values=()):
-	# g.db is the database connection
-	db=sqlite3.connect('dtb.sql')
-	cur = db.cursor()
+	db = sqlite3.connect('dtb.db')
+	#cur = db.cursor()
+
 	query = 'INSERT INTO %s (%s) VALUES (%s)' % (
 		table,
 		', '.join(fields),
 		', '.join(['?'] * len(values))
-		)
-	cur.execute(query, values)
-	db.commit()
-	id = cur.lastrowid
-	cur.close()
-	return id
+
+	)
+	try: 
+		db.execute(query, values)
+		db.commit()
+	except: 
+		print("INSERT ERROR") 
+	finally: 
+		db.close()
+
 
 
 def checklog (login):
@@ -44,7 +48,6 @@ def checklog (login):
 #Returns True if login and password are correct and exist in database, False if not
 def sign_in (login, password):
 	db= sqlite3.connect('dtb.db')
-	c=db.cursor()
 	try: 
 		row = db.execute('SELECT login_membre,mdp_membre FROM Connex_Membre WHERE login_membre=:who AND mdp_membre=:pass', {"who": login, "pass": password}).fetchone()
 		if row is not None: 
@@ -58,27 +61,24 @@ def sign_in (login, password):
 
 		
 def sign_up_club (clubName,city,email,login,password,clubId):
-	db= sqlite3.connect('dtb.db')
-	#c=db.cursor()
+	insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
+	insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
 	try: 
-		insert(clubs,(club_id,nom_club,ville,email),(clubId,clubName,city,email))
-		insert(Connex_Club,(login_club,mdp_club,club_id),(login,password,clubId))
-		#row = c.fetchone()
-		#c.execute('INSERT INTO clubs (club_id, nom_club, ville, email) VALUES (club_id:=clubId, nom_club:=clubName, ville:=city,email:=email)',{"clubName":clubName, "city":city, "email":email})
-		#c.execute('INSERT INTO Connex_Club (login_club,mdp_club,club_id) VALUES (login_club:=login, mdp_club:= password, club_id:=clubId)',{"login":login,"password":password,"clubId":clubId})
+		print("")
 	except: 
-		print("login error")
+		print("SIGNUP error")
 	finally: 
-		db.close()
+		print("End signup")
 		
+def sign_up_member(): 
+	pass 
 
 #Returns the tuple associated to the profile of a club with all the Datas
 def getClubProfile(login): 
 	db= sqlite3.connect('dtb.db')
 	c=db.cursor()
 	try: 
-		row = c.fetchone()
-		c.execute('SELECT nom, ville, email FROM clubs AS c, club_connex AS cc WHERE c.club_id = cc.club_id AND cc.login=:who',{"who":login})
+		row= c.execute('SELECT nom_club, ville, email FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id = cc.club_id AND cc.login_club=:who',{"who":login}).fetchone()
 		if row is not None:
 			print(row) 
 			return row

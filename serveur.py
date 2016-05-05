@@ -119,15 +119,16 @@ def login():
    	 		password = request.form['pswrd']
  		
 	    		# validate the received values
-	    		if login and password :
-	    			exists= server_function.sign_in(login,password)
-	    			print(exists) 
-	    			if exists == True: 
-	    				session['username']=login
-	    				return redirect(url_for('createEvent'))
-	    			else: 
-	    				return redirect('/login')
-							
+
+	    		exists= server_function.sign_in(login,password)
+	    		
+	    		if exists== True: 
+	    			session['username']=login 
+	    			return redirect(url_for("createEvent"))
+	    		else: 
+	    			flash("Invalid password or login")
+	    			return redirect('/login')
+			
 	    	elif request.form['subBtn'] == 'Club':
     			return redirect(url_for('registerClub'))
     		elif request.form['subBtn'] == 'Membre':
@@ -146,7 +147,7 @@ def logout():
 def registerClub():
 	if request.method=='POST':
 		server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation'])
-		return redirect('main')
+		return redirect(url_for('profileClub'))
 	return render_template('registerClub.html')
 	
 @app.route('/register/member', methods=['GET', 'POST'])
@@ -166,9 +167,16 @@ def registerMember():
 def home(): 
 	return render_template('home.html')
 
-@app.route('/home/profile')
-def profile(): 
+
+@app.route('/home/profileClub')
+def profileClub(): 
+	
 	return render_template('profileClub.html')
+	
+@app.route('/home/profileMember')
+def profileMember(): 
+	return render_template('profileMember.html')
+
 
 @app.route('/home/profile/addLicense')
 def addLicense(): 
