@@ -1,50 +1,96 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Connexion</title>
-		<link rel="stylesheet" href="loginStyleSheet.css" />
-	</head>
-	
-	<body>
-		<form method='POST' action='/login'>
-			<div class="bloc">
-			<h1>Connexion</h1>
-			<p id="blocSignIn">
-				<label for="userID">Identifiant : </label>
-				<input type="text" name="userID" id="userID"/>
-				<span id="test_valid_ID"></span>
-				<br />
-				<label for="pswrd">Mot de passe : </label>
-				<input type="password" name="pswrd" id="pswrd" />
-				<span id="test_valid_pswrd"></span>
-				<br />
-				<div class="container" style="min-height:100% width:80%">
-					{% with messages = get_flashed_messages() %}
-					{% if messages %}
-	 	  			{% for message in messages %}
-		  			<div class="alert alert-warning alert-dismissible" role="alert">
-						{{message}}
-		 			</div>
-					{% endfor %}
-	 				{% endif %}
-					{% endwith %}
-	
-					{% block body %}{% endblock %}
-				</div>
-				<input type="submit" name="subBtn" value="Connexion"/>
-			</p>
-			</div>
-		</form>
-		<form method='POST' action='/login'>
-			<p>
-				<label for="inscription">Vous arrivez tout juste ?</label><br/>
-				<input type="submit" name= "subBtn" value="Membre"  />
-				<input type="submit" name= "subBtn"  value="Club" />
-			</p>
-		</form>		
-	</body>
-</html>
+@font-face
+{
+	font-family: 'Pacifico';
+	src: url('./fonts/pacifico/Pacifico.ttf');
+}
 
-			
-			
+@font-face {
+    font-family: 'robotoregular';
+    src: url('Roboto-Regular-webfont.eot');
+    src: url('Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Roboto-Regular-webfont.woff') format('woff'),
+         url('Roboto-Regular-webfont.ttf') format('truetype'),
+         url('Roboto-Regular-webfont.svg#robotoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@media screen{
+body
+{
+	width: device-width;
+	height: device-height;
+	background-image: url("./img/imgLogin.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	display: flex;	
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-around;
+}
+
+h1
+{
+	font-family: 'Pacifico', sans-serif;
+	font-size: 3em;
+	text-align: center;
+	color: rgba(210,210,230,1);
+	text-shadow: 3px 3px 2px gray;
+}
+
+section
+{
+	text-align: center;
+	border-radius: 30px;
+	width: 45%;
+	min-height: 450px;
+	min-width: 300px;
+	overflow: auto;
+	
+}
+
+#signinBloc
+{
+	background-color: rgba(5, 177, 235, 0.6);	
+}
+
+#signupBloc
+{
+	background-color: rgba(43, 92, 181, 0.6);	
+}
+
+label
+{
+	font-family: 'robotoregular', sans-serif;
+	font-weight: bold;
+	color: white;
+	font-size: 1.2em;
+}
+
+input
+{
+	margin: 10px;
+}
+
+.btn
+{
+	background-color: rgb(210,210,230);
+	width: 70%;
+	height: 50px;
+	border-radius: 8px;
+	border: none;
+	font-family: 'robotoregular', sans-serif;
+	color: white;
+	font-weight: bold;
+	font-size: 1.5em;
+}
+
+.btn:hover
+{
+	background-color: rgb(5, 177, 235);
+}
+}
+
+
