@@ -4,6 +4,8 @@
 		<meta charset="utf-8" />
 		<title>Connexion</title>
 		<link rel="stylesheet" href="loginStyleSheet.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="../static/signIn.js"></script>
 	</head>
 	
 	<body>
@@ -12,11 +14,11 @@
 			<h1>Connexion</h1>
 			<p id="blocSignIn">
 				<label for="userID">Identifiant : </label>
-				<input type="text" name="userID" id="userID"/>
+				<input type="text" name="userID" id="userID" required/>
 				<span id="test_valid_ID"></span>
 				<br />
 				<label for="pswrd">Mot de passe : </label>
-				<input type="password" name="pswrd" id="pswrd" />
+				<input type="password" name="pswrd" id="pswrd" required />
 				<span id="test_valid_pswrd"></span>
 				<br />
 				<div class="container" style="min-height:100% width:80%">
@@ -42,7 +44,8 @@
 				<input type="submit" name= "subBtn" value="Membre"  />
 				<input type="submit" name= "subBtn"  value="Club" />
 			</p>
-		</form>		
+		</form>	
+			
 	</body>
 </html>
 

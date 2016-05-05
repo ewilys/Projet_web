@@ -99,6 +99,14 @@ def authenticate_or_create(login, password):
 def login():
 	if request.method =='POST' : 
 		
+		if request.json :
+			print("in json")
+			log=request.json['login']
+			if server_function.checklog(log) == True : 
+				return jsonify({'user' :" Le login est valide ! Well done !"})
+			else :
+				return jsonify({'user' :" login invalide "})			
+		
     		if request.form['subBtn'] == 'Connexion':
        			# read the posted values from the UI
 			login = request.form['userID']
@@ -108,9 +116,9 @@ def login():
 	    		if login and password :
 	    			exists= server_function.sign_in(login,password)
 	    			print(exists) 
-	    			if exists== True: 
-	    				session['username']=request.form['login'] 
-	    				return redirect(url_for("main"))
+	    			if exists == True: 
+	    				session['username']=login
+	    				return redirect(url_for('createEvent'))
 	    			else: 
 	    				flash("Invalid password or login")
 	    				return redirect('/login')

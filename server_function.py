@@ -23,13 +23,29 @@ def insert(table, fields=(), values=()):
 	cur.close()
 	return id
 
+
+def checklog (login):
+	db= sqlite3.connect('dtb.db')
+	
+	try: 
+		row = db.execute('SELECT login_membre FROM Connex_Membre WHERE login_membre=:who', {"who": login}).fetchone()
+		if row is None: 
+			return False
+		else :
+			return True
+	except: 
+		print("login error")
+	finally: 
+		db.close()
+	
+	
+		
 #Returns True if login and password are correct and exist in database, False if not
 def sign_in (login, password):
 	db= sqlite3.connect('dtb.db')
 	c=db.cursor()
 	try: 
-		row = c.fetchone()
-		c.execute('SELECT login,mdp FROM membre_connex WHERE login=:who AND mdp=:pass', {"who": login, "pass": password})
+		row = db.execute('SELECT login_membre,mdp_membre FROM Connex_Membre WHERE login_membre=:who AND mdp_membre=:pass', {"who": login, "pass": password}).fetchone()
 		if row is not None: 
 			return True
 		else: 
