@@ -100,13 +100,19 @@ def login():
 	if request.method =='POST' : 
 		
 		if request.json :
-			print("in json")
-			log=request.json['login']
-			if server_function.checklog(log) == True : 
-				return jsonify({'user' :" Le login est valide ! Well done !"})
+			log_user=request.json["login"]
+			psw=request.json["pswrd"]
+			if server_function.checklog(log_user) == True : 
+				user= " Le login est valide ! Well done !"
 			else :
-				return jsonify({'user' :" login invalide "})			
-		
+				user= " login inconnu "
+			if psw != "" : 
+				if server_function.sign_in(log_user,psw) == True:
+					psw= "le mot de passe est le bon ! bonne memoire"
+				else :
+					psw="mot de passe incorrect"		
+			return jsonify({'user': user, 'psw' : psw})
+			
     		if request.form['subBtn'] == 'Connexion':
        			# read the posted values from the UI
 			login = request.form['userID']
@@ -120,11 +126,8 @@ def login():
 	    				session['username']=login
 	    				return redirect(url_for('createEvent'))
 	    			else: 
-	    				flash("Invalid password or login")
 	    				return redirect('/login')
-			else :
-				flash("Please enter a login or password ")
-	    			return redirect('/login')
+							
 	    	elif request.form['subBtn'] == 'Club':
     			return redirect(url_for('registerClub'))
     		elif request.form['subBtn'] == 'Membre':
@@ -165,7 +168,7 @@ def home():
 
 @app.route('/home/profile')
 def profile(): 
-	return render_template('profile.html')
+	return render_template('profileClub.html')
 
 @app.route('/home/profile/addLicense')
 def addLicense(): 

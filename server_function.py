@@ -11,14 +11,15 @@ sys.setdefaultencoding('utf8')
 
 def insert(table, fields=(), values=()):
 	# g.db is the database connection
-	cur = g.db.cursor()
+	db=sqlite3.connect('dtb.sql')
+	cur = db.cursor()
 	query = 'INSERT INTO %s (%s) VALUES (%s)' % (
 		table,
 		', '.join(fields),
 		', '.join(['?'] * len(values))
 		)
 	cur.execute(query, values)
-	g.db.commit()
+	db.commit()
 	id = cur.lastrowid
 	cur.close()
 	return id
