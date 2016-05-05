@@ -64,8 +64,10 @@ create table Connex_Membre (
 .schema table
 
 insert into Membres(license,nom,prenom,date_n,email,club_id)
-values ("50123456","olivier", "rger","01021994","hgjhegf@gmail.com",1234567) ; /*nom des catégories all poussinado jeune senior */
+values ("12345678","martini", "lisa","12051994","martini.lisa14@gmail.com",026159) ; /*nom des catégories all poussinado jeune senior */
 
+insert into Connex_Membre(login_membre, mdp_membre, license)
+values ("lisa","moi","12345678")
 
 insert into Membres(license,nom,prenom,date_n,email,club_id)
 values ("89987654","jean-louis", "jhgjh","020318995","hffx@gmail.com",123);

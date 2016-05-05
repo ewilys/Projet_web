@@ -105,18 +105,15 @@ def login():
    	 		password = request.form['pswrd']
  		
 	    		# validate the received values
-	    		if login and password :
-	    			exists= server_function.sign_in(login,password)
-	    			print(exists) 
-	    			if exists== True: 
-	    				session['username']=request.form['login'] 
-	    				return redirect(url_for("main"))
-	    			else: 
-	    				flash("Invalid password or login")
-	    				return redirect('/login')
-			else :
-				flash("Please enter a login or password ")
+	    		exists= server_function.sign_in(login,password)
+	    		print(exists) 
+	    		if exists== True: 
+	    			session['username']=login 
+	    			return redirect(url_for("createEvent"))
+	    		else: 
+	    			flash("Invalid password or login")
 	    			return redirect('/login')
+			
 	    	elif request.form['subBtn'] == 'Club':
     			return redirect(url_for('registerClub'))
     		elif request.form['subBtn'] == 'Membre':
