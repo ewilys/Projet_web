@@ -99,36 +99,44 @@ def authenticate_or_create(login, password):
 def login():
 	if request.method =='POST' : 
 		
+		#ajax handler
 		if request.json :
 			log_user=request.json["login"]
 			psw=request.json["pswrd"]
-			if server_function.checklog(log_user) == True : 
+			mtype=request.json["memtype"]
+			
+			#validate login
+			if server_function.checklog(log_user, mtype) == True : 
 				user= " Le login est valide ! Well done !"
 			else :
 				user= " login inconnu "
+				
+			#validate psw
 			if psw != "" : 
-				if server_function.sign_in(log_user,psw) == True:
+				if server_function.sign_in(log_user,psw, mtype) == True:
 					psw= "le mot de passe est le bon ! bonne memoire"
 				else :
 					psw="mot de passe incorrect"		
 			return jsonify({'user': user, 'psw' : psw})
 			
+		#submission 	
     		if request.form['subBtn'] == 'Connexion':
        			# read the posted values from the UI
 			login = request.form['userID']
    	 		password = request.form['pswrd']
- 		
+ 			mtype=request.form['memberType']
+ 			
 	    		# validate the received values
-
-	    		exists= server_function.sign_in(login,password)
-	    		
-	    		if exists== True: 
+	    		oklog= server_function.sign_in(login,password, mtype)
+	    		print (oklog)
+	    		if oklog== True: #signIn has worked
 	    			session['username']=login 
-	    			return redirect(url_for("createEvent"))
+	    			mtype=mtype.capitalize()
+	    			return redirect(url_for("profile"+mtype))
 	    		else: 
-	    			flash("Invalid password or login")
 	    			return redirect('/login')
-			
+		
+		#redirect to appropriate signUp	
 	    	elif request.form['subBtn'] == 'Club':
     			return redirect(url_for('registerClub'))
     		elif request.form['subBtn'] == 'Membre':

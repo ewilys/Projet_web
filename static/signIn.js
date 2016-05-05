@@ -4,6 +4,7 @@ function checkLog() {
 		var outbound_message = {
 	   			'login': $("#userID").val(),
 	   			'pswrd': $("#pswrd").val(), 
+	   			'memtype': $("input[type=radio][name=memberType]:checked").attr('value')
   		};
 		$.ajax({
         		type: 'POST',
