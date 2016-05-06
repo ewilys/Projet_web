@@ -161,14 +161,8 @@ def registerClub():
 @app.route('/register/member', methods=['GET', 'POST'])
 def registerMember():
 	if request.method == 'POST':
-		#username= request.form('username') 
-		#userFirstName = request.form('userfirstname')
-		#bday=request.form('bday')
-		#usermail= request.form('usermail')
-		#userNo= request.form('userNo')
-		#login=request.form('login')
-		#pswrd= request.form('pswrd')
-		return redirect( url_for('main'))
+		server_function.sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd)
+		return redirect( url_for('profileMember'))
 	return render_template('registerMember.html')
 
 @app.route('/home')

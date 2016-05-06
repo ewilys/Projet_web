@@ -87,17 +87,23 @@ def sign_in (login, password, mtype):
 
 		
 def sign_up_club (clubName,city,email,login,password,clubId):
-	insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
-	insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
 	try: 
-		print("")
+		insert("Membres",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
+		insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
 	except: 
-		print("SIGNUP error")
+		print("CLUB SIGNUP error")
 	finally: 
-		print("End signup")
+		print("End signup CLUB")
 		
-def sign_up_member(): 
-	pass 
+def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
+	print("HELLO JE PASSE ICI") 
+	try: 
+		insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
+		insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))
+	except: 
+		print("MEMBER SIGNUP error")
+	finally: 
+		print("End signup MEMBER")
 
 #Returns the tuple associated to the profile of a club with all the Datas
 def getClubProfile(login): 

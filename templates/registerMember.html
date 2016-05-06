@@ -10,20 +10,23 @@
 		<form method=POST action={{ url_for('registerMember') }} >
 			<h1>Inscription</h1>
 			<p>
-				<label for="username">Nom : </label>
-				<input type="text" name="username" id="username" required/>
+				<label for="userName">Nom : </label>
+				<input type="text" name="userName" id="userName" required/>
 				<br />
-				<label for="userfirstname">Prénom : </label>
-				<input type="text" name="userfirstname" id="userfirstname" required/>
+				<label for="userFirstName">Prénom : </label>
+				<input type="text" name="userFirstName" id="userFirstName" required/>
 				<br />
 				<label for="bday">Date de naissance : </label>
 				<input type="date" name="bday" id="bday" required/>
 				<br />
-				<label for="usermail">Email : </label>
-				<input type="email" name="usermail" id="usermail"/>
+				<label for="userMail">Email : </label>
+				<input type="email" name="userMail" id="userMail"/>
 				<br />
 				<label for="userNo">Numéro de licence : </label>
 				<input type="number" name="userNo" id="userNo" required/>
+				<br />
+				<label for="clubId">Identifiant de votre club (si vous en avez un): </label>
+				<input type="number" name="clubId" id="clubId"/>
 				<br />
 				<label for="login">Identifiant : </label>
 				<input type="text" name="login" id="login" required/>
