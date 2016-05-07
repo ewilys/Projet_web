@@ -23,7 +23,7 @@ def insert(table, fields=(), values=()):
 		db.execute(query, values)
 		db.commit()
 	except: 
-		print("INSERT ERROR") 
+		print("INSERT ERROR in %s",table) 
 	finally: 
 		db.close()
 
@@ -55,7 +55,18 @@ def checklog (login, mtype):
 		finally: 
 			db.close()
 	
-	
+def checkLicense (license):
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute('SELECT license FROM Connex_Membre WHERE license=:who', {"who": license}).fetchone()
+		if row is None: 
+			return False
+		else :
+			return True
+	except: 
+		print("login error")
+	finally: 
+		db.close()
 		
 #Returns True if login and password are correct and exist in database, False if not
 def sign_in (login, password, mtype):
@@ -98,13 +109,20 @@ def sign_up_club (clubName,city,email,login,password,clubId):
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
 	print("HELLO JE PASSE ICI") 
 	try: 
-		insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
-		insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))
+		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False):  
+			if clubId: 
+				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
+			else: 
+				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 			
+			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))		
+		else: 
+			print("LICENSE OR LOGIN ALREADY EXISTS") 
+	
 	except: 
 		print("MEMBER SIGNUP error")
 	finally: 
 		print("End signup MEMBER")
-
+	
 #Returns the tuple associated to the profile of a club with all the Datas
 def getClubProfile(login): 
 	db= sqlite3.connect('dtb.db')
