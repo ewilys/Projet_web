@@ -154,8 +154,10 @@ def logout():
 @app.route('/register/club', methods=['GET', 'POST'])
 def registerClub():
 	if request.method=='POST':
-		server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation'])
-		return redirect(url_for('profileClub'))
+		if server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation']) == 0 :
+			return redirect(url_for('profileClub'))
+		else: 
+			return redirect(url_for('registerClub')) 
 	return render_template('registerClub.html')
 	
 @app.route('/register/member', methods=['GET', 'POST'])
@@ -172,7 +174,8 @@ def home():
 
 @app.route('/home/profileClub')
 def profileClub(): 
-	
+	result = server_function.getClubProfile("martiniclub_login") 
+	print(result)
 	return render_template('profileClub.html')
 	
 @app.route('/home/profileMember')

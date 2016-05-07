@@ -67,6 +67,19 @@ def checkLicense (license):
 		print("login error")
 	finally: 
 		db.close()
+
+def checkClubId (clubId): 
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute('SELECT club_id FROM Connex_Club WHERE club_id=:who', {"who": clubId}).fetchone()
+		if row is None: 
+			return False
+		else :
+			return True
+	except: 
+		print("login error")
+	finally: 
+		db.close()
 		
 #Returns True if login and password are correct and exist in database, False if not
 def sign_in (login, password, mtype):
@@ -96,18 +109,23 @@ def sign_in (login, password, mtype):
 		finally: 
 			db.close()
 
-		
+#Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du club existe		
 def sign_up_club (clubName,city,email,login,password,clubId):
 	try: 
-		insert("Membres",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
-		insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
+		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) : 
+			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
+			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
+			return 0 
+		else: 
+			print("THE ID OF THIS CLUB IS REGISTERED") 
+			return 1
 	except: 
 		print("CLUB SIGNUP error")
+		return  -1 
 	finally: 
 		print("End signup CLUB")
 		
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
-	print("HELLO JE PASSE ICI") 
 	try: 
 		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False):  
 			if clubId: 
@@ -139,4 +157,3 @@ def getClubProfile(login):
 	finally: 
 		db.close()
 
- 
