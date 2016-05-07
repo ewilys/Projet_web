@@ -157,14 +157,16 @@ def registerClub():
 		if server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation']) == 0 :
 			return redirect(url_for('profileClub'))
 		else: 
-			return redirect(url_for('registerClub')) 
+			return redirect(url_for('registerClub',login=request.form['login'])) 
 	return render_template('registerClub.html')
 	
 @app.route('/register/member', methods=['GET', 'POST'])
 def registerMember():
 	if request.method == 'POST':
-		server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd'])
-		return redirect( url_for('profileMember'))
+		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == 0:
+			return redirect( url_for('profileMember',login=request.form['login']))
+		else: 
+			return redirect(url_for('registerMember'))
 	return render_template('registerMember.html')
 
 @app.route('/home')
@@ -172,14 +174,14 @@ def home():
 	return render_template('home.html')
 
 
-@app.route('/home/profileClub')
-def profileClub(): 
-	result = server_function.getClubProfile("martiniclub_login") 
-	print(result)
+@app.route('/home/profileClub/<login>')
+def profileClub(login): 
+	result = server_function.getClubProfile(login) 
 	return render_template('profileClub.html')
 	
-@app.route('/home/profileMember')
-def profileMember(): 
+@app.route('/home/profileMember/<login>')
+def profileMember(login): 
+	result = server_function.getMemberProfile(login) 
 	return render_template('profileMember.html')
 
 

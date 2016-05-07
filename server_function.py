@@ -124,7 +124,8 @@ def sign_up_club (clubName,city,email,login,password,clubId):
 		return  -1 
 	finally: 
 		print("End signup CLUB")
-		
+
+#Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du membre existe			
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
 	try: 
 		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False):  
@@ -132,12 +133,15 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
 			else: 
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 			
-			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))		
+			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))
+			return 0		
 		else: 
 			print("LICENSE OR LOGIN ALREADY EXISTS") 
+			return 1 
 	
 	except: 
 		print("MEMBER SIGNUP error")
+		return -1 
 	finally: 
 		print("End signup MEMBER")
 	
@@ -147,6 +151,22 @@ def getClubProfile(login):
 	c=db.cursor()
 	try: 
 		row= c.execute('SELECT nom_club, ville, email FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id = cc.club_id AND cc.login_club=:who',{"who":login}).fetchone()
+		if row is not None:
+			print(row) 
+			return row
+		else: 
+			return "" 
+	except: 
+		print("login error")
+	finally: 
+		db.close()
+
+#Returns the tuple associated to the profile of a member with all the datas. 
+def getMemberProfile(login): 
+	db= sqlite3.connect('dtb.db')
+	c=db.cursor()
+	try: 
+		row= c.execute('SELECT Membres.nom, Membres.prenom, categorie.groupe_id, clubs.nom, membres.email FROM membres AS m, categorie AS ca, clubs AS c, connex_membre AS mc WHERE m.license=ca.license AND m.club_id=c.club_id AND m.license=mc.license AND mc.login=: who',{"who":login}).fetchone()
 		if row is not None:
 			print(row) 
 			return row
