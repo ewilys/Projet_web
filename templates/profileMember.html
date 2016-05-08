@@ -2,19 +2,30 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
+		<link rel="stylesheet" href="./css/profileStyleSheet.css" />
 		<title>{{userName}}</title><!--Prénom + Nom-->
 	</head>
 	
 	<body>
-		<h1>{{userName}}</h1><!-- Idem -->
-		<p>
-			Club : {{userClub}}<br /><!-- Nom du club dans lequel le membre est licencié -->
-			Age : {{userAge}}<br />
-			Email : {{userMail}}<br />
-			<input type="button" value="Modifier" id="setup" />
-			<input type="button" value="Evènements suivis" id="eventFollowed" />
-			<input type="button" value="Clubs suivis" id="clubFollowed" />
-		</p>
+		<article>
+			<h1>{{userName}}</h1><!-- Idem -->
+			<p>
+				<div class="field">
+					Club : {{userClub}}<br /><!-- Nom du club dans lequel le membre est licencié -->
+				</div>
+				<div class="field">
+					Age : {{userAge}}<br />
+				</div>
+				<div class="field">
+					Email : {{userMail}}<br />
+				</div>
+				<div class="ctrl">
+					<input type="button" value="Modifier" id="setup" class="btn"/>
+					<input type="button" value="Evènements suivis" id="eventFollowed" class="btn"/>
+					<input type="button" value="Clubs suivis" id="clubFollowed" class="btn"/>
+				</div>
+			</p>
+		</article>
 	</body>
 </html>
 			
