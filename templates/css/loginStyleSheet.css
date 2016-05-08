@@ -16,7 +16,6 @@
 
 }
 
-@media screen{
 body
 {
 	width: device-width;
@@ -27,6 +26,7 @@ body
 	background-attachment: fixed;
 	display: flex;	
 	flex-wrap: wrap;
+	flex-direction: column;
 	align-items: center;
 	justify-content: space-around;
 }
@@ -38,27 +38,38 @@ h1
 	text-align: center;
 	color: rgba(210,210,230,1);
 	text-shadow: 3px 3px 2px gray;
+	z-index: 2;
 }
 
 section
 {
 	text-align: center;
 	border-radius: 30px;
-	width: 45%;
+	width: 50%;
 	min-height: 450px;
 	min-width: 300px;
 	overflow: auto;
+	margin: 10px;
+	z-index: 2;
 	
+}
+
+input
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: solid rgb(84, 182, 214) 1px;
+	border-radius: 4px;
+}
+
+input:focus, select:focus, textarea:focus
+{
+	border: 2px rgb(84, 182, 240) solid;
 }
 
 #signinBloc
 {
 	background-color: rgba(5, 177, 235, 0.6);	
-}
-
-#signupBloc
-{
-	background-color: rgba(43, 92, 181, 0.6);	
 }
 
 label
@@ -67,11 +78,6 @@ label
 	font-weight: bold;
 	color: white;
 	font-size: 1.2em;
-}
-
-input
-{
-	margin: 10px;
 }
 
 .btn
@@ -91,6 +97,6 @@ input
 {
 	background-color: rgb(5, 177, 235);
 }
-}
+
 
 
