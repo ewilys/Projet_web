@@ -2,20 +2,33 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
+		<link rel="stylesheet" href="./css/profileStyleSheet.css" />
 		<title>{{clubName}}</title>
 	</head>
 	
 	<body>
-		<h1>Profil : {{clubName}}</h1>
-		<p>
-			Ville : {{clubCity}}<br />
-			Nombres de licenciés : {{nbPlayers}}<br />
-			E-mail : {{clubEmail}}<br />
-			Vous êtes suivi par {{nbFollowers}} personnes <br />
-			<input type="button" value="Modifier" id="setup" />
-			<input type="button" value="Evènements" id="events" />
-			<input type="button" value="Licenciés" id="players" />
-		</p>
+		<article>
+			<h1>{{clubName}}</h1>
+			<p>
+				<div class="field">
+					Ville : {{clubCity}}<br />
+				</div>
+				<div class="field">
+					Nombres de licenciés : {{nbPlayers}}<br />
+				</div>
+				<div class="field">
+					E-mail : {{clubEmail}}<br />
+				</div>
+				<div class="field">
+					Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
+				</div>
+				<div class="ctrl">
+					<input type="button" value="Modifier" id="setup" class="btn"/>
+					<input type="button" value="Evènements" id="events" class="btn" />
+					<input type="button" value="Licenciés" id="players" class="btn"/>
+				</div>
+			</p>
+		</article>
 	</body>
 </html>
 		
