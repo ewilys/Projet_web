@@ -2,13 +2,14 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+		<link rel="stylesheet" href="./css/formsStyleSheet.css" />
 		<title>Inscription</title>
 	</head>
 	
 	<body>
-
-		<form method=POST action={{ url_for('registerMember') }} >
-			<h1>Inscription</h1>
+		<h1>Inscription</h1>
+		<form method='POST' action={{ url_for('registerMember') }} >
+			<h2>Informations personnelles</h2>
 			<p>
 				<label for="userName">Nom : </label>
 				<input type="text" name="userName" id="userName" required/>
@@ -18,9 +19,12 @@
 				<br />
 				<label for="bday">Date de naissance : </label>
 				<input type="date" name="bday" id="bday" required/>
-				<br />
+			</p>
+			<h2>Informations pratiques</h2>
+			<p>
 				<label for="userMail">Email : </label>
 				<input type="email" name="userMail" id="userMail"/>
+				<span id="test_duplicate_email"></span>
 				<br />
 				<label for="userNo">Numéro de licence : </label>
 				<input type="number" name="userNo" id="userNo" required/>
@@ -30,14 +34,16 @@
 				<br />
 				<label for="login">Identifiant : </label>
 				<input type="text" name="login" id="login" required/>
+				<span id="test_duplicate_login"></span>
 				<br />
 				<label for="pswrd">Mot de passe : </label>
 				<input type="text" name="pswrd" id="pswrd" required/>
-				
-				<? BOUTON SUBMIT : /> 
-				<br />
-				<input type="submit" name="subBtn" value="Envoyer"/>
 			</p>
+			<div class="button">
+			<p>
+				<input type="submit" class="btn" name="subBtn" value="Envoyer"/>
+			</p>
+			</div>
 		</form>
 	</body>
 </html>
