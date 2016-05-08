@@ -3,46 +3,42 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Connexion</title>
-		<link rel="stylesheet" href="css/loginStyleSheet.css" />
-
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-		<script src="../static/signIn.js"></script>
-
+		<link rel="stylesheet" href="./css/loginStyleSheet.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script language="JavaScript" src="../static/signIn.js"></script>
 	</head>
 	
 	<body>
 		<section id="signinBloc">
-		<form method='POST' action='/login'>
-			<h1>Connexion</h1>
-			<p id="blocSignIn">
-				<label for="memberType">Vous êtes ?</label><br/>
-				<input type="radio" name="memberType" id="club" value="club" /><label for="club"> Un club</label>
-				<input type="radio" name="memberType" id="member" value="member" checked="checked" /><label for="member">Un sportif</label>
-				<br/>
-				<label for="userID">Identifiant : </label>
-				<input type="text" name="userID" id="userID"  onkeyup="javascript:checkLog();" required/><br/>
-				<span id="test_valid_ID"></span>
-				<br />
-				<label for="pswrd">Mot de passe : </label>
-				<input type="password" name="pswrd" id="pswrd" onkeyup="javascript:checkLog();" required /><br/>
-
-				<span id="test_valid_pswrd"></span>
-				<br />
-				<input type="submit" name="subBtn" value="Connexion"/>
-			</p>
-		</form>
+			<form method='POST' action='/login'>
+				<h1>Connexion</h1>
+				<p id="blocSignIn">
+					<label for="memberType">Vous êtes ?</label><br/>
+					<input type="radio" name="memberType" id="club" value="club" /><label for="club"> Un club</label>
+					<input type="radio" name="memberType" id="member" value="member" checked="checked" /><label for="member">Un sportif</label>
+					<br/>
+					<label for="userID">Identifiant : </label><br/>
+					<input type="text" name="userID" id="userID" onkeyup="javascript:checkLog();" required/>
+					<span id="test_valid_ID"></span>
+					<br />
+					<label for="pswrd">Mot de passe : </label><br/>
+					<input type="password" name="pswrd" id="pswrd" required />
+					<span id="test_valid_pswrd"></span>
+					<br />
+					<input type="submit" name="subBtn" value="Connexion" class="btn"/>
+				</p>
+			</form>
 		</section>
+		
 		<section id="signupBloc">
-		<form method='POST' action='/login'>
-			<p>
-				<label for="inscription">Vous arrivez tout juste ?</label><br/>
-				<input type="submit" name= "subBtn" value="Membre"  />
-				<input type="submit" name= "subBtn"  value="Club" />
-			</p>
-		</form>
-		</section>
+			<form method='POST' action='/login'>
+				<h1>Inscription</h1>
+				<p>
+					<label for="inscription">Vous arrivez tout juste ?</label><br/>
+					<input class="btn" type="submit" name= "subBtn" value="Sportif"  />
+					<input class="btn" type="submit" name= "subBtn"  value="Club" />
+				</p>
+			</form>
+		</section>	
 	</body>
 </html>
-
-			
-			
