@@ -175,6 +175,7 @@ def registerMember():
 			
 		#submission :	
 		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == 0:
+			t = (request.form['login'],register.form['clubId'],request.form['bday'],request.form['userMail'])	
 			return redirect( url_for('profileMember',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerMember'))
@@ -193,8 +194,10 @@ def profileClub(login):
 	
 @app.route('/home/profileMember/<login>')
 def profileMember(login): 
+	#nom, prenom, categorie, club, email 
 	result = server_function.getMemberProfile(login) 
-	return render_template('profileMember.html')
+	print(result)
+	return render_template('profileMember.html',userName=result[0] ,userClub=result[3])
 
 
 @app.route('/home/profile/addLicense')

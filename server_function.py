@@ -116,7 +116,6 @@ def sign_up_club(clubName,city,email,login,password,clubId):
 		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) : 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
 			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
-			print("J'AJOUTE BIEN")
 			return 0 
 		else: 
 			print("THE ID OF THIS CLUB IS REGISTERED") 
@@ -160,7 +159,7 @@ def getClubProfile(login):
 		else: 
 			return "" 
 	except: 
-		print("login error")
+		print("problem with the login in database search")
 	finally: 
 		db.close()
 
@@ -169,14 +168,14 @@ def getMemberProfile(login):
 	db= sqlite3.connect('dtb.db')
 	c=db.cursor()
 	try: 
-		row= c.execute('SELECT Membres.nom, Membres.prenom, categorie.groupe_id, clubs.nom, membres.email FROM membres AS m, categorie AS ca, clubs AS c, connex_membre AS mc WHERE m.license=ca.license AND m.club_id=c.club_id AND m.license=mc.license AND mc.login=: who',{"who":login}).fetchone()
+		row= c.execute('SELECT m.nom, m.prenom, ca.categorie, c.nom_club, m.email, m.date_n FROM Membres AS m, Categories AS ca, Clubs AS c, Connex_Membre AS mc WHERE m.licence=ca.licence AND m.club_id=c.club_id AND m.licence=mc.licence AND mc.login_membre:=who',{"who":login}).fetchone()
 		if row is not None:
 			print(row) 
 			return row
 		else: 
 			return "" 
 	except: 
-		print("login error")
+		print("Problem with the login in database Search ")
 	finally: 
 		db.close()
 
