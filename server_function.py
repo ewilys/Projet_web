@@ -110,11 +110,13 @@ def sign_in (login, password, mtype):
 			db.close()
 
 #Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du club existe		
-def sign_up_club (clubName,city,email,login,password,clubId):
+def sign_up_club(clubName,city,email,login,password,clubId):
+	print("je passe ici")
 	try: 
 		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) : 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
 			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
+			print("J'AJOUTE BIEN")
 			return 0 
 		else: 
 			print("THE ID OF THIS CLUB IS REGISTERED") 
