@@ -154,9 +154,49 @@ def logout():
 @app.route('/register/club', methods=['GET', 'POST'])
 def registerClub():
 	if request.method=='POST':
-		print (request.form['noFederation'])
+		#ajax handler
+		if request.json :
+			clubName=request.json['userName']
+			login=request.json['newLogin']
+			email=request.json['email']
+			noFede=request.json['noFede']
+			
+			if clubName!="" :
+				#duplicate license :
+				if server_function.checkClubName(clubName) == False : 
+					clubName="nom de club valide "
+				else :
+					clubName="ce nom de club existe deja"
+						
+				
+			if login != "":
+				#duplicate login :
+				if server_function.checklog(login,"club") == False:
+					login="login valide"
+				else : 
+					login="ce login existe deja , veuillez en choisir un autre"
+					
+			if len(noFede)==6:
+				#validate clubId :
+				if server_function.checkClubId(noFede) == False:
+					noFede="numero du club valide"
+				else : 
+					noFede="ce numero de club existe deja"
+			elif noFede !="" :
+				noFede="veuillez entrer un numero de club a 6 chiffres"
+			
+			if email != "":
+				#validate email:
+				if server_function.checkEmail(email, "club") == False :
+					email="email valide"
+				else:
+					email="cet email existe deja, veuillez en choisir un autre"
+							
+			return jsonify({'clubName':clubName, 'newLogin': login, 'email':email,'noFede':noFede})
+			
 		#submission :	
-		if server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation']) == 0:
+		if server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation']) == True:
+			
 			return redirect( url_for('profileClub',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerClub'))
@@ -168,14 +208,54 @@ def registerMember():
 		#ajax handler
 		if request.json :
 			license=request.json['license']
+			login=request.json['newLogin']
+			email=request.json['email']
+			clubId=request.json['clubId']
 			
-			#duplicate license :
-			if server_function.checkLicense(license) == False : 
-				pass 
+			if len(license)==8 :
+				#duplicate license :
+				if server_function.checkLicense(license) == False : 
+					license="ce numero de licence n'est pas utilise "
+				else :
+					license="ce numero de licence existe deja"
+			elif license !="":
+				license ="veuillez entrez un numero de licence a 8 chiffres"
+				
+				
+			if login != "":
+				#duplicate login :
+				if server_function.checklog(login,"member") == False:
+					login="login valide"
+				else : 
+					login="ce login existe deja , veuillez en choisir un autre"
+					
+			if len(clubId)==6:
+				#validate clubId :
+				if server_function.checkClubId(clubId) == True:
+					clubId="numero du club valide"
+				else : 
+					clubId="numero du club invalide"
+			elif clubId !="" :
+				clubId="veuillez entrer un numero de club a 6 chiffres"
 			
+			if email != "":
+				#validate email:
+				if server_function.checkEmail(email,"member") == False :
+					email="email valide"
+				else:
+					email="cet email existe deja, veuillez en choisir un autre"
+							
+			return jsonify({'license':license, 'newLogin': login, 'email':email,'clubId':clubId})
+			
+
 		#submission :	
+<<<<<<< HEAD
 		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == 0:
 			t = (request.form['login'],register.form['clubId'],request.form['bday'],request.form['userMail'])	
+=======
+		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == True:
+			session['username']=request.form['login']
+>>>>>>> a1758e00211f890feda2353f180afa216dd806da
 			return redirect( url_for('profileMember',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerMember'))
@@ -196,8 +276,12 @@ def profileClub(login):
 def profileMember(login): 
 	#nom, prenom, categorie, club, email 
 	result = server_function.getMemberProfile(login) 
+<<<<<<< HEAD
 	print(result)
 	return render_template('profileMember.html',userName=result[0] ,userClub=result[3])
+=======
+	return render_template('profileMember.html', userName=login)
+>>>>>>> a1758e00211f890feda2353f180afa216dd806da
 
 
 @app.route('/home/profile/addLicense')
