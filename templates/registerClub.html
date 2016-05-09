@@ -11,8 +11,8 @@
 		<form method='POST' action={{ url_for('registerClub') }}>
 			<h2>Informations personnelles</h2>
 			<p>
-				<label for="username">Nom : </label>
-				<input type="text" name="username" id="username" required/>
+				<label for="userName">Nom : </label>
+				<input type="text" name="userName" id="userName" required/>
 				<span id="test_duplicate_username"></span>
 				<br />
 				<label for="city">Ville : </label>
@@ -24,8 +24,8 @@
 				<input type="email" name="email" id="email"/>
 				<span id="test_duplicate_email"></span>
 				<br />
-				<label for="nofederation" title="Donné par la fédération">Numéro d'identification : </label>
-				<input type="number" name="nofederation" id="nofederation" required/>
+				<label for="noFederation" title="Donné par la fédération">Numéro d'identification : </label>
+				<input type="number" name="noFederation" id="noFederation" required/>
 				<span id="test_duplicate_nofede"></span>
 				<br />
 				<label for="login">Identifiant : </label>
@@ -33,7 +33,7 @@
 				<span id="test_duplicate_login"></span>
 				<br />
 				<label for="pswrd">Mot de passe : </label>
-				<input type="text" name="pswrd" id="pswrd" required/>
+				<input type="password" name="pswrd" id="pswrd" required/>
 			</p>
 			<p>
 				<div class="button">
