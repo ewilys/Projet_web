@@ -2,7 +2,9 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" href="../static/css/formsStyleSheet.css" />
+		<link rel="stylesheet" href="http://localhost:5000/static/css/formsStyleSheet.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script language="JavaScript" src="../static/signIn.js"></script>
 		<title>Inscription</title>
 	</head>
 	
@@ -12,7 +14,7 @@
 			<h2>Informations personnelles</h2>
 			<p>
 				<label for="userName">Nom : </label>
-				<input type="text" name="userName" id="userName" required/>
+				<input type="text" name="userName" id="userName" onkeyup="javascript:checkSignUpClub();"required/>
 				<span id="test_duplicate_userName"></span>
 
 				<br />
@@ -22,16 +24,16 @@
 			<h2>Informations pratiques</h2>
 			<p>
 				<label for="email">Email : </label>
-				<input type="email" name="email" id="email"/>
+				<input type="email" name="email" id="email" onkeyup="javascript:checkSignUpClub();"/>
 				<span id="test_duplicate_email"></span>
 				<br />
 				<label for="noFederation" title="Donné par la fédération">Numéro d'identification : </label>
-				<input type="number" name="noFederation" id="noFederation" required/>
+				<input type="number" min="000001" max="999999" name="noFederation" id="noFederation" onkeyup="javascript:checkSignUpClub();" required/>
 				<span id="test_duplicate_noFede"></span>
 
 				<br />
 				<label for="login">Identifiant : </label>
-				<input type="text" name="login" id="login" required/>
+				<input type="text" name="login" id="login" onkeyup="javascript:checkSignUpClub();"required/>
 				<span id="test_duplicate_login"></span>
 				<br />
 				<label for="pswrd">Mot de passe : </label>

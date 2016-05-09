@@ -154,9 +154,49 @@ def logout():
 @app.route('/register/club', methods=['GET', 'POST'])
 def registerClub():
 	if request.method=='POST':
-
+		#ajax handler
+		if request.json :
+			clubName=request.json['userName']
+			login=request.json['newLogin']
+			email=request.json['email']
+			noFede=request.json['noFede']
+			
+			if clubName!="" :
+				#duplicate license :
+				if server_function.checkClubName(clubName) == False : 
+					clubName="nom de club valide "
+				else :
+					clubName="ce nom de club existe deja"
+						
+				
+			if login != "":
+				#duplicate login :
+				if server_function.checklog(login,"club") == False:
+					login="login valide"
+				else : 
+					login="ce login existe deja , veuillez en choisir un autre"
+					
+			if len(noFede)==6:
+				#validate clubId :
+				if server_function.checkClubId(noFede) == False:
+					noFede="numero du club valide"
+				else : 
+					noFede="ce numero de club existe deja"
+			elif noFede !="" :
+				noFede="veuillez entrer un numero de club a 6 chiffres"
+			
+			if email != "":
+				#validate email:
+				if server_function.checkEmail(email, "club") == False :
+					email="email valide"
+				else:
+					email="cet email existe deja, veuillez en choisir un autre"
+							
+			return jsonify({'clubName':clubName, 'newLogin': login, 'email':email,'noFede':noFede})
+			
 		#submission :	
-		if server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation']) == 0:
+		if server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation']) == True:
+			
 			return redirect( url_for('profileClub',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerClub'))
@@ -200,7 +240,7 @@ def registerMember():
 			
 			if email != "":
 				#validate email:
-				if server_function.checkEmail(email) == False :
+				if server_function.checkEmail(email,"member") == False :
 					email="email valide"
 				else:
 					email="cet email existe deja, veuillez en choisir un autre"
@@ -229,9 +269,8 @@ def profileClub(login):
 	
 @app.route('/home/profileMember/<login>')
 def profileMember(login): 
-	
 	result = server_function.getMemberProfile(login) 
-	return render_template('profileMember.html', userName="lisa")
+	return render_template('profileMember.html', userName=login)
 
 
 @app.route('/home/profile/addLicense')

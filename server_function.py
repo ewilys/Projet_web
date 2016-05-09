@@ -58,7 +58,7 @@ def checklog (login, mtype):
 def checkLicense (license):
 	db= sqlite3.connect('dtb.db')
 	try: 
-		row = db.execute('SELECT license FROM Connex_Membre WHERE license=:who', {"who": license}).fetchone()
+		row = db.execute('SELECT license FROM Membres WHERE license=:who', {"who": license}).fetchone()
 		if row is None: 
 			return False
 		else :
@@ -71,7 +71,7 @@ def checkLicense (license):
 def checkClubId (clubId): 
 	db= sqlite3.connect('dtb.db')
 	try: 
-		row = db.execute('SELECT club_id FROM Connex_Club WHERE club_id=:who', {"who": clubId}).fetchone()
+		row = db.execute('SELECT club_id FROM Clubs WHERE club_id=:who', {"who": clubId}).fetchone()
 		if row is None: 
 			return False
 		else :
@@ -80,20 +80,45 @@ def checkClubId (clubId):
 		print("clubId error")
 	finally: 
 		db.close()
-	
-		
-def checkEmail(email):
+
+def checkClubName (clubName): 
 	db= sqlite3.connect('dtb.db')
 	try: 
-		row = db.execute('SELECT email FROM Membres WHERE email=:which', {"which": email}).fetchone()
+		row = db.execute('SELECT nom_club FROM Clubs WHERE nom_club=:who', {"who": clubName}).fetchone()
 		if row is None: 
 			return False
 		else :
 			return True
 	except: 
-		print("email error")
+		print("clubName error")
 	finally: 
 		db.close()
+			
+		
+def checkEmail(email, mtype):
+	db= sqlite3.connect('dtb.db')
+	if mtype=="member" :
+		try: 
+			row = db.execute('SELECT email FROM Membres WHERE email=:which', {"which": email}).fetchone()
+			if row is None: 
+				return False
+			else :
+				return True
+		except: 
+			print("email member error")
+		finally: 
+			db.close()
+	else : #club
+		try: 
+			row = db.execute('SELECT email FROM Clubs WHERE email=:which', {"which": email}).fetchone()
+			if row is None: 
+				return False
+			else :
+				return True
+		except: 
+			print("email club error")
+		finally: 
+			db.close()
 		
 		
 #Returns True if login and password are correct and exist in database, False if not
@@ -124,32 +149,30 @@ def sign_in (login, password, mtype):
 		finally: 
 			db.close()
 
-#Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du club existe		
+#Retourne True si l'ajout est un succes, False si il y a eu une erreur et False si l'id du club existe		
 def sign_up_club(clubName,city,email,login,password,clubId):
-	print("je passe ici")
+	
 	try: 
-		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) : 
+		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) and (checkEmail(email, "club")==False) and (checkClubName(clubName)==False): 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
 			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
-			print("J'AJOUTE BIEN")
-			return 0 
-		else: 
-			print("THE ID OF THIS CLUB IS REGISTERED") 
-			return 1
+			return True 
+		else:  
+			return False
 	except: 
 		print("CLUB SIGNUP error")
-		return  -1 
+		return  False 
 	finally: 
 		print("End signup CLUB")
 
 
 
-#Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du membre existe			
+#Retourne True si l'ajout est un succes, FAlse si il y a eu une erreur et False si l'id du membre existe			
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
 
 	try: 
 	
-		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False) and (checkEmail(userMail)==False):  
+		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False) and (checkEmail(userMail,"member")==False):  
 		
 			if checkClubId(clubId) == True: #le clubID existe 
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 

@@ -53,5 +53,31 @@ function checkSignUpMember() {
 }
 
 
-
+function checkSignUpClub() {
+		
+		var outbound_message = {
+	   			'userName': $("#userName").val(),
+	   			'newLogin': $("#login").val(),
+	   			'email':$("#email").val(),
+	   			'noFede':$("#noFederation").val(),
+	   			
+  		};
+		$.ajax({
+        		type: 'POST',
+		     url: '/register/club',
+		     data: JSON.stringify(outbound_message),         
+	    		dataType: 'json',
+	    		contentType: 'application/json; charset=utf-8', 
+		       
+		     success: function(response) {
+		     	$("#test_duplicate_userName").text(response.clubName);
+		     	$("#test_duplicate_email").text(response.email);
+		     	$("#test_duplicate_login").text(response.newLogin);
+		     	$("#test_duplicate_noFede").text(response.noFede);
+		     },
+		     error: function() {
+		           console.log("do not work");
+		     }
+       	});
+}
 
