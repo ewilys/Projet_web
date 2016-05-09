@@ -168,13 +168,49 @@ def registerMember():
 		#ajax handler
 		if request.json :
 			license=request.json['license']
+			login=request.json['newLogin']
+			email=request.json['email']
+			clubId=request.json['clubId']
 			
-			#duplicate license :
-			if server_function.checkLicense(license) == False : 
-				pass 
+			if len(license)==8 :
+				#duplicate license :
+				if server_function.checkLicense(license) == False : 
+					license="ce numero de licence n'est pas utilise "
+				else :
+					license="ce numero de licence existe deja"
+			elif license !="":
+				license ="veuillez entrez un numero de licence a 8 chiffres"
+				
+				
+			if login != "":
+				#duplicate login :
+				if server_function.checklog(login,"member") == False:
+					login="login valide"
+				else : 
+					login="ce login existe deja , veuillez en choisir un autre"
+					
+			if len(clubId)==6:
+				#validate clubId :
+				if server_function.checkClubId(clubId) == True:
+					clubId="numero du club valide"
+				else : 
+					clubId="numero du club invalide"
+			elif clubId !="" :
+				clubId="veuillez entrer un numero de club a 6 chiffres"
 			
+			if email != "":
+				#validate email:
+				if server_function.checkEmail(email) == False :
+					email="email valide"
+				else:
+					email="cet email existe deja, veuillez en choisir un autre"
+							
+			return jsonify({'license':license, 'newLogin': login, 'email':email,'clubId':clubId})
+			
+
 		#submission :	
-		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == 0:
+		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == True:
+			session['username']=request.form['login']
 			return redirect( url_for('profileMember',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerMember'))
@@ -193,8 +229,9 @@ def profileClub(login):
 	
 @app.route('/home/profileMember/<login>')
 def profileMember(login): 
+	
 	result = server_function.getMemberProfile(login) 
-	return render_template('profileMember.html')
+	return render_template('profileMember.html', userName="lisa")
 
 
 @app.route('/home/profile/addLicense')

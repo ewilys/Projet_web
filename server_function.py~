@@ -80,6 +80,21 @@ def checkClubId (clubId):
 		print("login error")
 	finally: 
 		db.close()
+	
+		
+def checkEmail(email):
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute('SELECT email FROM Membres WHERE email=:which', {"which": email}).fetchone()
+		if row is None: 
+			return False
+		else :
+			return True
+	except: 
+		print("login error")
+	finally: 
+		db.close()
+		
 		
 #Returns True if login and password are correct and exist in database, False if not
 def sign_in (login, password, mtype):
@@ -110,11 +125,13 @@ def sign_in (login, password, mtype):
 			db.close()
 
 #Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du club existe		
-def sign_up_club (clubName,city,email,login,password,clubId):
+def sign_up_club(clubName,city,email,login,password,clubId):
+	print("je passe ici")
 	try: 
 		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) : 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
 			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
+			print("J'AJOUTE BIEN")
 			return 0 
 		else: 
 			print("THE ID OF THIS CLUB IS REGISTERED") 
@@ -125,26 +142,35 @@ def sign_up_club (clubName,city,email,login,password,clubId):
 	finally: 
 		print("End signup CLUB")
 
+
+
 #Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du membre existe			
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
+
 	try: 
-		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False):  #checker redondance email (lisa s'en charge)
-			if clubId: #le clubID existe (a tester lisa s'en charge!)
+	
+		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False) and (checkEmail(userMail)==False):  
+		
+			if checkClubId(clubId) == True: #le clubID existe 
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
-			else: 
-				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 	
+				insert("Suivis",("license", "club_id"),(licenseNo, clubId))
+			else: #le club n'existe pas
+				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 
+					
 			#si pas de redondance on peut inserer login et mot de passe		
 			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))
-			return 0		
+			return True		
 		else: 
-			print("LICENSE OR LOGIN ALREADY EXISTS") 
-			return 1 
+			print("LICENSE OR LOGIN OR EMAIL ALREADY EXISTS") 
+			return False 
 	
 	except: 
 		print("MEMBER SIGNUP error")
-		return -1 
+		return False 
 	finally: 
 		print("End signup MEMBER")
+	
+	
 	
 #Returns the tuple associated to the profile of a club with all the Datas
 def getClubProfile(login): 
