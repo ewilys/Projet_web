@@ -155,7 +155,7 @@ def logout():
 def registerClub():
 	if request.method=='POST':
 		if server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation']) == 0 :
-			return redirect(url_for('profileClub',login=request.form['login'))
+			return redirect(url_for('profileClub',login=request.form['login'])
 		else: 
 			return redirect(url_for('registerClub'])) 
 	return render_template('registerClub.html')
