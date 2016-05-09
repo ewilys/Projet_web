@@ -155,9 +155,9 @@ def logout():
 def registerClub():
 	if request.method=='POST':
 		if server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation']) == 0 :
-			return redirect(url_for('profileClub',login=request.form['login'])
+			return redirect(url_for('profileClub',login=request.form['login']))
 		else: 
-			return redirect(url_for('registerClub'])) 
+			return redirect(url_for('registerClub')) 
 	return render_template('registerClub.html')
 	
 @app.route('/register/member', methods=['GET', 'POST'])
@@ -169,7 +169,7 @@ def registerMember():
 			
 			#duplicate license :
 			if server_function.checkLicense(license) == False : 
-				
+				pass 
 			
 		#submission :	
 		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == 0:
