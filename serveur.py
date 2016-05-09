@@ -132,14 +132,14 @@ def login():
 	    		if oklog== True: #signIn has worked
 	    			session['username']=login 
 	    			mtype=mtype.capitalize()
-	    			return redirect(url_for("profile"+mtype))
+	    			return redirect(url_for("profile"+mtype, login=login))
 	    		else: 
 	    			return redirect('/login')
 		
 		#redirect to appropriate signUp	
 	    	elif request.form['subBtn'] == 'Club':
     			return redirect(url_for('registerClub'))
-    		elif request.form['subBtn'] == 'Membre':
+    		elif request.form['subBtn'] == 'Sportif':
     			return redirect(url_for('registerMember'))
 	else:
 		return render_template('login.html')  
@@ -155,18 +155,28 @@ def logout():
 def registerClub():
 	if request.method=='POST':
 		if server_function.sign_up_club(request.form['username'], request.form['ville'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['nofederation']) == 0 :
-			return redirect(url_for('profileClub'))
+			return redirect(url_for('profileClub',login=request.form['login'))
 		else: 
-			return redirect(url_for('registerClub',login=request.form['login'])) 
+			return redirect(url_for('registerClub'])) 
 	return render_template('registerClub.html')
 	
 @app.route('/register/member', methods=['GET', 'POST'])
 def registerMember():
 	if request.method == 'POST':
+		#ajax handler
+		if request.json :
+			license=request.json['license']
+			
+			#duplicate license :
+			if server_function.checkLicense(license) == False : 
+				
+			
+		#submission :	
 		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == 0:
 			return redirect( url_for('profileMember',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerMember'))
+	#GET :
 	return render_template('registerMember.html')
 
 @app.route('/home')

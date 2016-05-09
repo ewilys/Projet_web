@@ -128,11 +128,12 @@ def sign_up_club (clubName,city,email,login,password,clubId):
 #Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du membre existe			
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
 	try: 
-		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False):  
-			if clubId: 
+		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False):  #checker redondance email (lisa s'en charge)
+			if clubId: #le clubID existe (à tester lisa s'en charge!)
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
 			else: 
-				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 			
+				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 	
+			#si pas de redondance on peut inserer login et mot de passe		
 			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))
 			return 0		
 		else: 
