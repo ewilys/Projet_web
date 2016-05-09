@@ -129,7 +129,7 @@ def sign_up_club (clubName,city,email,login,password,clubId):
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
 	try: 
 		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False):  #checker redondance email (lisa s'en charge)
-			if clubId: #le clubID existe (a tester lisa s'en charge!)
+			if clubId: #le clubID existe ( tester lisa s'en charge!)
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
 			else: 
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 	
