@@ -110,13 +110,11 @@ def sign_in (login, password, mtype):
 			db.close()
 
 #Retourne 0 si l'ajout est un succes, -1 si il y a eu une erreur et 1 si l'id du club existe		
-def sign_up_club(clubName,city,email,login,password,clubId):
-	print("je passe ici")
+def sign_up_club (clubName,city,email,login,password,clubId):
 	try: 
 		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) : 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
 			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
-			print("J'AJOUTE BIEN")
 			return 0 
 		else: 
 			print("THE ID OF THIS CLUB IS REGISTERED") 
@@ -131,7 +129,7 @@ def sign_up_club(clubName,city,email,login,password,clubId):
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
 	try: 
 		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False):  #checker redondance email (lisa s'en charge)
-			if clubId: #le clubID existe ( tester lisa s'en charge!)
+			if clubId: #le clubID existe (a tester lisa s'en charge!)
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
 			else: 
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 	
