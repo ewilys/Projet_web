@@ -156,16 +156,9 @@ def sign_up_club(clubName,city,email,login,password,clubId):
 		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) and (checkEmail(email, "club")==False) and (checkClubName(clubName)==False): 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
 			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
-<<<<<<< HEAD
-			return 0 
-		else: 
-			print("THE ID OF THIS CLUB IS REGISTERED") 
-			return 1
-=======
 			return True 
 		else:  
 			return False
->>>>>>> a1758e00211f890feda2353f180afa216dd806da
 	except: 
 		print("CLUB SIGNUP error")
 		return  False 
@@ -233,4 +226,33 @@ def getMemberProfile(login):
 		print("Problem with the login in database Search ")
 	finally: 
 		db.close()
+
+def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,imageLink): 
+	try: 
+		insert("Evenements",("nom_ev","categorie","date_e","nb_places","adresse","description","lien_image"),(nameEvent,categorie,start,nbPlace,adress,desc,imageLink))
+		return 1
+	except: 
+		print("Could not insert Event in database ....")
+		return -1 
+	finally: 
+		print("End adding event")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

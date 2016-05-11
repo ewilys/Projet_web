@@ -249,13 +249,8 @@ def registerMember():
 			
 
 		#submission :	
-<<<<<<< HEAD
-		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == 0:
-			t = (request.form['login'],register.form['clubId'],request.form['bday'],request.form['userMail'])	
-=======
 		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == True:
 			session['username']=request.form['login']
->>>>>>> a1758e00211f890feda2353f180afa216dd806da
 			return redirect( url_for('profileMember',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerMember'))
@@ -276,12 +271,7 @@ def profileClub(login):
 def profileMember(login): 
 	#nom, prenom, categorie, club, email 
 	result = server_function.getMemberProfile(login) 
-<<<<<<< HEAD
-	print(result)
-	return render_template('profileMember.html',userName=result[0] ,userClub=result[3])
-=======
 	return render_template('profileMember.html', userName=login)
->>>>>>> a1758e00211f890feda2353f180afa216dd806da
 
 
 @app.route('/home/profile/addLicense')
@@ -292,9 +282,24 @@ def addLicense():
 def search (): 
 	return render_template('search.html')
 
-@app.route('/home/creaEnvent')
+@app.route('/home/creaEvent', methods=['GET', 'POST'])
 def createEvent():
-	return render_template('createEvent.html')
+	if request.method== 'POST': 
+		adress=request.form['city']+" "+ request.form['road']
+		print(adress)
+		nameEvent=request.form['nameEvent']
+		categorie=request.form['categorie']
+		start= request.form['start']
+		desc= request.form['desc']
+		imageLink="http://www.google.fr/"
+		if createEvent(nameEvent,categorie,start,adress,desc,imageLink)==1: 
+			print("SUCESS !" )
+			return redirect(url_for('main'))
+		else: 
+			print("error on event creation")
+			return redirect(url_for('createEvent'))
+	else: 
+		return render_template('createEvent.html')
 
 @app.route('/main')
 def main():
