@@ -27,8 +27,6 @@ def insert(table, fields=(), values=()):
 	finally: 
 		db.close()
 
-
-
 def checklog (login, mtype):
 	db= sqlite3.connect('dtb.db')
 	if mtype == "member":#member
@@ -250,6 +248,7 @@ def getEvent():
 		else: 
 			return "" 
 	except: 
+		print("exeption")
 	finally: 
 		print("End getting event") 
 

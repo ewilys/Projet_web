@@ -8,7 +8,9 @@ import sqlite3
 
 # ............................................................................................... #
 app = Flask(__name__)
-app.secret_key = os.urandom(256)   
+app.secret_key = os.urandom(256)
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # la session dure une heure
+   
 # ............................................................................................... #
 
 """
@@ -97,57 +99,62 @@ def authenticate_or_create(login, password):
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if request.method =='POST' : 
-		
-		#ajax handler
-		if request.json :
-			log_user=request.json["login"]
-			psw=request.json["pswrd"]
-			mtype=request.json["memtype"]
+	if 'username' in session: 
+		#A CHANGER PAR HOME QUAND ON AURA FINI LA PAGE HTML HOME 
+		return redirect(url_for('profileMember',login=session['username']))
+	else: 
+		if request.method =='POST' : 
 			
-			#validate login
-			if server_function.checklog(log_user, mtype) == True : 
-				user= " Le login est valide ! Well done !"
-			else :
-				user= " login inconnu "
+			#ajax handler
+			if request.json :
+				log_user=request.json["login"]
+				psw=request.json["pswrd"]
+				mtype=request.json["memtype"]
 				
-			#validate psw
-			if psw != "" : 
-				if server_function.sign_in(log_user,psw, mtype) == True:
-					psw= "le mot de passe est le bon ! bonne memoire"
+				#validate login
+				if server_function.checklog(log_user, mtype) == True : 
+					user= " Le login est valide ! Well done !"
 				else :
-					psw="mot de passe incorrect"		
-			return jsonify({'user': user, 'psw' : psw})
-			
-		#submission 	
-    		if request.form['subBtn'] == 'Connexion':
-       			# read the posted values from the UI
-			login = request.form['userID']
-   	 		password = request.form['pswrd']
- 			mtype=request.form['memberType']
- 			
-	    		# validate the received values
-	    		oklog= server_function.sign_in(login,password, mtype)
-	    		print (oklog)
-	    		if oklog== True: #signIn has worked
-	    			session['username']=login 
-	    			mtype=mtype.capitalize()
-	    			return redirect(url_for("profile"+mtype, login=login))
-	    		else: 
-	    			return redirect('/login')
+					user= " login inconnu "
+					
+				#validate psw
+				if psw != "" : 
+					if server_function.sign_in(log_user,psw, mtype) == True:
+						psw= "le mot de passe est le bon ! bonne memoire"
+					else :
+						psw="mot de passe incorrect"		
+				return jsonify({'user': user, 'psw' : psw})
+					
+			#submission 	
+    			if request.form['subBtn'] == 'Connexion':
+       				# read the posted values from the UI
+				login = request.form['userID']
+   		 		password = request.form['pswrd']
+ 				mtype=request.form['memberType']
+ 				
+		    		# validate the received values
+		    		oklog= server_function.sign_in(login,password, mtype)
+		    		print (oklog)
+			    	if oklog== True: #signIn has worked
+	    				session['username']=login 
+	    				mtype=mtype.capitalize()
+	    				return redirect(url_for("profile"+mtype, login=login))
+	    			else: 
+	    				return redirect('/login')
 		
-		#redirect to appropriate signUp	
-	    	elif request.form['subBtn'] == 'Club':
-    			return redirect(url_for('registerClub'))
-    		elif request.form['subBtn'] == 'Sportif':
-    			return redirect(url_for('registerMember'))
-	else:
-		return render_template('login.html')  
+			#redirect to appropriate signUp	
+	    		elif request.form['subBtn'] == 'Club':
+    				return redirect(url_for('registerClub'))
+    			elif request.form['subBtn'] == 'Sportif':
+    				return redirect(url_for('registerMember'))
+		else:
+			return render_template('login.html')  
 
 
 @app.route('/logout')
 def logout():
 	session.clear()
+	#session.pop('pseudo', None)
 	return redirect('/login')
 
 @app.route('/register/club', methods=['GET', 'POST'])
@@ -284,21 +291,13 @@ def search ():
 @app.route('/home/creaEvent', methods=['GET', 'POST'])
 def createEvent():
 	if request.method== 'POST': 
-		#print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
 		adress=request.form['city']+" "+ request.form['road']
-		print(adress)
 		nameEvent=request.form['nameEvent']
-		print("NOM EVENT "+ nameEvent)
 		categorie=request.form['categorie']
-		print("CATEGORIE = "+categorie)
 		nbPlace=request.form['nbPlace']
-		print("NB PLACES ="+nbPlace)
 		start= request.form['start']
-		print("DEBUT = "+start)
 		desc= request.form['desc']
-		print("DESCRIPTION = "+desc) 
 		hour=request.form['hour']
-		print("HEURE ="+ hour) 
 		imageLink="http://www.google.fr/"
 		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour)==1: 
 			print("SUCESS !" )
