@@ -219,7 +219,7 @@ def getMemberProfile(login):
 	try: 
 		row= c.execute('SELECT m.nom, m.prenom, ca.categorie, c.nom_club, m.email, m.date_n FROM Membres AS m, Categories AS ca, Clubs AS c, Connex_Membre AS mc WHERE m.licence=ca.licence AND m.club_id=c.club_id AND m.licence=mc.licence AND mc.login_membre:=who',{"who":login}).fetchone()
 		if row is not None:
-			print(row) 
+			print(row) #debug
 			return row
 		else: 
 			return "" 
@@ -239,7 +239,19 @@ def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour):
 	finally: 
 		print("End adding event")
 
-
+def getEvent():
+	db=sqlite3.connect('dtb.db')
+	c=db.cursor()	
+	try: 
+		row = c.execute("")
+		if row is not None: 
+			print(row) #debug
+			return row
+		else: 
+			return "" 
+	except: 
+	finally: 
+		print("End getting event") 
 
 
 
