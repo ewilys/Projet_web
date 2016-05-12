@@ -284,14 +284,23 @@ def search ():
 @app.route('/home/creaEvent', methods=['GET', 'POST'])
 def createEvent():
 	if request.method== 'POST': 
+		#print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
 		adress=request.form['city']+" "+ request.form['road']
 		print(adress)
 		nameEvent=request.form['nameEvent']
+		print("NOM EVENT "+ nameEvent)
 		categorie=request.form['categorie']
+		print("CATEGORIE = "+categorie)
+		nbPlace=request.form['nbPlace']
+		print("NB PLACES ="+nbPlace)
 		start= request.form['start']
+		print("DEBUT = "+start)
 		desc= request.form['desc']
+		print("DESCRIPTION = "+desc) 
+		hour=request.form['hour']
+		print("HEURE ="+ hour) 
 		imageLink="http://www.google.fr/"
-		if createEvent(nameEvent,categorie,start,adress,desc,imageLink)==1: 
+		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour)==1: 
 			print("SUCESS !" )
 			return redirect(url_for('main'))
 		else: 
