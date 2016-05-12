@@ -5,7 +5,7 @@ function newLicence(){
 	i++;
 }
 
-function date(){
+function date(id){
 		console.log("recherche date");
         date = new Date;
         year = date.getFullYear();
@@ -19,6 +19,11 @@ function date(){
         	}
         resultat=''+year+'-'+month+'-'+day+'';
         console.log(resultat);
-        document.getElementById("bday").setAttribute("max",resultat);
+        if (id=="bday"){
+        document.getElementById(id).setAttribute("max",resultat);
+        }
+        if (id=="start"){
+        document.getElementById(id).setAttribute("min",resultat);
+        }
         
 }

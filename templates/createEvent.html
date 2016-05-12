@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="http://localhost:5000/static/css/formsStyleSheet.css" />
+		<script language="JavaScript" src="../static/scripts.js"></script>
 		<title>Créer un évènement</title>
 	</head>
 	
@@ -38,20 +39,24 @@
 				<label for="road">Numéro et rue : </label>
 				<input type="text" name="road" id="road" required>
 				<br/>
+				
 				<label for="start" title="jj/mm/aaaa">Du : </label>
-				<input type="text" name="start" id="start" placeholder="jj/mm/aaaa" required>
+				<input type="date" name="start" id="start" placeholder="jj/mm/aaaa" required>
+				<script type="text/javascript">window.onload = date("start");</script>
 				<span id="test_format_start_date"></span>
+				
 				<label for="end" title="jj/mm/aaaa"> au : </label>
-				<input type="text" name="end" id="end" placeholder="jj/mm/aaaa" required>
+				<input type="date" name="end" id="end" placeholder="jj/mm/aaaa" required>
 				<span id="test_format_end_date"></span>
 				<br/>
+				
 				<label for="hour">A : </label>
-				<input type="text" name="hour" id="hour" placeholder="Ex : 14h30" required>
+				<input type="time" name="hour" id="hour" placeholder="Ex : 14h30" required>
 				<span id="test_format_hours"></span>
 			</p>
 			<p>
 			<div class="button">
-				<input type="submit" class="btn" name="subBtn" value="Envoyer"/>
+				<input type="submit" class="btn" name="subBtn" value="Soumettre"/>
 			</div>
 			</p>
 		</form>

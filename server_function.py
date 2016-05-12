@@ -149,6 +149,7 @@ def sign_in (login, password, mtype):
 		finally: 
 			db.close()
 
+
 #Retourne True si l'ajout est un succes, False si il y a eu une erreur et False si l'id du club existe		
 def sign_up_club(clubName,city,email,login,password,clubId):
 	
@@ -226,6 +227,7 @@ def getMemberProfile(login):
 		print("Problem with the login in database Search ")
 	finally: 
 		db.close()
+
 
 def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,imageLink): 
 	try: 

@@ -147,7 +147,6 @@ def login():
 
 @app.route('/logout')
 def logout():
-	from_page = request.args.get('from', 'main')
 	session.clear()
 	return redirect('/login')
 
