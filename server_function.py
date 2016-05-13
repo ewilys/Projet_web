@@ -9,6 +9,10 @@ import sys
 reload(sys) 
 sys.setdefaultencoding('utf8')
 
+def crypter(pswrd): 
+	mdp=pswrd.encode()
+	return hashlib.sha1(mdp).hexdigest()    
+
 def insert(table, fields=(), values=()):
 	db = sqlite3.connect('dtb.db')
 	#cur = db.cursor()
@@ -122,10 +126,11 @@ def checkEmail(email, mtype):
 #Returns True if login and password are correct and exist in database, False if not
 def sign_in (login, password, mtype):
 	db= sqlite3.connect('dtb.db')
+	pwd=password.encode()
 	if mtype == "member":#member
 		
 		try: 
-			row = db.execute('SELECT login_membre,mdp_membre FROM Connex_Membre WHERE login_membre=:who AND mdp_membre=:pass',{"who": login, "pass": password}).fetchone()
+			row = db.execute('SELECT login_membre,mdp_membre FROM Connex_Membre WHERE login_membre=:who AND mdp_membre=:pass',{"who": login, "pass": pwd}).fetchone()
 			if row is not None: 
 				return True
 			else: 
@@ -137,7 +142,7 @@ def sign_in (login, password, mtype):
 	else :#club
 	 
 		try: 
-			row = db.execute('SELECT login_club,mdp_club FROM Connex_Club WHERE login_club=:who AND mdp_club=:pass',{"who": login, "pass": password}).fetchone()
+			row = db.execute('SELECT login_club,mdp_club FROM Connex_Club WHERE login_club=:who AND mdp_club=:pass',{"who": login, "pass": pwd}).fetchone()
 			if row is not None: 
 				return True
 			else: 
@@ -150,11 +155,11 @@ def sign_in (login, password, mtype):
 
 #Retourne True si l'ajout est un succes, False si il y a eu une erreur et False si l'id du club existe		
 def sign_up_club(clubName,city,email,login,password,clubId):
-	
+	pwd=password.encode()
 	try: 
 		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) and (checkEmail(email, "club")==False) and (checkClubName(clubName)==False): 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
-			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
+			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,pwd,clubId))
 			return True 
 		else:  
 			return False
@@ -168,7 +173,7 @@ def sign_up_club(clubName,city,email,login,password,clubId):
 
 #Retourne True si l'ajout est un succes, FAlse si il y a eu une erreur et False si l'id du membre existe			
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
-
+	pwd=pswrd.encode()
 	try: 
 	
 		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False) and (checkEmail(userMail,"member")==False):  
@@ -181,7 +186,7 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 
 					
 			#si pas de redondance on peut inserer login et mot de passe		
-			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))
+			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pwd,licenseNo))
 			return True		
 		else: 
 			print("LICENSE OR LOGIN OR EMAIL ALREADY EXISTS") 
