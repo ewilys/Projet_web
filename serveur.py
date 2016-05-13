@@ -8,7 +8,9 @@ import sqlite3
 
 # ............................................................................................... #
 app = Flask(__name__)
-app.secret_key = os.urandom(256)   
+app.secret_key = os.urandom(256)
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # la session dure une heure
+   
 # ............................................................................................... #
 
 """
@@ -97,62 +99,74 @@ def authenticate_or_create(login, password):
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if request.method =='POST' : 
-		
-		#ajax handler
-		if request.json :
-			log_user=request.json["login"]
-			psw=request.json["pswrd"]
-			mtype=request.json["memtype"]
+	if 'usernameMember' in session: 
+		#A CHANGER PAR HOME QUAND ON AURA FINI LA PAGE HTML HOME 
+		result = server_function.getMemberProfile(session['usernameMember'])
+		return redirect(url_for('profileMember',login=session['usernameMember']))
+	elif 'usernameClub' in session: 
+		result = server_function.getClubProfile(session['usernameClub']) 
+		print(result)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2])
+	else: 
+		if request.method =='POST' : 
 			
-			#validate login
-			
-			if server_function.checklog(log_user, mtype) == True : 
-				user= " Le login est valide ! Well done !"
-			else :
-				user= " login inconnu "
+			#ajax handler
+			if request.json :
+				log_user=request.json["login"]
+				psw=request.json["pswrd"]
+				mtype=request.json["memtype"]
 				
-			#validate psw
-			if psw != "" : 
-				if server_function.sign_in(log_user,psw, mtype) [0] == True:
-					psw= "le mot de passe est le bon ! bonne memoire"
+				#validate login
+				if server_function.checklog(log_user, mtype) == True : 
+					user= "login valide"
 				else :
-					psw="mot de passe incorrect"		
-			return jsonify({'user': user, 'psw' : psw})
-			
-		#submission 	
-    		if request.form['subBtn'] == 'Connexion':
-       			# read the posted values from the UI
-			login = request.form['userID']
-   	 		password = request.form['pswrd']
- 			mtype=request.form['memberType']
- 			
-	    		# validate the received values
-	    		oklog, repLog = server_function.sign_in(login,password, mtype)
-	    		print (oklog)
-	    		if oklog  == True: #signIn has worked
-	    			session['username']=login 
-	    			mtype=mtype.capitalize()
-	    			return redirect(url_for("profile"+mtype, login=login))
-	    		else:
-	    			if repLog == True:
-	    				flash("Echec de connexion : Le mot de passe est incorrect");
-	    			else :
-	    				flash("Echec de connexion : Le login est incorrect");
-	    			return redirect('/login')
+					user= " login inconnu "
+					
+				#validate psw
+				if psw != "" : 
+					if server_function.sign_in(log_user,psw, mtype)[0] == True:
+						psw= "mot de passe valide"
+					else :
+						psw="mot de passe incorrect"		
+				return jsonify({'user': user, 'psw' : psw})
+					
+			#submission 	
+    			if request.form['subBtn'] == 'Connexion':
+       				# read the posted values from the UI
+				login = request.form['userID']
+   		 		password = request.form['pswrd']
+ 				mtype=request.form['memberType']
+ 				
+		    		# validate the received values
+		    		oklog, repLog = server_function.sign_in(login,password, mtype)
+	    			print (oklog)
+			    	if oklog== True: #signIn has worked
+	    				mtype=mtype.capitalize()
+	    				if mtype=='Club':
+	    					session['usernameClub']=login 
+	    				else : 
+	    					session['usernameMember']=login 
+	    				return redirect(url_for("profile"+mtype, login=login))
+	    			else: 
+	    				if repLog == True:
+	    					flash("Echec de connexion : Le mot de passe est incorrect");
+	    				else :
+	    					flash("Echec de connexion : Le login est incorrect");
+	    				return redirect('/login')
 		
-		#redirect to appropriate signUp	
-	    	elif request.form['subBtn'] == 'Club':
-    			return redirect(url_for('registerClub'))
-    		elif request.form['subBtn'] == 'Sportif':
-    			return redirect(url_for('registerMember'))
-	else:
-		return render_template('login.html')  
+			#redirect to appropriate signUp	
+	    		elif request.form['subBtn'] == 'Club':
+    				return redirect(url_for('registerClub'))
+    			elif request.form['subBtn'] == 'Sportif':
+    				return redirect(url_for('registerMember'))
+		else:
+			return render_template('login.html')  
 
 
 @app.route('/logout')
 def logout():
 	session.clear()
+	#session.pop('pseudo', None)
 	return redirect('/login')
 
 @app.route('/register/club', methods=['GET', 'POST'])
@@ -199,9 +213,11 @@ def registerClub():
 			return jsonify({'clubName':clubName, 'newLogin': login, 'email':email,'noFede':noFede})
 			
 		#submission :	
+
 		repRegClub=server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation'])
 		
 		if repRegClub[0] == 0:
+			session['usernameClub']=request.form['login']
 			return redirect( url_for('profileClub',login=request.form['login']))
 		else:
 			flash("Erreur d'inscription!") 
@@ -234,7 +250,8 @@ def registerMember():
 			if len(license)==8 :
 				#duplicate license :
 				if server_function.checkLicense(license) == False : 
-					license="ce numero de licence n'est pas utilise"
+					license="numero de licence valable"
+
 				else :
 					license="ce numero de licence existe deja"
 			elif license !="":
@@ -268,10 +285,13 @@ def registerMember():
 			
 
 		#submission :	
+
 		repRegMem=server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd'])
 		
 		if repRegMem == 0:
 			session['username']=request.form['login']
+			session['usernameMember']=request.form['login']
+
 			return redirect( url_for('profileMember',login=request.form['login']))
 		else: 
 			flash("Erreur d'inscription!") 
@@ -299,12 +319,14 @@ def home():
 @app.route('/home/profileClub/<login>')
 def profileClub(login): 
 	result = server_function.getClubProfile(login) 
-	return render_template('profileClub.html')
+	print(result)
+	return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2])
 	
 @app.route('/home/profileMember/<login>')
 def profileMember(login): 
 	#nom, prenom, categorie, club, email 
 	result = server_function.getMemberProfile(login) 
+	print(result)
 	return render_template('profileMember.html', userName=login)
 
 
@@ -320,13 +342,14 @@ def search ():
 def createEvent():
 	if request.method == 'POST': 
 		adress=request.form['city']+" "+ request.form['road']
-		print(adress)
 		nameEvent=request.form['nameEvent']
 		categorie=request.form['categorie']
+		nbPlace=request.form['nbPlace']
 		start= request.form['start']
 		desc= request.form['desc']
+		hour=request.form['hour']
 		imageLink="http://www.google.fr/"
-		if createEvent(nameEvent,categorie,start,adress,desc,imageLink)==1: 
+		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour)==1: 
 			print("SUCESS !" )
 			return redirect(url_for('main'))
 		else: 

@@ -1,22 +1,37 @@
 @font-face
 {
 	font-family: 'Pacifico';
-	src: url('./fonts/pacifico/Pacifico.ttf');
+	src: url('fonts/pacifico/Pacifico.ttf');
 }
 
 @font-face {
     font-family: 'robotoregular';
-    src: url('Roboto-Regular-webfont.eot');
-    src: url('Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('Roboto-Regular-webfont.woff') format('woff'),
-         url('Roboto-Regular-webfont.ttf') format('truetype'),
-         url('Roboto-Regular-webfont.svg#robotoregular') format('svg');
+    src: url('fonts/roboto-fontfacekit/web\ fonts/roboto_regular_macroman/Roboto-Regular-webfont.eot');
+    src: url('fonts/roboto-fontfacekit/web\ fonts/roboto_regular_macroman/Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-fontfacekit/web\ fonts/roboto_regular_macroman/Roboto-Regular-webfont.woff') format('woff'),
+         url('fonts/roboto-fontfacekit/web\ fonts/roboto_regular_macroman/Roboto-Regular-webfont.ttf') format('truetype'),
+         url('fonts/roboto-fontfacekit/web\ fonts/roboto_regular_macroman/Roboto-Regular-webfont.svg#robotoregular') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
 
 h1
+{
+	font-family: 'Pacifico', sans-serif;
+	font-weight: normal;
+	font-size: 5em;
+	color: white;
+	background-color: rgb(5, 177, 235); 
+	text-align: left;
+	border-radius: 6px;
+}
+
+header
+{
+	width: 100%;
+}
+
+h2
 {
 	font-family: 'Pacifico', sans-serif;
 	font-size: 3em;
@@ -46,7 +61,7 @@ form
 	
 }
 
-h2
+h3
 {
 	font-family: 'Pacifico', sans-serif;
 	font-size: 1.5em;
@@ -98,4 +113,18 @@ label
 .btn:hover
 {
 	background-color: rgb(5, 177, 235);
+}
+
+.info[value="_blank"]
+{
+	display: none;
+}
+.info[value="Filled"]
+{
+	font-family: 'robotoregular', sans-serif;
+	font-size: 0.8em;
+	color: rgb(255,89,0);
+	border: solid 1px;
+	padding: 2px;
+	border-radius: 3px;
 }
