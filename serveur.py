@@ -113,14 +113,14 @@ def login():
 				
 				#validate login
 				if server_function.checklog(log_user, mtype) == True : 
-					user= " Le login est valide ! Well done !"
+					user= "login valide"
 				else :
 					user= " login inconnu "
 					
 				#validate psw
 				if psw != "" : 
 					if server_function.sign_in(log_user,psw, mtype) == True:
-						psw= "le mot de passe est le bon ! bonne memoire"
+						psw= "mot de passe valide"
 					else :
 						psw="mot de passe incorrect"		
 				return jsonify({'user': user, 'psw' : psw})
@@ -221,7 +221,7 @@ def registerMember():
 			if len(license)==8 :
 				#duplicate license :
 				if server_function.checkLicense(license) == False : 
-					license="ce numero de licence n'est pas utilise "
+					license="numero de licence valable"
 				else :
 					license="ce numero de licence existe deja"
 			elif license !="":
