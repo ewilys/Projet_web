@@ -271,12 +271,14 @@ def home():
 @app.route('/home/profileClub/<login>')
 def profileClub(login): 
 	result = server_function.getClubProfile(login) 
-	return render_template('profileClub.html')
+	print(result)
+	return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2])
 	
 @app.route('/home/profileMember/<login>')
 def profileMember(login): 
 	#nom, prenom, categorie, club, email 
 	result = server_function.getMemberProfile(login) 
+	print(result)
 	return render_template('profileMember.html', userName=login)
 
 
