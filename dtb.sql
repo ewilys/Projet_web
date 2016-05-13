@@ -84,7 +84,6 @@ insert into Connex_Club(login_club, mdp_club, club_id)
 values ("cecileclub", "azerty", "4"), ("martiniclub", "mdp", "3");
 
 insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description, lien_image)
-<<<<<<< HEAD
 values ("coupe normandie handball","3","all","19022017","1600","50","disponible","30, avenue de gaulle,Havre"," événement handball organisé par martiniclub accès publique", "https://drive.google.com/open?id=0B39DIRT6d2sGLUQwb2RsbmU0VHM");
 
 insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description, lien_image)
