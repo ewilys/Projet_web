@@ -129,9 +129,10 @@ def sign_in (login, password, mtype):
 		try: 
 			row = db.execute('SELECT login_membre,mdp_membre FROM Connex_Membre WHERE login_membre=:who AND mdp_membre=:pass',{"who": login, "pass": password}).fetchone()
 			if row is not None: 
-				return True
+				return True, True
 			else: 
-				return False 
+				repLog=checklog(login, mtype);
+				return False, repLog
 		except: 
 			print("sigin error")
 		finally: 
@@ -141,28 +142,32 @@ def sign_in (login, password, mtype):
 		try: 
 			row = db.execute('SELECT login_club,mdp_club FROM Connex_Club WHERE login_club=:who AND mdp_club=:pass',{"who": login, "pass": password}).fetchone()
 			if row is not None: 
-				return True
+				return True, True
 			else: 
-				return False 
+				repLog=checklog(login, mtype);
+				return False , repLog
 		except: 
 			print("signin error")
 		finally: 
 			db.close()
 
 
-#Retourne True si l'ajout est un succes, False si il y a eu une erreur et False si l'id du club existe		
+#Retourne 0 si l'ajout est un succes, res des requetes si une des exigences n'est pas respectee et -1 si erreur	
 def sign_up_club(clubName,city,email,login,password,clubId):
-	
+	cl=checklog(login,"club")
+	ci=checkClubId(clubId)
+	ce=checkEmail(email, "club")
+	cn=checkClubName(clubName)
 	try: 
-		if (checklog(login,"club")==False) and  (checkClubId(clubId)==False) and (checkEmail(email, "club")==False) and (checkClubName(clubName)==False): 
+		if (cl==False) and  (ci==False) and (ce==False) and (cn==False): 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
 			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,password,clubId))
-			return True 
+			return 0 
 		else:  
-			return False
+			return cl, ci, ce, cn
 	except: 
 		print("CLUB SIGNUP error")
-		return  False 
+		return  -1 
 	finally: 
 		print("End signup CLUB")
 
@@ -170,12 +175,15 @@ def sign_up_club(clubName,city,email,login,password,clubId):
 
 #Retourne True si l'ajout est un succes, FAlse si il y a eu une erreur et False si l'id du membre existe			
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
-
+	cli=checkLicense(licenseNo)
+	clo=checklog(login,"member")
+	ce=checkEmail(userMail,"member")
+	cc=checkClubId(clubId)
 	try: 
 	
-		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False) and (checkEmail(userMail,"member")==False):  
+		if ( cli == False) and (clo==False) and (ce==False):  
 		
-			if checkClubId(clubId) == True: #le clubID existe 
+			if cc == True : #le clubID existe 
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
 				insert("Suivis",("license", "club_id"),(licenseNo, clubId))
 			else: #le club n'existe pas
@@ -183,10 +191,10 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 					
 			#si pas de redondance on peut inserer login et mot de passe		
 			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pswrd,licenseNo))
-			return True		
+			return 0		
 		else: 
 			print("LICENSE OR LOGIN OR EMAIL ALREADY EXISTS") 
-			return False 
+			return cli,clo,ce,cc 
 	
 	except: 
 		print("MEMBER SIGNUP error")

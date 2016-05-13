@@ -106,6 +106,7 @@ def login():
 			mtype=request.json["memtype"]
 			
 			#validate login
+			
 			if server_function.checklog(log_user, mtype) == True : 
 				user= " Le login est valide ! Well done !"
 			else :
@@ -113,7 +114,7 @@ def login():
 				
 			#validate psw
 			if psw != "" : 
-				if server_function.sign_in(log_user,psw, mtype) == True:
+				if server_function.sign_in(log_user,psw, mtype) [0] == True:
 					psw= "le mot de passe est le bon ! bonne memoire"
 				else :
 					psw="mot de passe incorrect"		
@@ -127,13 +128,17 @@ def login():
  			mtype=request.form['memberType']
  			
 	    		# validate the received values
-	    		oklog= server_function.sign_in(login,password, mtype)
+	    		oklog, repLog = server_function.sign_in(login,password, mtype)
 	    		print (oklog)
-	    		if oklog== True: #signIn has worked
+	    		if oklog  == True: #signIn has worked
 	    			session['username']=login 
 	    			mtype=mtype.capitalize()
 	    			return redirect(url_for("profile"+mtype, login=login))
-	    		else: 
+	    		else:
+	    			if repLog == True:
+	    				flash("Echec de connexion : Le mot de passe est incorrect");
+	    			else :
+	    				flash("Echec de connexion : Le login est incorrect");
 	    			return redirect('/login')
 		
 		#redirect to appropriate signUp	
@@ -194,10 +199,25 @@ def registerClub():
 			return jsonify({'clubName':clubName, 'newLogin': login, 'email':email,'noFede':noFede})
 			
 		#submission :	
-		if server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation']) == True:
-			
+		repRegClub=server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation'])
+		
+		if repRegClub[0] == 0:
 			return redirect( url_for('profileClub',login=request.form['login']))
-		else: 
+		else:
+			flash("Erreur d'inscription!") 
+			rep=[]
+			for i in repRegClub:
+				rep.append(i)
+				print(rep)
+			if rep[0]== True:
+				flash(" Login deja existant, veuillez en choisir un autre")
+			if rep[1]== True:
+				flash(" Numero de federation deja existant, veuillez en choisir un autre")
+			if rep[2]== True:
+				flash(" Email deja existant, veuillez en choisir un autre")
+			if rep[3]== True:
+				flash(" Nom de club deja existant, veuillez en choisir un autre")
+					
 			return redirect(url_for('registerClub'))
 	return render_template('registerClub.html')
 	
@@ -214,7 +234,7 @@ def registerMember():
 			if len(license)==8 :
 				#duplicate license :
 				if server_function.checkLicense(license) == False : 
-					license="ce numero de licence n'est pas utilise "
+					license="ce numero de licence n'est pas utilise"
 				else :
 					license="ce numero de licence existe deja"
 			elif license !="":
@@ -233,7 +253,7 @@ def registerMember():
 				if server_function.checkClubId(clubId) == True:
 					clubId="numero du club valide"
 				else : 
-					clubId="numero du club invalide"
+					clubId="numero du club invalide, veuillez en entrer un autre"
 			elif clubId !="" :
 				clubId="veuillez entrer un numero de club a 6 chiffres"
 			
@@ -248,10 +268,25 @@ def registerMember():
 			
 
 		#submission :	
-		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == True:
+		repRegMem=server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd'])
+		
+		if repRegMem == 0:
 			session['username']=request.form['login']
 			return redirect( url_for('profileMember',login=request.form['login']))
 		else: 
+			flash("Erreur d'inscription!") 
+			rep=[]
+			for i in repRegMem:
+				rep.append(i)
+				print(rep)
+			if rep[0]== True:
+				flash(" Licence deja existante, veuillez en choisir un autre")
+			if rep[1]== True:
+				flash(" Login deja existant, veuillez en choisir un autre")
+			if rep[2]== True:
+				flash(" Email deja existant, veuillez en choisir un autre")
+			if rep[3]== False:
+				flash(" Numero du club invalide, veuillez en choisir un autre")
 			return redirect(url_for('registerMember'))
 	#GET :
 	return render_template('registerMember.html')
@@ -283,7 +318,7 @@ def search ():
 
 @app.route('/home/creaEvent', methods=['GET', 'POST'])
 def createEvent():
-	if request.method== 'POST': 
+	if request.method == 'POST': 
 		adress=request.form['city']+" "+ request.form['road']
 		print(adress)
 		nameEvent=request.form['nameEvent']

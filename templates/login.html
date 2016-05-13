@@ -12,6 +12,13 @@
 		<section id="signinBloc">
 			<form method='POST' action='/login'>
 				<h1>Connexion</h1>
+				{% with messages = get_flashed_messages() %}
+      			{% if messages %}
+        				{% for message in messages %}
+          				<div class="alert alert-danger">{{ message }}</div>
+        				{% endfor %}
+      			{% endif %}
+    				{% endwith %}
 				<p id="blocSignIn">
 					<label for="memberType">Vous êtes ?</label><br/>
 					<input type="radio" name="memberType" id="club" value="club" /><label for="club"> Un club</label>
