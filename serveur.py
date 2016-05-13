@@ -184,7 +184,7 @@ def registerClub():
 				if server_function.checkClubName(clubName) == False : 
 					clubName="nom de club valide "
 				else :
-					clubName="ce nom de club existe deja"
+					clubName="ce nom de club existe deja, veuillez en choisir un autre"
 						
 				
 			if login != "":
@@ -215,7 +215,7 @@ def registerClub():
 		#submission :	
 
 		repRegClub=server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation'])
-		
+		print(repRegClub)
 		if repRegClub[0] == 0:
 			session['usernameClub']=request.form['login']
 			return redirect( url_for('profileClub',login=request.form['login']))
@@ -232,9 +232,9 @@ def registerClub():
 			if rep[2]== True:
 				flash(" Email deja existant, veuillez en choisir un autre")
 			if rep[3]== True:
-				flash(" Nom de club deja existant, veuillez en choisir un autre")
-					
+				flash(" Nom de club deja existant, veuillez en choisir un autre")		
 			return redirect(url_for('registerClub'))
+			
 	return render_template('registerClub.html')
 	
 @app.route('/register/member', methods=['GET', 'POST'])

@@ -168,10 +168,8 @@ def sign_up_club(clubName,city,email,login,password,clubId):
 	try: 
 		if (cl==False) and  (ci==False) and (ce==False) and (cn==False): 
 			insert("Clubs",("club_id","nom_club","ville","email"),(clubId,clubName,city,email)) 
-
 			insert("Connex_Club",("login_club","mdp_club","club_id"),(login,pwd,clubId))
-			return 0 
-
+			return 0
 		else:  
 			return cl, ci, ce, cn
 	except: 
