@@ -174,6 +174,7 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 		if (checkLicense(licenseNo) == False) and (checklog(login,"member")==False) and (checkEmail(userMail,"member")==False):  
 		
 			if checkClubId(clubId) == True: #le clubID existe 
+				print("jinsere les infos membre dans MEMBRES")	
 				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
 				insert("Suivis",("license", "club_id"),(licenseNo, clubId))
 			else: #le club n'existe pas

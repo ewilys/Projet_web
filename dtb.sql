@@ -2,7 +2,7 @@
 .databases
 
 create table Membres (
-    license text primary key,
+    licence text primary key,
     nom text,
     prenom text,
     date_n text,
@@ -16,8 +16,7 @@ create table Clubs (
     email text) ;
     
 create table Evenements (
-    ev_id integer primary key AUTOINCREMENT,
-    nom_ev text,
+    nom_ev text primary key,
     club_id text,
     categorie text,
     date_e text,
@@ -26,26 +25,26 @@ create table Evenements (
     etat text,
     adresse text,
     description text,
-    FOREIGN KEY(club_id) REFERENCES Membres(club_id)) ;
+    lien_image text,
+    FOREIGN KEY(club_id) REFERENCES Membres(club_id)
+    FOREIGN KEY(categorie) REFERENCES Categories(categorie) );
     
 create table Inscriptions (
-    license text,
-    ev_id text,
-    FOREIGN KEY(license) REFERENCES Membres(license),
-    FOREIGN KEY(ev_id) REFERENCES Evenements(ev_id) );
-
-
+    licence text,
+    nom_ev text,
+    FOREIGN KEY(licence) REFERENCES Membres(licence),
+    FOREIGN KEY(nom_ev) REFERENCES Evenements(nom_ev) );
     
 create table Suivis (
-    license text,
+    licence text,
     club_id text,
-     FOREIGN KEY(license) REFERENCES Membres(license),
+     FOREIGN KEY(licence) REFERENCES Membres(licence),
     FOREIGN KEY(club_id) REFERENCES Membres(club_id)) ;
  																					
 create table Categories (
-    license text,
-    groupe_id text primary key,
-    FOREIGN KEY(license) REFERENCES Membres(license)) ;
+    licence text,
+    categorie text primary key,
+    FOREIGN KEY(licence) REFERENCES Membres(licence)) ;
     
 create table Connex_Club (
     login_club text primary key,
@@ -56,64 +55,73 @@ create table Connex_Club (
 create table Connex_Membre (
     login_membre text primary key,
     mdp_membre text,
-    license text,
-    FOREIGN KEY(license) REFERENCES Membres(license)) ;
-    
+    licence text,
+    FOREIGN KEY(licence) REFERENCES Membres(licence)) ;
+        
 .tables
 
 .schema table
 
-insert into Membres(license,nom,prenom,date_n,email,club_id)
-values ("12345678","martini", "lisa","12051994","martini.lisa14@gmail.com",026159) ; /*nom des catégories all poussinado jeune senior */
+insert into Membres(licence,nom,prenom,date_n,email,club_id)
+values ("1","martini", "lisa","12051994","martini.lisa14@gmail.com","4") ; /*nom des catégories all poussin ado jeune senior */
 
-insert into Connex_Membre(login_membre, mdp_membre, license)
-values ("lisa","moi","12345678")
+insert into Membres(licence,nom,prenom,date_n,email,club_id)
+values ("2","jean-louis", "jhgjh","020318995","hffx@gmail.com","3");
 
-insert into Membres(license,nom,prenom,date_n,email,club_id)
-values ("89987654","jean-louis", "jhgjh","020318995","hffx@gmail.com",123);
-
-insert into Clubs(club_id,nom_club,ville,email)
-values ("568423","martiniclub","lyon","martiniclub@gmail.com");
+insert into Membres(licence,nom,prenom,date_n,email,club_id)
+values ("5","esclarmonde", "dubois","30031932","escla@gmail.com","3");
 
 insert into Clubs(club_id,nom_club,ville,email)
-values ("547634","cecileclub","paris","cecileclub@gmail.com");
+values ("3","martiniclub","lyon","martiniclub@gmail.com");
 
-insert into Connex_Membre(login_membre, mdp_membre, license)
-values ("lisa", "moi", "12345678");
+insert into Clubs(club_id,nom_club,ville,email)
+values ("4","cecileclub","paris","cecileclub@gmail.com");
 
-insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description)
-values ("coupe normandie handball","martiniclub","all","19022017","1600","50","disponible","30, avenue de gaulle,Havre"," événement handball organisé par martiniclub accès publique");
+insert into Connex_Membre(login_membre, mdp_membre, licence)
+values ("lisa", "moi", "1");
 
+insert into Connex_Membre(login_membre, mdp_membre, licence)
+values ("jean-louis", "plop", "2");
 
-insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description)
-values("equitation trophy","cecileclub","jeune",15062016,"1200","15","complet","2, rue des arts villeurbanneé","compétition déquitation sur le campus de la DOUA");
+insert into Connex_Club(login_club, mdp_club, club_id)
+values ("cecileclub", "azerty", "4");
 
-insert into Inscriptions(license,ev_id)
-values ("89987654","2");
+insert into Connex_Club(login_club, mdp_club, club_id)
+values ("martiniclub", "mdp", "3");
 
-
-insert into Inscriptions(license,ev_id)
-values ("50123456","1");
-
-insert into Inscriptions(license,ev_id)
-values ("50123456","2");
-
-insert into Suivis(license,club_id)
-values("50123456","547634");
+insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description, lien_image)
+values ("coupe normandie handball","3","all","19022017","1600","50","disponible","30, avenue de gaulle,Havre"," événement handball organisé par martiniclub accès publique", "https://drive.google.com/open?id=0B39DIRT6d2sGLUQwb2RsbmU0VHM");
 
 
-insert into Suivis(license,club_id)
-values("50123456","568423");
+insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description, lien_image)
+values("equitation trophy","4","jeune","15062016","1200","15","complet","2, rue des arts villeurbanne","compétition déquitation sur le campus de la DOUA", "https://drive.google.com/open?id=0B39DIRT6d2sGUlR3a3B5T0V4VzQ");
+
+insert into Inscriptions(licence,nom_ev)
+values ("1","coupe normandie handball");
 
 
-insert into Suivis(license,club_id)
-values("89987654","568423");
+insert into Inscriptions(licence,nom_ev)
+values ("2","coupe normandie handball");
 
-insert into Categories(license,groupe_id)
-values("89987654","jeune");
+insert into Inscriptions(licence,nom_ev)
+values ("1","equitation trophy");
 
-insert into Categories(license,groupe_id)
-values("50123456","senior");
+insert into Suivis(licence,club_id)
+values("1","3");
+
+
+insert into Suivis(licence,club_id)
+values("2","3");
+
+
+insert into Suivis(licence,club_id)
+values("1","4");
+
+insert into Categories(licence,categorie)
+values("2","jeune");
+
+insert into Categories(licence, categorie)
+values("1","senior");
 
 
 

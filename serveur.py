@@ -99,9 +99,14 @@ def authenticate_or_create(login, password):
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if 'username' in session: 
+	if 'usernameMember' in session: 
 		#A CHANGER PAR HOME QUAND ON AURA FINI LA PAGE HTML HOME 
-		return redirect(url_for('profileMember',login=session['username']))
+		result = server_function.getMemberProfile(session['usernameMember'])
+		return redirect(url_for('profileMember',login=session['usernameMember']))
+	elif 'usernameClub' in session: 
+		result = server_function.getClubProfile(session['usernameClub']) 
+		print(result)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2])
 	else: 
 		if request.method =='POST' : 
 			
@@ -136,8 +141,12 @@ def login():
 		    		oklog= server_function.sign_in(login,password, mtype)
 		    		print (oklog)
 			    	if oklog== True: #signIn has worked
-	    				session['username']=login 
+	    				#session['username']=login 
 	    				mtype=mtype.capitalize()
+	    				if mtype=='Club':
+	    					session['usernameClub']=login 
+	    				else : 
+	    					session['usernameMember']=login 
 	    				return redirect(url_for("profile"+mtype, login=login))
 	    			else: 
 	    				return redirect('/login')
@@ -202,7 +211,7 @@ def registerClub():
 			
 		#submission :	
 		if server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation']) == True:
-			
+			session['usernameClub']=request.form['login']
 			return redirect( url_for('profileClub',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerClub'))
@@ -256,7 +265,7 @@ def registerMember():
 
 		#submission :	
 		if server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd']) == True:
-			session['username']=request.form['login']
+			session['usernameMember']=request.form['login']
 			return redirect( url_for('profileMember',login=request.form['login']))
 		else: 
 			return redirect(url_for('registerMember'))
