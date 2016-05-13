@@ -4,8 +4,8 @@
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="http://localhost:5000/static/css/formsStyleSheet.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-		<script language="JavaScript" src="../static/signIn.js"></script>
-		<script language="JavaScript" src="../static/scripts.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/signIn.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
 		<title>Inscription</title>
 	</head>
 	
@@ -29,19 +29,19 @@
 			<p>
 				<label for="userMail">Email : </label>
 				<input type="email" name="userMail" id="userMail"  onkeyup="javascript:checkSignUpMember();" required/>
-				<span id="test_duplicate_email"></span>
+				<span class="info" id="test_duplicate_email" value="_blank"></span>
 				<br />
 				<label for="userNo">Numéro de licence : </label>
 				<input type="number" min="00000001" max="99999999"name="userNo" id="userNo" onkeyup="javascript:checkSignUpMember();" required/>
-				<span id="test_duplicate_license"></span>
+				<span class="info" id="test_duplicate_license" value="_blank"></span>
 				<br />
 				<label for="clubId">Identifiant de votre club (si vous en avez un): </label>
 				<input type="number" min="000001" max="999999" name="clubId" id="clubId" onkeyup="javascript:checkSignUpMember();" />
-				<span id="test_valid_clubId"></span>
+				<span class="info" id="test_valid_clubId" value="_blank"></span>
 				<br />
 				<label for="login">Identifiant : </label>
 				<input type="text" name="login" id="login" onkeyup="javascript:checkSignUpMember();"  required/>
-				<span id="test_duplicate_login"></span>
+				<span class="info" id="test_duplicate_login" value="_blank"></span>
 				<br />
 				<label for="pswrd">Mot de passe : </label>
 				<input type="password" name="pswrd" id="pswrd" required/>
