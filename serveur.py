@@ -288,7 +288,7 @@ def profileMember(login):
 	#nom, prenom, categorie, club, email 
 	result = server_function.getMemberProfile(login) 
 	print(result)
-	return render_template('profileMember.html', userName=login)
+	return render_template('profileMember.html', userName=result[0]+" "+result[1], userAge= result[5],userMail= result[4], userClub=result[3])
 
 
 @app.route('/home/profile/addLicense')

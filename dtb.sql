@@ -92,7 +92,6 @@ values ("martiniclub", "mdp", "3");
 insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description, lien_image)
 values ("coupe normandie handball","3","all","19022017","1600","50","disponible","30, avenue de gaulle,Havre"," événement handball organisé par martiniclub accès publique", "https://drive.google.com/open?id=0B39DIRT6d2sGLUQwb2RsbmU0VHM");
 
-
 insert into Evenements(nom_ev,club_id,categorie,date_e,heure_e,nb_places,etat,adresse,description, lien_image)
 values("equitation trophy","4","jeune","15062016","1200","15","complet","2, rue des arts villeurbanne","compétition déquitation sur le campus de la DOUA", "https://drive.google.com/open?id=0B39DIRT6d2sGUlR3a3B5T0V4VzQ");
 
