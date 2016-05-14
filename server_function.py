@@ -60,7 +60,7 @@ def checklog (login, mtype):
 def checkLicense (license):
 	db= sqlite3.connect('dtb.db')
 	try: 
-		row = db.execute('SELECT license FROM Membres WHERE license=:who', {"who": license}).fetchone()
+		row = db.execute('SELECT licence FROM Membres WHERE licence=:who', {"who": license}).fetchone()
 		if row is None: 
 			return False
 		else :
@@ -197,14 +197,14 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 
 			if cc == True : #le clubID existe 
 
-				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
-				insert("Suivis",("license", "club_id"),(licenseNo, clubId))
+				insert("Membres",("licence","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,clubId)) 
+				insert("Suivis",("licence", "club_id"),(licenseNo, clubId))
 			else: #le club n'existe pas
-				insert("Membres",("license","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 
+				insert("Membres",("licence","nom","prenom","date_n","email","club_id"),(licenseNo,userName,userFirstName,bday,userMail,0)) 
 					
 			#si pas de redondance on peut inserer login et mot de passe		
 
-			insert("Connex_Membre",("login_membre","mdp_membre","license"),(login,pwd,licenseNo))
+			insert("Connex_Membre",("login_membre","mdp_membre","licence"),(login,pwd,licenseNo))
 			return 0		
 
 		else: 
@@ -238,29 +238,28 @@ def getClubProfile(login):
 #Returns the tuple associated to the profile of a member with all the datas. 
 def getMemberProfile(login): 
 	db= sqlite3.connect('dtb.db')
-	c=db.cursor()
 	try: 
-		row= c.execute('SELECT m.nom, m.prenom, ca.categorie, c.nom_club, m.email, m.date_n FROM Membres AS m, Categories AS ca, Clubs AS c, Connex_Membre AS mc WHERE m.licence=ca.licence AND m.club_id=c.club_id AND m.licence=mc.licence AND mc.login_membre:=who',{"who":login}).fetchone()
-		if row is not None:
-			print(row) #debug
+		row = db.execute('SELECT m.nom,m.prenom,c.nom_club, m.date_n, m.email FROM Membres AS m, Connex_Membre AS cm, Clubs AS c WHERE m.club_id=c.club_id AND m.licence=cm.licence AND cm.login_membre=:who', {"who": login}).fetchone()
+		if row is None: 
+			return False
+		else :
 			return row
-		else: 
-			return "" 
 	except: 
-		print("Problem with the login in database Search ")
+		print("error in getting member profile")
 	finally: 
 		db.close()
 
 
 def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour): 
+	db=sqlite3.connect('dtb.db')
 	try: 
-		insert("Evenements",("nom_ev","categorie","date_e","nb_places","adresse","description"),(nameEvent,categorie,start,nbPlace,adress,desc))
+		insert("Evenements",("nom_ev","categorie","date_e","heure_e","nb_places","etat","adresse","description"),(nameEvent,categorie,start,hour,nbPlace,"open",adress,desc))
 		return 1
 	except: 
 		print("Could not insert Event in database ....")
 		return -1 
 	finally: 
-		print("End adding event")
+		db.close()
 
 def getEvent():
 	db=sqlite3.connect('dtb.db')
@@ -273,17 +272,101 @@ def getEvent():
 		else: 
 			return "" 
 	except: 
-		print("exeption")
+		print("exception")
 	finally: 
-		print("End getting event") 
+		db.close()
 
 
 
+def getNumberEvent(login,mtype):
+	db=sqlite3.connect('dtb.db')
+	print(login)
+	c=db.cursor()	
+	club_id=[]
+	events=[]
+	if mtype == "member":
+		try: 
+			row = c.execute('SELECT club_id FROM Suivis AS s, Connex_Membre AS cm WHERE s.licence=cm.licence AND cm.login_membre=:who ',{"who":login}).fetchall()
+			if row is not None: 
+				#print(row) #debug
+				for i in row:
+					club_id.append(i)
+			else: 
+				club_id.append("none")
+			#print(club_id)
+		
+		except: 
+			print("exception in seeking club_id")
+		finally: 
+			if club_id[0]!="none":
+				for i in range (len(club_id)):
+					print(club_id[i])
+					row=getEventForLogin(club_id[i],mtype)
+					for a in row:
+						events.append(a)
+						
+				#print(events)
+				return len(events),events
+				
+			else:
+				print("no club followed")
+				return 0
+			db.close()
+	else: #club
+		try:
+			row = c.execute('SELECT club_id FROM Connex_Club WHERE login_club=:who',{"who":login}).fetchone()
+			if row is not None: 
+				print(row) #debug
+				row=getEventForLogin(row,mtype)
+				for a in row:
+						events.append(a)
+				return len(events),events	
+			else:
+				print("no club for this login")
+				return 0
+		
+		except: 
+			print("exception in getting events information")
+		finally: 
+			print("get information associated to event for this login") 
+			db.close()
+	
 
 
-
-
-
+def getEventForLogin(club_id,mtype):
+	db=sqlite3.connect('dtb.db')
+	c=db.cursor()	
+	club_id=''.join(club_id)
+	if mtype == "member":
+		try:
+			row = c.execute('SELECT e.nom_ev,c.nom_club,e.categorie,e.date_e,e.heure_e FROM Evenements AS e, Clubs AS c WHERE c.club_id=e.club_id AND e.club_id=:which',{"which":club_id}).fetchall()
+			if row is not None: 
+				#print(row) #debug
+				return row
+			else:
+				print("no event for this club")
+		
+		except: 
+			print("exception in getting events information")
+		finally: 
+			print("get information associated to event for this login") 
+			db.close()
+			
+			
+	else :#club 
+		try:
+			row = c.execute('SELECT e.nom_ev,e.categorie,e.date_e,e.heure_e FROM Evenements AS e WHERE e.club_id=:which',{"which":club_id}).fetchall()
+			if row is not None: 
+				#print(row) #debug
+				return row
+			else:
+				print("no event for this club")
+		
+		except: 
+			print("exception in getting events information")
+		finally: 
+			print("get information associated to event for this login") 
+			db.close()
 
 
 

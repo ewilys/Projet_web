@@ -216,7 +216,7 @@ def registerClub():
 
 		repRegClub=server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation'])
 		print(repRegClub)
-		if repRegClub[0] == 0:
+		if repRegClub == 0:
 			session['usernameClub']=request.form['login']
 			return redirect( url_for('profileClub',login=request.form['login']))
 		else:
@@ -289,7 +289,7 @@ def registerMember():
 		repRegMem=server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd'])
 		
 		if repRegMem == 0:
-			session['username']=request.form['login']
+			#session['username']=request.form['login']
 			session['usernameMember']=request.form['login']
 
 			return redirect( url_for('profileMember',login=request.form['login']))
@@ -311,23 +311,28 @@ def registerMember():
 	#GET :
 	return render_template('registerMember.html')
 
-@app.route('/home')
-def home(): 
-	return render_template('home.html')
+@app.route('/home/<login>')
+def home(login): 
+	if request.method=='GET':
+		nbEvents, events=server_function.getNumberEvent(login,"member")
+		print(nbEvents, events)	
+	return "home"
 
 
 @app.route('/home/profileClub/<login>')
 def profileClub(login): 
 	result = server_function.getClubProfile(login) 
 	print(result)
-	return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2])
+	return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2], clubLogin=session['usernameClub'])
 	
 @app.route('/home/profileMember/<login>')
 def profileMember(login): 
 	#nom, prenom, categorie, club, email 
 	result = server_function.getMemberProfile(login) 
 	print(result)
-	return render_template('profileMember.html', userName=login)
+	if result [0] != False :
+		userName=result[0]+" "+result[1]
+	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[3],userMail=result[4], userLogin=session['usernameMember'])
 
 
 @app.route('/home/profile/addLicense')
@@ -350,7 +355,7 @@ def createEvent():
 		hour=request.form['hour']
 		imageLink="http://www.google.fr/"
 		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour)==1: 
-			print("SUCESS !" )
+			print("SUCCESS !" )
 			return redirect(url_for('main'))
 		else: 
 			print("error on event creation")

@@ -1,34 +1,95 @@
-﻿Requêtes SQL :
--Vérifier que le login existe avec le mot de passe pour un user :
+#Requêtes SQL :
+#-Vérifier que le login existe avec le mot de passe pour un user :
 row = cursor.fetchone()
-cursor.execute (“SELECT login, mdp FROM membre_connex WHERE login = ‘login’ AND mdp = ‘mdp’”)
+cursor.execute (“SELECT login_membre, mdp_membre FROM Connex_Membre WHERE login_membre = ‘login’ AND mdp_membre = ‘mdp’”)
 IF row IS NOT None
-code pour la connexion…
+#code pour la connexion…
 ELSE
-code d’erreur...
+#code d’erreur...
 
--Vérifier que le login existe avec le mot de passe pour un club :
+#-Vérifier que le login existe avec le mot de passe pour un club :
 row = cursor.fetchone()
-cursor.execute (“SELECT login, mdp FROM club_connex WHERE login = ‘login’ AND mdp = ‘mdp’”)
+cursor.execute (“SELECT login_club, mdp_club FROM Connex_Club WHERE login_club = ‘login’ AND mdp_club = ‘mdp’”)
 IF row IS NOT None
-code pour la connexion…
+#code pour la connexion…
 ELSE
-code d’erreur...
+#code d’erreur...
 
--Afficher le profil (nom, ville, email) du club :
-SELECT nom, ville, email FROM clubs AS c, club_connex AS cc WHERE c.club_id = cc.club_id AND cc.login=’login’
+#-Afficher le profil (nom, ville, email) du club :
+SELECT c.nom_club, c.ville, c.email FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id = cc.club_id AND cc.login_club=’login’ #TESTÉ
 
--Afficher le nombre de licenciés :
-SELECT COUNT(license) FROM membres AS m, clubs AS c WHERE c.club_id=’club_id’ AND m.club_id=c.club_id
+#-Afficher le nombre de licenciés :
+SELECT COUNT(m.club_id) FROM Membres AS m, Clubs AS c, Connex_Club as cc WHERE m.club_id=c.club_id AND cc.club_id=c.club_id AND cc.login_club=’login’ #TESTÉ
 
--Afficher le profil (nom, prenom, catégorie, club, email) du membre :
-SELECT membres.nom, membres.prenom, categorie.groupe_id, clubs.nom, membres.email FROM membres AS m, categorie AS ca, clubs AS c, membre_connex AS mc WHERE m.license=ca.license AND m.club_id=c.club_id AND m.license=mc.license AND mc.login=’login’
+#-Afficher le profil (nom, prenom, catégorie, club, email, date de naissance) du membre :
+SELECT m.nom, m.prenom, ca.categorie, c.nom_club, m.email, m.date_n FROM Membres AS m, Categories AS ca, Clubs AS c, Connex_Membre AS mc WHERE m.licence=ca.licence AND m.club_id=c.club_id AND m.licence=mc.licence AND mc.login_membre=’login’ #TESTÉ
 
--Afficher les clubs suivis par un membre :
-SELECT clubs.nom, COUNT(suivis.club_id) FROM clubs AS c, membres AS m, suivis AS s, membre_connex AS mc WHERE m.license=s.license AND s.club_id=c.club_id AND mc.login=’login’
+#-Afficher les clubs suivis par un membre (nom et nombre de clubs) :
+SELECT c.nom_club FROM Clubs AS c, Membres AS m, Suivis AS s, Connex_Membre AS mc WHERE m.licence=s.licence AND s.club_id=c.club_id AND mc.licence=m.licence AND mc.login_membre=’login’
+SELECT COUNT(s.club_id) FROM Clubs AS c, Membres AS m, Suivis AS s, Connex_Membre AS mc WHERE m.licence=s.licence AND s.club_id=c.club_id AND mc.licence=m.licence AND mc.login_membre=’login’ #TESTÉ
 
--Inscription club :
-INSERT INTO clubs (club_id, nom_club, ville, email)
+#-Afficher les évènements auxquels participe le membre connecté
+SELECT e.nom_ev FROM Evenements AS e, Inscriptions AS i, Connex_Membre AS mc, Membres AS m WHERE mc.licence=m.licence AND i.licence=m.licence AND i.nom_ev=e.nom_ev AND mc.login_membre=’login’ #TESTÉ
+
+#-Afficher les membres qui participent à un évènement
+SELECT m.nom, m.prenom FROM  Evenements AS e, Inscriptions AS i, Membres AS m WHERE i.licence=m.licence AND i.nom_ev=e.nom_ev AND e.nom_ev = ‘nom_ev’ #TESTÉ
+
+#Compter les évènements :
+SELECT count(nom_ev) From Evenements; #TESTÉ
+
+#-Inscription club :
+INSERT INTO Clubs (club_id, nom_club, ville, email)
+ VALUES
+ ('club_id', 'nom_club', 'ville', ‘email’)
+INSERT INTO Connex_Club (login_club, mdp_club, club_id)
 VALUES
-('club_id', 'nom_club', 'ville', ‘email’)
+(‘login’, ‘mdp’, ‘club_id’) #TESTÉ
+
+#-Inscription licence des membres par le club :
+#faire une fonction python qui appelle cette fonction à chaque fois qu’on rentre une licence
+INSERT INTO Membres (licence)
+VALUES(‘licence’)
+row = cursor.fetchone()
+cursor.execute('SELECT c.club_id FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id=cc.club_id’)
+UPDATE Membres
+SET Membres.club_id=row
+WHERE
+Membres.license = ‘licence’
+
+#-Inscription membre :
+row = cursor.fetchone()
+cursor.execute (“SELECT licence FROM Membres, Clubs WHERE Membres.club_id=Clubs.club_id AND licence = ‘licence’”)
+IF row IS NOT None
+INSERT INTO Membres (nom, prenom, date_n, email)
+VALUES (‘nom’, ‘prenom’, ‘date_n’, ’email’)
+#c=catégorie calculée grâce à l’âge et donc date_n la date de naissance
+INSERT INTO Categories(categorie, licence)
+VALUES(‘c’, ‘licence’)
+ELSE
+#code d’erreur…
+
+#-création d’un évènement :
+INSERT INTO Evenements(nom_ev, categorie, date_e, heure_e, nb_places, adresse, description, lien_image)
+VALUES (‘nom’, ‘categorie’, ‘date’, ‘heure’, ‘nb_places’, ‘adresse’, ‘description’, ‘lien’)
+row = cursor.fetchone()
+cursor.execute(“SELECT c.club_id FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id=cc.club_id AND cc.login_club=’login’”)
+UPDATE Evenements
+SET Evenements.club_id=row
+WHERE
+Evenements.nom_ev = ‘nom’
+
+#-Remplissage de la table Inscriptions quand un membre s’inscrit à un #évenement (on suppose qu’on connaît la clé nom_ev)
+INSERT INTO Inscriptions (nom_ev)
+VALUES(‘nom_ev’)
+row = cursor.fetchone()
+cursor.execute(“SELECT m.licence FROM Membres AS m, Connex_Membre AS mc WHERE m.licence=mc.licence AND mc.licence = ‘login_membre’”)
+UPDATE Inscriptions
+SET licence = row
+WHERE nom_ev=’nom_ev’
+
+#Ajout d’une image asociée à un évenement dans la base de donnée.
+#Nécessite de connaître la clé nom_ev de l’évenement
+UPDATE Evenement
+SET lien_image=’lien_image’
+WHERE nom_ev=’nom_ev’
 
