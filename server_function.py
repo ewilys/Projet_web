@@ -234,9 +234,9 @@ def getMemberProfile(login):
 		db.close()
 
 
-def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour): 
+def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId,imageLink): 
 	try: 
-		insert("Evenements",("nom_ev","categorie","date_e","nb_places","adresse","description"),(nameEvent,categorie,start,nbPlace,adress,desc))
+		insert("Evenements",("nom_ev","categorie","date_e","nb_places","adresse","description","club_id","heure_e","lien_image"),(nameEvent,categorie,start,nbPlace,adress,desc,clubId,hour,imageLink))
 		return 1
 	except: 
 		print("Could not insert Event in database ....")

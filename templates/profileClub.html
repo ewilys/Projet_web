@@ -22,10 +22,16 @@
 				<div class="field">
 					Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
 				</div>
+				
+				
 				<div class="ctrl">
-					<input type="button" value="Modifier" id="setup" class="btn"/>
-					<input type="button" value="Evènements" id="events" class="btn" />
-					<input type="button" value="Licenciés" id="players" class="btn"/>
+					<form method='POST' >
+						<p>
+							<input class="btn" type="submit" name= "subBtn"  value="Modifier" />
+							<input class="btn" type="submit" name= "subBtn" value="Evenements" />
+							<input class="btn" type="submit" name= "subBtn" value="Licencies" />
+						</p>
+					</form>
 				</div>
 			</p>
 		</article>
