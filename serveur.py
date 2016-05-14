@@ -319,11 +319,20 @@ def home(login):
 	return "home"
 
 
-@app.route('/home/profileClub/<login>')
+@app.route('/home/profileClub/<login>',methods = ['GET','POST'])
 def profileClub(login): 
-	result = server_function.getClubProfile(login) 
-	print(result)
-	return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2], clubLogin=session['usernameClub'])
+	if request.method =='POST' : 
+		if request.form['subBtn'] == "Evenements":
+			return redirect(url_for('createEvent',loginClub=login))
+		elif request.form['subBtn'] == 'Licencies': 
+			return redirect(url_for('addLicense',loginClub=login))
+		elif request.form ['subBtn']== 'Modifier': 
+			return redirect(url_for('main'))
+	else: 
+		result = server_function.getClubProfile(login) 
+		#print(result)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],login=session['usernameClub'])
+
 	
 @app.route('/home/profileMember/<login>')
 def profileMember(login): 
@@ -335,17 +344,27 @@ def profileMember(login):
 	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[3],userMail=result[4], userLogin=session['usernameMember'])
 
 
-@app.route('/home/profile/addLicense')
-def addLicense(): 
-	return render_template('addLicense.html')
+@app.route('/home/profile/<loginClub>/addLicense',methods = ['GET','POST'])
+def addLicense(loginClub): 
+	club_id=server_function.getClubId(loginClub)
+	from_page = request.args.get('from', 'main')
+	if request.method =='POST' : 
+		if request.form['subBtn'] == "envoyer":
+			return redirect(from_page)
+	else: 
+		return render_template('addLicense.html')
 
 @app.route('/home/search')
 def search (): 
 	return render_template('search.html')
 
-@app.route('/home/creaEvent', methods=['GET', 'POST'])
-def createEvent():
-	if request.method == 'POST': 
+
+
+@app.route('/home/<loginClub>/creaEvent', methods=['GET', 'POST'])
+def createEvent(loginClub):
+	club_id=server_function.getClubId(loginClub)
+	if request.method== 'POST': 
+
 		adress=request.form['city']+" "+ request.form['road']
 		nameEvent=request.form['nameEvent']
 		categorie=request.form['categorie']
@@ -354,17 +373,18 @@ def createEvent():
 		desc= request.form['desc']
 		hour=request.form['hour']
 		imageLink="http://www.google.fr/"
-		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour)==1: 
+
+		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,club_id,imageLink)==1: 
 			print("SUCCESS !" )
-			return redirect(url_for('main'))
+			return redirect(url_for('profileEvent'))
 		else: 
 			print("error on event creation")
 			return redirect(url_for('createEvent'))
 	else: 
 		return render_template('createEvent.html')
 
-@app.route('/main')
-def main():
+@app.route('/profileEvent')
+def profileEvent():
 	return "MAIN"
 # ............................................................................................... #
 #lancement appli

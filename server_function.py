@@ -82,6 +82,22 @@ def checkClubId (clubId):
 		print("clubId error")
 	finally: 
 		db.close()
+		
+		
+def getClubId(login):
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute('SELECT club_id FROM Connex_Club WHERE login_club=:who', {"who": login}).fetchone()
+		if row is not None: 
+			return row
+		else :
+			return ""
+	except: 
+		print("clubId error")
+	finally: 
+		db.close()
+		
+		
 
 def checkClubName (clubName): 
 	db= sqlite3.connect('dtb.db')
@@ -224,7 +240,7 @@ def getClubProfile(login):
 	db= sqlite3.connect('dtb.db')
 	c=db.cursor()
 	try: 
-		row= c.execute('SELECT nom_club, ville, email FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id = cc.club_id AND cc.login_club=:who',{"who":login}).fetchone()
+		row= c.execute('SELECT nom_club, ville, email ,club_id FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id = cc.club_id AND cc.login_club=:who',{"who":login}).fetchone()
 		if row is not None:
 			print(row) 
 			return row
@@ -250,10 +266,11 @@ def getMemberProfile(login):
 		db.close()
 
 
-def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour): 
+
+def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId,imageLink): 
 	db=sqlite3.connect('dtb.db')
 	try: 
-		insert("Evenements",("nom_ev","categorie","date_e","heure_e","nb_places","etat","adresse","description"),(nameEvent,categorie,start,hour,nbPlace,"open",adress,desc))
+		insert("Evenements",("nom_ev","categorie","date_e","nb_places","etat","adresse","description","club_id","heure_e","lien_image"),(nameEvent,categorie,start,nbPlace,"open",adress,desc,clubId,hour,imageLink))
 		return 1
 	except: 
 		print("Could not insert Event in database ....")
