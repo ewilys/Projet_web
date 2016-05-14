@@ -11,87 +11,6 @@ app = Flask(__name__)
 app.secret_key = os.urandom(256)
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # la session dure une heure
    
-# ............................................................................................... #
-
-"""
-engine = create_engine('sqlite:///dtb.db', echo=True)
-metadata = MetaData()
-
-accounts = Table('membre_connex', metadata,
-    Column('login', String, primary_key=true),
-    Column('password_hash', String, nullable=False))    
-
-pages = Table('pages', metadata,
-    Column('name', String, primary_key=true),
-    Column('text', String))# contenu brut de la page
-
-metadata.create_all(engine)
-
-def page_content(name):
-    db = engine.connect()
-    try:
-        row = db.execute(select([pages.c.text]).where(pages.c.name == name)).fetchone()
-        if row is None:
-            return '**(This page is empty or does not exist.)**'
-        return row[0]
-    finally:
-        db.close()
-
-def indexation():
-    db = engine.connect()
-    try:
-        row=list()
-        for i in db.execute("select name from pages") :
-        	row.append(i)
-        	print(row)
-        	return row
-    finally:
-        db.close()
-        
-        
-def update_page(name, text):
-    db = engine.connect()
-    try:
-        row = db.execute(select([pages.c.name]).where(pages.c.name == name)).fetchone()
-        if row is None:
-            db.execute(pages.insert().values(name=name,text=text))
-        else :
-            db.execute(pages.update().values(text=text).where(pages.c.name==name))
-    finally:
-        db.close()
-     
-
-def delete_page(name, text):
-	db = engine.connect()
-    	try:
-    		if db.execute(select([pages.c.name]).where(pages.c.name == name)).fetchone() != None:
-    			db.execute(pages.delete().where(pages.c.name == name))       	
-    	finally:
-        	db.close() 
-        
-def hash_for(password): #hashage du password 
-	salted = '%s @ %s' % (SALT, password)
-	return hashlib.sha256(salted).hexdigest()       
-
-
-def authenticate_or_create(login, password):
-    db = engine.connect()
-    hash_pass=hash_for(password)
-    try:
-        if db.execute(select([accounts.c.login]).where(accounts.c.login == login)).fetchone() is None:
-            db.execute(accounts.insert().values(login=login,password_hash=hash_pass))
-            return True
-        else: 
-        	  s=select([accounts.c.login]).where(
-        			and_(
-        				accounts.c.login ==login,
-        				accounts.c.password_hash == hash_pass
-        			)
-        		)
-        	  return db.execute(s).fetchone() != None
-    finally:
-        db.close()
-"""
 
 # ............................................................................................... #
 #gestion des url
@@ -106,7 +25,7 @@ def login():
 	elif 'usernameClub' in session: 
 		result = server_function.getClubProfile(session['usernameClub']) 
 		print(result)
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2])
+		return redirect(url_for('profileClub',login=session['usernameClub']))
 	else: 
 		if request.method =='POST' : 
 			
@@ -322,16 +241,16 @@ def home(login):
 @app.route('/home/profileClub/<login>',methods = ['GET','POST'])
 def profileClub(login): 
 	if request.method =='POST' : 
-		if request.form['subBtn'] == "Evenements":
+		if request.form['subBtn'] == 'Creer des Evenements':
 			return redirect(url_for('createEvent',loginClub=login))
-		elif request.form['subBtn'] == 'Licencies': 
+		elif request.form['subBtn'] == 'Ajouter des Licencies': 
 			return redirect(url_for('addLicense',loginClub=login))
 		elif request.form ['subBtn']== 'Modifier': 
 			return redirect(url_for('main'))
 	else: 
 		result = server_function.getClubProfile(login) 
 		#print(result)
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],login=session['usernameClub'])
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login)
 
 	
 @app.route('/home/profileMember/<login>')
@@ -341,18 +260,17 @@ def profileMember(login):
 	print(result)
 	if result [0] != False :
 		userName=result[0]+" "+result[1]
-	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[3],userMail=result[4], userLogin=session['usernameMember'])
+	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[3],userMail=result[4], userLogin=login)
 
 
-@app.route('/home/profile/<loginClub>/addLicense',methods = ['GET','POST'])
+@app.route('/home/profileClub/<loginClub>/addLicense',methods = ['GET','POST'])
 def addLicense(loginClub): 
 	club_id=server_function.getClubId(loginClub)
-	from_page = request.args.get('from', 'main')
+	#from_page = request.args.get('from', 'main')
 	if request.method =='POST' : 
 		if request.form['subBtn'] == "envoyer":
 			return redirect(from_page)
-	else: 
-		return render_template('addLicense.html')
+	return render_template('addLicense.html')
 
 @app.route('/home/search')
 def search (): 
@@ -360,10 +278,11 @@ def search ():
 
 
 
-@app.route('/home/<loginClub>/creaEvent', methods=['GET', 'POST'])
+@app.route('/home/profileClub/<loginClub>/creaEvent', methods=['GET', 'POST'])
 def createEvent(loginClub):
 	club_id=server_function.getClubId(loginClub)
-	if request.method== 'POST': 
+	print(club_id)
+	if request.method == 'POST': 
 
 		adress=request.form['city']+" "+ request.form['road']
 		nameEvent=request.form['nameEvent']
@@ -379,9 +298,9 @@ def createEvent(loginClub):
 			return redirect(url_for('profileEvent'))
 		else: 
 			print("error on event creation")
-			return redirect(url_for('createEvent'))
-	else: 
-		return render_template('createEvent.html')
+			return redirect(url_for('createEvent',loginClub=login))
+			
+	return render_template('createEvent.html')
 
 @app.route('/profileEvent')
 def profileEvent():

@@ -27,7 +27,7 @@ def insert(table, fields=(), values=()):
 		db.execute(query, values)
 		db.commit()
 	except: 
-		print("INSERT ERROR in %s",table) 
+		print("INSERT ERROR in ",table) 
 	finally: 
 		db.close()
 
@@ -240,7 +240,8 @@ def getClubProfile(login):
 	db= sqlite3.connect('dtb.db')
 	c=db.cursor()
 	try: 
-		row= c.execute('SELECT nom_club, ville, email ,club_id FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id = cc.club_id AND cc.login_club=:who',{"who":login}).fetchone()
+		print(login)
+		row= c.execute('SELECT nom_club, ville, email, c.club_id FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id = cc.club_id AND cc.login_club=:who',{"who":login}).fetchone()
 		if row is not None:
 			print(row) 
 			return row
@@ -270,7 +271,7 @@ def getMemberProfile(login):
 def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId,imageLink): 
 	db=sqlite3.connect('dtb.db')
 	try: 
-		insert("Evenements",("nom_ev","categorie","date_e","nb_places","etat","adresse","description","club_id","heure_e","lien_image"),(nameEvent,categorie,start,nbPlace,"open",adress,desc,clubId,hour,imageLink))
+		insert("Evenements",("nom_ev","club_id","categorie","date_e","heure_e","nb_places","etat","adresse","description","lien_image"),(nameEvent,clubId,categorie,start,hour,nbPlace,"open",adress,desc,imageLink))
 		return 1
 	except: 
 		print("Could not insert Event in database ....")
