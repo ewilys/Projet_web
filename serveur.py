@@ -265,12 +265,12 @@ def profileMember(login):
 
 @app.route('/home/profileClub/<loginClub>/addLicense',methods = ['GET','POST'])
 def addLicense(loginClub): 
-	club_id=server_function.getClubId(loginClub)
-	#from_page = request.args.get('from', 'main')
+	clubId=server_function.getClubId(loginClub)
+	from_page = request.args.get('from', 'main')
 	if request.method =='POST' : 
 		if request.form['subBtn'] == "envoyer":
 			return redirect(from_page)
-	return render_template('addLicense.html')
+	return render_template('addLicense.html',loginClub=loginClub)
 
 @app.route('/home/search')
 def search (): 
@@ -280,8 +280,8 @@ def search ():
 
 @app.route('/home/profileClub/<loginClub>/creaEvent', methods=['GET', 'POST'])
 def createEvent(loginClub):
-	club_id=server_function.getClubId(loginClub)
-	print(club_id)
+	clubId=server_function.getClubId(loginClub)
+	print(clubId)
 	if request.method == 'POST': 
 
 		adress=request.form['city']+" "+ request.form['road']
@@ -293,12 +293,12 @@ def createEvent(loginClub):
 		hour=request.form['hour']
 		imageLink="http://www.google.fr/"
 
-		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,club_id,imageLink)==1: 
+		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId[0],imageLink)==1: 
 			print("SUCCESS !" )
 			return redirect(url_for('profileEvent'))
 		else: 
 			print("error on event creation")
-			return redirect(url_for('createEvent',loginClub=login))
+			return redirect(url_for('createEvent',loginClub=loginClub))
 			
 	return render_template('createEvent.html')
 
