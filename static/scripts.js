@@ -5,8 +5,36 @@ function newLicence(){
 	i++;
 }
 
-function date(id){
-		console.log("recherche date");
+function testDate(id){
+	console.log("recherche date");
+	today=Tdate();
+	if (id=="bday"){
+        document.getElementById(id).setAttribute("max",resultat);
+        }
+     if (id=="start"){
+        document.getElementById(id).setAttribute("min",resultat);
+        document.getElementById("end").setAttribute("min",resultat);
+        }
+}
+
+
+function testHour(){
+	valStart=document.getElementById("start").value;
+	today=Tdate();
+	date=new Date;
+	console.log(today, date);
+	if(valStart==today){
+		hours=date.getHours();
+		minutes=date.getMinutes();
+		hour=''+hours+':'+minutes+'';
+		console.log(hour);
+		document.getElementById("hour").setAttribute("min",hour);
+	}
+}
+
+
+function Tdate(){
+		
         date = new Date;
         year = date.getFullYear();
         month = date.getMonth()+1;
@@ -19,11 +47,15 @@ function date(id){
         	}
         resultat=''+year+'-'+month+'-'+day+'';
         console.log(resultat);
-        if (id=="bday"){
-        document.getElementById(id).setAttribute("max",resultat);
-        }
-        if (id=="start"){
-        document.getElementById(id).setAttribute("min",resultat);
-        }
-        
+        return resultat;
+      
 }
+
+function testEnd(){
+	valStart=document.getElementById("start").value;
+	console.log(valStart);
+	document.getElementById("end").setAttribute("min",valStart);
+	testHour();
+}
+
+
