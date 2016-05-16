@@ -19,13 +19,14 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # la session dure une heure
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if 'usernameMember' in session: 
-		#A CHANGER PAR HOME QUAND ON AURA FINI LA PAGE HTML HOME 
+		#A CHANGER PAR HOME QUAND ON AURA FINI LA PAGE HTML HOME  
 		result = server_function.getMemberProfile(session['usernameMember'])
 		return redirect(url_for('profileMember',login=session['usernameMember']))
 	elif 'usernameClub' in session: 
+		logged = 'usernameClub' in session
 		result = server_function.getClubProfile(session['usernameClub']) 
 		print(result)
-		return redirect(url_for('profileClub',login=session['usernameClub']))
+		return redirect(url_for('profileClub',login=session['usernameClub'],usernameClub=logged))
 	else: 
 		if request.method =='POST' : 
 			
@@ -137,7 +138,8 @@ def registerClub():
 		print(repRegClub)
 		if repRegClub == 0:
 			session['usernameClub']=request.form['login']
-			return redirect( url_for('profileClub',login=request.form['login']))
+			logged = 'usernameClub' in session
+			return redirect( url_for('profileClub',login=request.form['login'],usernameClub=logged))
 		else:
 			flash("Erreur d'inscription!") 
 			rep=[]
@@ -258,8 +260,9 @@ def profileClub(login):
 			return redirect(url_for('profileMember',login=session['usernameMember']))
 	else: 
 		result = server_function.getClubProfile(login) 
+		logged = 'usernameClub' in session
 		#print(result)
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,usernameClub=logged)
 
 	
 @app.route('/home/profileMember/<login>')
