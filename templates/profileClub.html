@@ -7,50 +7,45 @@
 	</head>
 	
 	<body>
+		<header>
+			<h1>EV&Sport</h1>
+		</header>
+		
 		<article>
-			<h1>{{clubName}}</h1>
+			<h2>{{clubName}}</h2>
 			<p>
-			   	{% if usernameClub %}
-			   	<div class="field">
-					Login : {{clubLogin}}<br />
-				</div>
-				{% endif %}
 				<div class="field">
 					Ville : {{clubCity}}<br />
 				</div>
 				<div class="field">
-					Numero de fédération : {{clubNumber}}<br />
-				</div>
-				{% if usernameClub %}
-				<div class="field">
 					Nombres de licenciés : {{nbPlayers}}<br />
 				</div>
-				{% endif %}
 				<div class="field">
 					E-mail : {{clubEmail}}<br />
 				</div>
-				{% if usernameClub %}
 				<div class="field">
 					Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
 				</div>
-				{% endif %}
-				
-				
+			</p>
+				{% if usernameClub %}
 				<div class="ctrl">
-
 					<form method='POST'>
 						<p>
-							{% if usernameClub %}
-							<input class="btn" type="submit" name= "subBtn" value="Modifier" id="setup"/>
-							<input class="btn" type="submit" name= "subBtn" value="Creer des Evenements" id="creaEvents" />
-							<input class="btn" type="submit" name= "subBtn" value="Ajouter des Licencies" id="addPlayers"  />
-							{% else %} 
-							<input class="btn" type="submit" name= "subBtn" value="Suivre" id="setup"/>
-							{% endif %}
+							<input type="button" value="Modifier" id="setup" class="btn"/>
+							<input type="button" value="Evènements" id="events" class="btn" />
+							<input type="button" value="Licenciés" id="players" class="btn"/>
 						</p>
 					</form>
 				</div>
-			</p>
+				{% else %}
+				<div class="ctrl">
+					<form method='POST'>
+						<p>
+							<input class="btn" type="submit" name= "subBtn" value="Suivre" id="setup"/>
+						</p>
+					</form>
+				</div>
+				{% endif %}
 		</article>
 	</body>
 </html>
