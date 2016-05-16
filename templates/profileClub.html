@@ -34,9 +34,13 @@
 
 					<form method='POST'>
 						<p>
+							{% if usernameClub %}
 							<input class="btn" type="submit" name= "subBtn" value="Modifier" id="setup"/>
 							<input class="btn" type="submit" name= "subBtn" value="Creer des Evenements" id="creaEvents" />
 							<input class="btn" type="submit" name= "subBtn" value="Ajouter des Licencies" id="addPlayers"  />
+							{% else %} 
+							<input class="btn" type="submit" name= "subBtn" value="Suivre" id="setup"/>
+							{% endif %}
 						</p>
 					</form>
 				</div>

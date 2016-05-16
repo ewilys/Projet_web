@@ -247,6 +247,15 @@ def profileClub(login):
 			return redirect(url_for('addLicense',loginClub=login))
 		elif request.form ['subBtn']== 'Modifier': 
 			return redirect(url_for('main'))
+		elif request.form['subBtn']=='Suivre':
+			loginMember= session['usernameMember'] 
+			print(loginMember) #debug
+			licenseNo= server_function.getLicenseFromLogin(loginMember)
+			print(licenseNo) #debug
+			clubId=server_function.getClubId(login)
+			print(clubId)
+			server_function.addFollower(licenseNo,clubId[0])
+			return redirect(url_for('profileMember',login=session['usernameMember']))
 	else: 
 		result = server_function.getClubProfile(login) 
 		#print(result)
@@ -291,7 +300,7 @@ def createEvent(loginClub):
 		start= request.form['start']
 		desc= request.form['desc']
 		hour=request.form['hour']
-		imageLink="http://www.google.fr/"
+		imageLink="http://www.google.fr/" # A changer quand on aura l'URL des images 
 
 		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId[0],imageLink)==1: 
 			print("SUCCESS !" )
