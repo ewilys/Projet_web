@@ -9,11 +9,22 @@
 	
 	<body>
 		<header>
-			<div id="banniere">
-				<h1>Ev&Sport</h1>
-			</div>
-			<aside>
-			</aside>
+			<p>
+				<img src="http://localhost:5000/static/css/img/banniere.png" alt="banniere du site" />
+			</p>
+			<nav>
+				<ul class="nav">
+					<li>Menu Principal</li>
+					<ul class="menu">
+						<li><a href="#">Accueil</a></li>
+						<li><a href="#">Mon Profil</a></li>
+						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
+						{% if usernameClub %}
+						<li><a href="http:/localhost:5000/">Créer un évènement</a></li>
+						{% endif %}
+					</ul>
+				</ul>
+			</nav>
 		</header>
 		
 		<article id="container">
