@@ -422,12 +422,13 @@ def checkFollowedClub (license,clubId):
 	db= sqlite3.connect('dtb.db')
 	try: 
 		# !!!!!!!!!!!!!!!!!!!!!!! A REVOIR NE MARCHE PAS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		row = db.execute('SELECT licence FROM Suivis WHERE club_id=:clubId', {"clubId": clubId}).fetchone()
-		print ("ROW = "+row)
-		if row is not None: 
-			return True #deja associe
+		print("LICENSE CHECK = "+str(license))
+		print("CLUBID CHECK = "+str(clubId))
+		row = db.execute("SELECT * FROM Suivis WHERE club_id=:idClub AND licence=:licenceNo",{"idClub":clubId,"licenceNo":license}).fetchone()
+		if row is None: 
+			return False
 		else: 
-			return False 
+			return True  #deja associe
 		
 	except: 
 		print("Problem with checkFollowedClub")
