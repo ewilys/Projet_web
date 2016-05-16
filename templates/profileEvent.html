@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="http://localhost:5000/static/css/profileStyleSheet.css" />
+		<title>{{ eventName }}</title>
+	</head>
+	
+	<body>
+		<header>
+			<h1>EV&Sport</h1>
+		</header>
+		
+		<article>
+			<h2>{{ eventName }}</h2>
+			<p>
+				<h3>L'évènement</h3>
+				<div class="field">
+					Il reste <strong>{{nbPlaceStillAvailable}}</strong> places<br />
+				</div>
+				<div class="field">
+					Catégorie ciblée : {{categorie}}<br />
+				</div>
+				<div class="field">
+				<h4>Description de l'évènement</h4>
+					<p>
+						{{descEvent}}
+					</p>
+				</div>
+				<h3>Infos pratiques</h3>
+				<div class="field">
+					Où ? {{cityEvent}} <br />
+				</div>
+				<div class="field">
+					Quand ? A partir de {{startHour}} le {{dateEvent}}<br/>
+				</div>
+				
+				<div class="ctrl">
+					<input type="button" value="S'inscrire" id="signUp" class="btn"/>
+				</div>
+			</p>
+		</article>
+	</body>
+</html>
+
+
