@@ -23,10 +23,10 @@ def login():
 		result = server_function.getMemberProfile(session['usernameMember'])
 		return redirect(url_for('profileMember',login=session['usernameMember']))
 	elif 'usernameClub' in session: 
-		logged = 'usernameClub' in session
+		clubLogged = 'usernameClub' in session
 		result = server_function.getClubProfile(session['usernameClub']) 
 		print(result)
-		return redirect(url_for('profileClub',login=session['usernameClub'],usernameClub=logged))
+		return redirect(url_for('profileClub',login=session['usernameClub'],clubLogged=clubLogged))
 	else: 
 		if request.method =='POST' : 
 			
@@ -138,8 +138,8 @@ def registerClub():
 		print(repRegClub)
 		if repRegClub == 0:
 			session['usernameClub']=request.form['login']
-			logged = 'usernameClub' in session
-			return redirect( url_for('profileClub',login=request.form['login'],usernameClub=logged))
+			clubLogged = 'usernameClub' in session
+			return redirect( url_for('profileClub',login=request.form['login'],clubLogged=clubLogged))
 		else:
 			flash("Erreur d'inscription!") 
 			rep=[]
@@ -260,9 +260,9 @@ def profileClub(login):
 			return redirect(url_for('profileMember',login=session['usernameMember']))
 	else: 
 		result = server_function.getClubProfile(login) 
-		logged = 'usernameClub' in session
+		clubLogged = 'usernameClub' in session
 		#print(result)
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,usernameClub=logged)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,clubLogged=clubLogged)
 
 	
 @app.route('/home/profileMember/<login>')
