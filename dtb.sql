@@ -95,9 +95,9 @@ values("equitation trophy","4","jeune","15062016","1200","15","complet","2, rue 
 
 insert into Inscriptions(licence,nom_ev)
 values ("2","coupe normandie handball"), ("1","equitation trophy"), ("1","coupe normandie handball");
-
+*/
 insert into Suivis(licence,club_id)
 values("1","3"), ("2","3"), ("1","4");
-
+/*
 insert into Categories(licence,categorie)
 values("2","jeune"), ("1","senior"), ("5", "senior");*/

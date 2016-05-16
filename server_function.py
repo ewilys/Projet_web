@@ -400,12 +400,17 @@ def getLicenseFromLogin (login):
 	finally: 
 		db.close()
 
+#Returns 0 if license already associated to club, 1 if follower successfully added and -1 if error 
 def addFollower(license,clubId): 
 	db=sqlite3.connect('dtb.db')
 	try: 
 		print("LICENSE = "+license)
 		print("CLUBID = "+clubId)
-		insert("suivis",("licence","club_id"),(license,clubId))
+		if checkFollowedClub(license,clubId)==False: 
+			insert("suivis",("licence","club_id"),(license,clubId))
+		else: 
+			print("CLUB DEJA SUIVI !!")
+			return 0
 		return 1
 	except: 
 		print("Could not insert follower in database ....")
@@ -413,6 +418,21 @@ def addFollower(license,clubId):
 	finally: 
 		db.close()
 
+def checkFollowedClub (license,clubId): 
+	db= sqlite3.connect('dtb.db')
+	try: 
+		# !!!!!!!!!!!!!!!!!!!!!!! A REVOIR NE MARCHE PAS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		row = db.execute('SELECT licence FROM Suivis WHERE club_id=:clubId', {"clubId": clubId}).fetchone()
+		print ("ROW = "+row)
+		if row is not None: 
+			return True #deja associe
+		else: 
+			return False 
+		
+	except: 
+		print("Problem with checkFollowedClub")
+	finally: 
+		db.close()
 
 
 

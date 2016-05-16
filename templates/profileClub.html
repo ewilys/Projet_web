@@ -10,24 +10,30 @@
 		<article>
 			<h1>{{clubName}}</h1>
 			<p>
+			   	{% if usernameClub %}
 			   	<div class="field">
 					Login : {{clubLogin}}<br />
 				</div>
+				{% endif %}
 				<div class="field">
 					Ville : {{clubCity}}<br />
 				</div>
 				<div class="field">
 					Numero de fédération : {{clubNumber}}<br />
 				</div>
+				{% if usernameClub %}
 				<div class="field">
 					Nombres de licenciés : {{nbPlayers}}<br />
 				</div>
+				{% endif %}
 				<div class="field">
 					E-mail : {{clubEmail}}<br />
 				</div>
+				{% if usernameClub %}
 				<div class="field">
 					Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
 				</div>
+				{% endif %}
 				
 				
 				<div class="ctrl">
