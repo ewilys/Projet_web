@@ -3,7 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="http://localhost:5000/static/css/formsStyleSheet.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/signIn.js"></script>
 		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
+		
 		<title>Créer un évènement</title>
 	</head>
 	
@@ -13,7 +16,7 @@
 			<h2>Description de l'évènement</h2>
 			<p>
 				<label for="nameEvent">Nom de l'évènement : </label>
-				<input type="text" name="nameEvent" id="nameEvent" required>
+				<input type="text" name="nameEvent" id="nameEvent" onkeyup="javascript:checkNameEvent();" required>
 				<span id="test_duplicate_name"></span>
 				<br/>
 				<label for="categorie">Catégorie : </label>

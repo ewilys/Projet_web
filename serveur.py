@@ -253,13 +253,28 @@ def profileClub(login):
 		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login)
 
 	
-@app.route('/home/profileMember/<login>')
+@app.route('/home/profileMember/<login>',methods=['GET','POST'])
 def profileMember(login): 
-	#nom, prenom, categorie, club, email 
-	result = server_function.getMemberProfile(login) 
-	print(result)
-	if result [0] != False :
-		userName=result[0]+" "+result[1]
+
+	if request.method == 'GET':
+		#ajax handler
+		if request.json :
+			action=request.json['action']
+			login=request.json['login']
+			
+			if action == "getEventFollowed":
+				nbEv,Ev=server_function.getEventFollowed(login)
+				return jsonify({'nb':nbEv,'Ev':Ev})
+			else :
+				nbClub,Clubs=server_function.getClubFollowed(login)
+				return jsonify({'nb':nbClub,'clubs':Clubs})
+		else : #affichage debut
+			#nom, prenom, categorie, club, email 
+			result = server_function.getMemberProfile(login) 
+			print(result)
+			if result [0] != False :
+				userName=result[0]+" "+result[1]
+
 	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[3],userMail=result[4], userLogin=login)
 
 
@@ -284,21 +299,39 @@ def createEvent(loginClub):
 	print(clubId)
 	if request.method == 'POST': 
 
-		adress=request.form['city']+" "+ request.form['road']
-		nameEvent=request.form['nameEvent']
-		categorie=request.form['categorie']
-		nbPlace=request.form['nbPlace']
-		start= request.form['start']
-		desc= request.form['desc']
-		hour=request.form['hour']
-		imageLink="http://www.google.fr/"
-
-		if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId[0],imageLink)==1: 
-			print("SUCCESS !" )
-			return redirect(url_for('profileEvent'))
-		else: 
-			print("error on event creation")
-			return redirect(url_for('createEvent',loginClub=loginClub))
+		if request.json:
+		
+			nameE=request.json['nameE']
+						
+			if nameE!="" :
+				#duplicate nameE :
+				if server_function.checkNameEvent(nameE) == False : 
+					nameE="nom d'evenement valide "
+				else :
+					nameE="ce nom d'evenement existe deja, veuillez en choisir un autre"
+				return jsonify({'nameE':nameE})
+		
+		else :				
+		#submission :
+			adress=request.form['city']+" "+ request.form['road']
+			nameEvent=request.form['nameEvent']
+			categorie=request.form['categorie']
+			nbPlace=request.form['nbPlace']
+			start= request.form['start']
+			desc= request.form['desc']
+			hour=request.form['hour']
+			imageLink="http://www.google.fr/"
+		
+			if server_function.checkNameEvent(nameEvent) == True : 
+				flash("Erreur de creation d'evenements : le nom de l'evenement existe deja, veuillez en choisir un autre")
+				return redirect(url_for("createEvent",loginClub=loginClub))
+			else : 
+				if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId[0],imageLink)==1: 
+					print("SUCCESS !" )
+					return redirect(url_for('profileEvent'))
+				else: 
+					print("error on event creation")
+					return redirect(url_for('createEvent',loginClub=loginClub))
 			
 	return render_template('createEvent.html')
 

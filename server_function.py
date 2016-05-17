@@ -111,7 +111,19 @@ def checkClubName (clubName):
 		print("clubName error")
 	finally: 
 		db.close()
-			
+
+def checkNameEvent (nameE): 
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute('SELECT nom_ev FROM Evenements WHERE nom_ev=:who', {"who": nameE}).fetchone()
+		if row is None: 
+			return False
+		else :
+			return True
+	except: 
+		print("nameEvent error")
+	finally: 
+		db.close()			
 		
 def checkEmail(email, mtype):
 	db= sqlite3.connect('dtb.db')
@@ -291,6 +303,38 @@ def getEvent():
 			return "" 
 	except: 
 		print("exception")
+	finally: 
+		db.close()
+
+def getClubFollowed(login):
+
+	db=sqlite3.connect('dtb.db')
+	c=db.cursor()	
+	try: 
+		row = c.execute('SELECT s.club_id c.nom_club FROM Clubs AS c,Suivis AS s, Connex_Membre AS cm WHERE s.licence=cm.licence AND s.club_id=c.club_id AND cm.login_membre=:who ',{"who":login}).fetchall()
+		if row is not None: 
+			print(row)
+			return len(row),row
+		else: 
+			return 0
+	except: 
+		print("exception in seeking club_id")
+	finally: 
+		db.close()
+			
+			
+def getEventFollowed(login):
+	db=sqlite3.connect('dtb.db')
+	c=db.cursor()	
+	try: 
+		row = c.execute('SELECT nom_ev date_e heure adresse FROM Evenements AS e, Inscriptions AS i, Connex_Membre AS cm WHERE i.licence=cm.licence AND i.nom_ev=e.nom_ev AND cm.login_membre=:who ',{"who":login}).fetchall()
+		if row is not None: 
+			print(row)
+			return len(row),row
+		else: 
+			return 0
+	except: 
+		print("exception in seeking club_id")
 	finally: 
 		db.close()
 
