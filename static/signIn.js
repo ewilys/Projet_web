@@ -126,7 +126,7 @@ function checkSignUpClub() {
 function checkNameEvent() {
 		
 		var outbound_message = {
-	   			'nameEvent': $("#nameEvent").val(),
+	   			'nameE': $("#nameEvent").val(),
 	   			
   		};
 		$.ajax({

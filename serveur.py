@@ -271,7 +271,6 @@ def profileMember(login):
 		else : #affichage debut
 			#nom, prenom, categorie, club, email 
 			result = server_function.getMemberProfile(login) 
-			print(result)
 			if result [0] != False :
 				userName=result[0]+" "+result[1]
 
@@ -281,11 +280,15 @@ def profileMember(login):
 @app.route('/home/profileClub/<loginClub>/addLicense',methods = ['GET','POST'])
 def addLicense(loginClub): 
 	clubId=server_function.getClubId(loginClub)
-	from_page = request.args.get('from', 'main')
+	
 	if request.method =='POST' : 
-		if request.form['subBtn'] == "envoyer":
-			return redirect(from_page)
+		if request.form['subBtn'] == "Ajouter les licences":
+			
+			return redirect(url_for("profileClub",login=loginClub))
+			
 	return render_template('addLicense.html',loginClub=loginClub)
+
+
 
 @app.route('/home/search')
 def search (): 
@@ -296,7 +299,7 @@ def search ():
 @app.route('/home/profileClub/<loginClub>/creaEvent', methods=['GET', 'POST'])
 def createEvent(loginClub):
 	clubId=server_function.getClubId(loginClub)
-	print(clubId)
+	#print(clubId)
 	if request.method == 'POST': 
 
 		if request.json:
