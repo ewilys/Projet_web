@@ -2,8 +2,13 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" href="http//localhost:5000/static/css/formsStyleSheet.css" />
+
+		<link rel="stylesheet" href="http://localhost:5000/static/css/formsStyleSheet.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/signIn.js"></script>
+
 		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
+		
 		<title>Créer un évènement</title>
 	</head>
 	
@@ -28,7 +33,7 @@
 			<h3>Description de l'évènement</h3>
 			<p>
 				<label for="nameEvent">Nom de l'évènement : </label>
-				<input type="text" name="nameEvent" id="nameEvent" required>
+				<input type="text" name="nameEvent" id="nameEvent" onkeyup="javascript:checkNameEvent();" required>
 				<span id="test_duplicate_name"></span>
 				<br/>
 				<label for="categorie">Catégorie : </label>
@@ -55,16 +60,16 @@
 				<input type="text" name="road" id="road" required>
 				<br/>
 				<label for="start" title="jj/mm/aaaa">Du : </label>
-				<input type="text" name="start" id="start" placeholder="jj/mm/aaaa" required>
-				<script type="text/javascript">window.onload = date("start");</script>
-				<span id="test_format_start_date"></span>
+				<input type="date" name="start" id="start" placeholder="jj/mm/aaaa" onchange="javascript:testEnd();" required>
+			
 				<label for="end" title="jj/mm/aaaa"> au : </label>
-				<input type="text" name="end" id="end" placeholder="jj/mm/aaaa" required>
-				<span id="test_format_end_date"></span>
+				<input type="date" name="end" id="end" placeholder="jj/mm/aaaa" required>
+				<script type="text/javascript">window.onload = testDate("start");</script>
 				<br/>
 				<label for="hour">A : </label>
-				<input type="text" name="hour" id="hour" placeholder="Ex : 14h30" required>
-				<span id="test_format_hours"></span>
+
+				<input type="time" name="hour" id="hour" value="08:00" required>
+
 			</p>
 			<p>
 			<div class="button">

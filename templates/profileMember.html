@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="utf-8"/>
 		<link rel="stylesheet" href="http://localhost:5000/static/css/profileStyleSheet.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/displayProfile.js"></script>
 		<title>{{userName}}</title><!--Prénom + Nom-->
 	</head>
 	
@@ -26,25 +28,25 @@
 		<article>
 			<h2>{{userName}}</h2><!-- Idem -->
 			<p>
-				<div class="field">
+				<div class="field" id="userLogin">
 					Login : {{userLogin}}<br />
 				</div>
-				<div class="field">
+				<div class="field" id="userClub">
 					Club : {{userClub}}<br /><!-- Nom du club dans lequel le membre est licencié -->
 				</div>
-				<div class="field">
-					Date de naissance : {{userDate}}<br />
+				<div class="field" id="Bdate">
+					Date de naissance: {{userDate}}<br />
 				</div>
-				<div class="field">
+				<div class="field" id="userCat">
 					Catégorie: {{userCat}}<br />
 				</div>
-				<div class="field">
+				<div class="field" id ="userMail">
 					Email : {{userMail}}<br />
 				</div>
 				<div class="ctrl">
-					<input type="button" value="Modifier" id="setup" class="btn"/>
-					<input type="button" value="Evènements suivis" id="eventFollowed" class="btn"/>
-					<input type="button" value="Clubs suivis" id="clubFollowed" class="btn"/>
+					<input type="button" value="Modifier" id="setup" class="btn" onclick="javascript:modification();"/>
+					<input type="button" value="Evènements suivis" id="eventFollowed" class="btn" onclick="javascript:getEventFollowed();">
+					<input type="button" value="Clubs suivis" id="clubFollowed" class="btn" onclick="javascript:getClubFollowed();">
 				</div>
 			</p>
 		</article>

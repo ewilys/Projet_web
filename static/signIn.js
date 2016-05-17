@@ -119,3 +119,32 @@ function checkSignUpClub() {
 		     }
        	});
 }
+
+
+
+
+function checkNameEvent() {
+		
+		var outbound_message = {
+	   			'nameE': $("#nameEvent").val(),
+	   			
+  		};
+		$.ajax({
+        		type: 'POST',
+		     url: document.URL,
+		     data: JSON.stringify(outbound_message),         
+	    		dataType: 'json',
+	    		contentType: 'application/json; charset=utf-8', 
+		       
+		     success: function(response) {
+		     	if(response.nameE !== ""){
+		     		$("#test_duplicate_name").text(response.nameE);
+		     		var el=document.getElementById("test_duplicate_name");
+		     		el.setAttribute("value", "Filled");
+		     	}
+		     },
+		     error: function() {
+		           console.log("do not work");
+		     }
+       	});
+}
