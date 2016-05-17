@@ -292,18 +292,17 @@ def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId,imageL
 		db.close()
 
 
-def getEvent():
+def getEvent(eventName):
 	db=sqlite3.connect('dtb.db')
-	c=db.cursor()	
 	try: 
-		row = c.execute("")
+		row = db.execute("SELECT club_id,categorie,date_e,heure_e,nb_places, etat, adresse,description,lien_image FROM Evenements WHERE nom_ev=:eventName",{"eventName":eventName}).fetchone()
 		if row is not None: 
-			print(row) #debug
+			#print(row) #debug
 			return row
 		else: 
 			return "" 
 	except: 
-		print("exception")
+		print("exception in getEvent")
 	finally: 
 		db.close()
 
@@ -487,7 +486,7 @@ def checkFollowedClub (license,clubId):
 
 def addLicenseClub(license,clubId): 
 	pass
-	
+
 
 
 

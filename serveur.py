@@ -357,7 +357,13 @@ def createEvent(loginClub):
 
 @app.route('/profileEvent/<eventName>')
 def profileEvent(eventName):
-	return redirect(url_for('profileEvent')) #AAAAA VOIR 
+	arg= eventName.replace("_"," ") #On remplace les ? par des espaces 
+	print(arg)
+	result = server_function.getEvent(arg)
+	print(result)
+	#Permet de modifier le lien pour l image 
+	
+	return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3]) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':
