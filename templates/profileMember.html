@@ -9,8 +9,24 @@
 	</head>
 	
 	<body>
+		<header>
+			<p>
+				<img src="http://localhost:5000/static/css/img/banniere.png" alt="banniere du site" />
+			</p>
+			<nav>
+				<ul class="nav">
+					<li>Menu Principal</li>
+					<ul class="menu">
+						<li><a href="#">Mon Profil</a></li>
+						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
+						<li><a href="http:/localhost:5000/">Créer un évènement</a></li>
+					</ul>
+				</ul>
+			</nav>
+		</header>
+		<div class="container">
 		<article>
-			<h1>{{userName}}</h1><!-- Idem -->
+			<h2>{{userName}}</h2><!-- Idem -->
 			<p>
 				<div class="field" id="userLogin">
 					Login : {{userLogin}}<br />
@@ -34,6 +50,7 @@
 				</div>
 			</p>
 		</article>
+		</div>
 	</body>
 </html>
 			

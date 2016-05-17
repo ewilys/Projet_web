@@ -60,3 +60,12 @@ function testEnd(){
 
 
 
+
+function newSection(){
+	var nbEventTotal=10;
+	for(var j=0; j<nbEventTotal; j++){
+			document.getElementById("container").innerHTML +="\n\t<section id='event_"+j+"'></section>";
+		
+	}
+}
+

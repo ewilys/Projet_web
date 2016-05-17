@@ -17,13 +17,94 @@
 
 body
 {
-	background-color: rgb(5, 177, 235);
+	background-color: rgb(192, 228, 240);
+	min-width: 500px;
 }
+
+header
+{
+	display: flex;
+}
+
+nav
+{
+	z-index: 2;
+	text-align: left;
+	position: absolute;
+	top: 1%;
+	right: 1%;
+	height: 10%;
+	width: 20%;
+	min-width: 130px;
+}
+
+.nav
+{
+	display: block;
+	list-style-type: none;
+	font-family: 'robotoregular', sans-serif
+}
+.nav li
+{
+	font-family: 'Pacifico', sans-serif;
+	font-size: 0.8em;
+	text-align:center;
+	border: solid 1px white;
+	color: white;
+}
+.menu
+{
+	display: none;
+	flex-direction: column;
+	list-style-type: none;
+	justify-content: flex-end;
+	align-items: flex-start;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: 'robotoregular', sans-serif;
+}
+
+.menu li
+{
+	display: block;
+	font-family: 'robotoregular', sans-serif;
+	background-color: rgba(5,137,181,0.8);
+	width: 100%;
+	padding: auto;
+	border: solid 1px white;
+}
+	
+
+.menu li a
+{
+	display: block;
+	text-decoration: none;
+	color: white;
+	font-size: 0.8em;
+}
+
+.nav:hover > .menu
+{
+	display: block;
+}
+
+header img
+{
+	z-index: 1;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	max-height: 150px;
+	min-height: 50px;
+}
+
 .container
 {
 	display: flex;
 	flex-direction: column;
-	margin-top: 200px;
+	margin-top: 10%;
 }
 article
 {
@@ -35,29 +116,6 @@ article
 	border-radius: 8px;
 	box-shadow: 3px 3px 16px black;
 	padding: 10px;
-}
-
-h1
-{
-	display: block;
-	font-family: 'Pacifico', sans-serif;
-	font-weight: normal;
-	font-size: 5em;
-	color: white; 
-	text-align: left;
-}
-
-header
-{
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	display: flex;
-	width: 100%;
-	background-color: blue;
-	height: 10em;
-	align-items: center;
-	justify-content: flex-start;
 }
 
 h2
@@ -100,7 +158,9 @@ strong:hover
 	color: white;
 	font-weight: bold;
 	font-size: 1em;
+	text-align: center;
 	margin-top: 30px;
+	min-width: 250px;
 }
 
 .btn:hover
@@ -113,5 +173,6 @@ strong:hover
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
+	flex-wrap: wrap;
 }
 	

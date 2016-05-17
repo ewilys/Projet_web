@@ -438,8 +438,53 @@ def getEventForLogin(club_id,mtype):
 			db.close()
 
 
+def getLicenseFromLogin (login):
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute('SELECT licence FROM Connex_Membre WHERE login_membre=:who', {"who": login}).fetchone()
+		if row is None: 
+			return 0
+		else :
+			return row[0]
+	except: 
+		print("error on getting license from login")
+	finally: 
+		db.close()
 
+#Returns 0 if license already associated to club, 1 if follower successfully added and -1 if error 
+def addFollower(license,clubId): 
+	db=sqlite3.connect('dtb.db')
+	try: 
+		print("LICENSE = "+license)
+		print("CLUBID = "+clubId)
+		if checkFollowedClub(license,clubId)==False: 
+			insert("suivis",("licence","club_id"),(license,clubId))
+		else: 
+			print("CLUB DEJA SUIVI !!")
+			return 0
+		return 1
+	except: 
+		print("Could not insert follower in database ....")
+		return -1 
+	finally: 
+		db.close()
 
+def checkFollowedClub (license,clubId): 
+	db= sqlite3.connect('dtb.db')
+	try: 
+		# !!!!!!!!!!!!!!!!!!!!!!! A REVOIR NE MARCHE PAS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		print("LICENSE CHECK = "+str(license))
+		print("CLUBID CHECK = "+str(clubId))
+		row = db.execute("SELECT * FROM Suivis WHERE club_id=:idClub AND licence=:licenceNo",{"idClub":clubId,"licenceNo":license}).fetchone()
+		if row is None: 
+			return False
+		else: 
+			return True  #deja associe
+		
+	except: 
+		print("Problem with checkFollowedClub")
+	finally: 
+		db.close()
 
 
 
