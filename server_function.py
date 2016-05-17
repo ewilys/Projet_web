@@ -421,7 +421,6 @@ def addFollower(license,clubId):
 def checkFollowedClub (license,clubId): 
 	db= sqlite3.connect('dtb.db')
 	try: 
-		# !!!!!!!!!!!!!!!!!!!!!!! A REVOIR NE MARCHE PAS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		print("LICENSE CHECK = "+str(license))
 		print("CLUBID CHECK = "+str(clubId))
 		row = db.execute("SELECT * FROM Suivis WHERE club_id=:idClub AND licence=:licenceNo",{"idClub":clubId,"licenceNo":license}).fetchone()
