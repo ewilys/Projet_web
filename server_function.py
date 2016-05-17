@@ -485,6 +485,10 @@ def checkFollowedClub (license,clubId):
 	finally: 
 		db.close()
 
+def addLicenseClub(license,clubId): 
+	pass
+	
+
 
 
 

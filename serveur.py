@@ -355,9 +355,9 @@ def createEvent(loginClub):
 			
 	return render_template('createEvent.html')
 
-@app.route('/profileEvent')
-def profileEvent():
-	return "MAIN"
+@app.route('/profileEvent/<eventName>')
+def profileEvent(eventName):
+	return redirect(url_for('profileEvent')) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':
