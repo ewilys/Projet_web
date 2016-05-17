@@ -242,13 +242,17 @@ def home(login):
 
 @app.route('/home/profileClub/<login>',methods = ['GET','POST'])
 def profileClub(login): 
-	if request.method =='POST' : 
+	if request.method =='POST' :
+	 
 		if request.form['subBtn'] == 'Creer des Evenements':
 			return redirect(url_for('createEvent',loginClub=login))
+			
 		elif request.form['subBtn'] == 'Ajouter des Licencies': 
 			return redirect(url_for('addLicense',loginClub=login))
+			
 		elif request.form ['subBtn']== 'Modifier': 
-			return redirect(url_for('main'))
+			return redirect(url_for('main')) 
+			
 		elif request.form['subBtn']=='Suivre':
 			loginMember= session['usernameMember'] 
 			print(loginMember) #debug
