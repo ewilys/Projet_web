@@ -237,10 +237,9 @@ def registerMember():
 
 @app.route('/home/<login>')
 def home(login): 
-	login=session['username']
-	if request.method=='GET':
-		nbEvents, events=server_function.getNumberEvent(login,"member")
-		print(nbEvents, events)	
+	#if request.method=='GET':
+		#nbEvents, events=server_function.getNumberEvent(login,"member")
+		#print(nbEvents, events)	
 	return render_template('home.html')
 
 
