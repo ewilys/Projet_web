@@ -154,7 +154,7 @@ def checkEmail(email, mtype):
 #Returns True if login and password are correct and exist in database, False if not
 def sign_in (login, password, mtype):
 	db= sqlite3.connect('dtb.db')
-	pwd=password.encode()
+	pwd=crypter(password)
 	if mtype == "member":#member
 		
 		try: 
@@ -191,7 +191,7 @@ def sign_up_club(clubName,city,email,login,password,clubId):
 	ce=checkEmail(email, "club")
 	cn=checkClubName(clubName)
 
-	pwd=password.encode()
+	pwd=crypter(password)
 
 	try: 
 		if (cl==False) and  (ci==False) and (ce==False) and (cn==False): 
@@ -216,7 +216,7 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 	ce=checkEmail(userMail,"member")
 	cc=checkClubId(clubId)
 
-	pwd=pswrd.encode()
+	pwd=crypter(password)
 
 	try: 
 	
@@ -486,10 +486,3 @@ def checkFollowedClub (license,clubId):
 
 def addLicenseClub(license,clubId): 
 	pass
-
-
-
-
-
-
-
