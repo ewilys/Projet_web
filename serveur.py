@@ -277,7 +277,8 @@ def profileClub(login):
 			clubLogged = False
 		else:
 			clubLogged= True 
-
+		nbLicensed= server_function.getNumberOfLicensed(login)
+		print("NNNNNNOOOOMBRE LICENNNNNCCCCCIEEEEEEEEESSSSS!!!!==== >> "+nbLicensed[0])
 		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,clubLogged=clubLogged)
 
 	

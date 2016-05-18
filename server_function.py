@@ -486,3 +486,17 @@ def checkFollowedClub (license,clubId):
 
 def addLicenseClub(license,clubId): 
 	pass
+
+def getNumberOfLicensed(loginClub):
+	clubId= getClubId(loginClub)
+	db= sqlite3.connect('dtb.db')
+	try: 
+		print("LOGIN CLUB = "+clubId[0])
+		row = db.execute("SELECT club_id FROM Membres WHERE club_id=:id",{"id":clubId}).fetchone()
+		print("ROOOOOOOOOWWWWW = "+row)
+		print("NB = "+len(row))
+		
+	except: 
+		print("Problem with getNumberOfLicensed")
+	finally: 
+		db.close()
