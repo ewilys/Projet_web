@@ -369,7 +369,7 @@ def profileEvent(eventName):
 	print(result)
 	#Permet de modifier le lien pour l image 
 	
-	return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3]) #AAAAA VOIR 
+	return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1]) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':
