@@ -42,13 +42,14 @@ function getEventFollowed(){
 		       
 		     success: function(response) {
 		     	if(response.nb !== 0){
-		     		info=new Array(response.nb);
 		     		for(i=0;i<response.nb;i++){
-		     			info[i]=response.Ev[i];
+		     			for(j=0;j<response.Ev[i].length();j++){
+		     				
+		     			}
 		     		}
-		     		console.log(info);
+		     		console.log(Ev);
 		     	}else{
-		     		console.log("pas de clubs suivis")
+		     		console.log("pas d'évènements suivis")
 		     	}
 		     		
 		     },
@@ -73,11 +74,13 @@ function getClubFollowed(){
 		       
 		     success: function(response) {
 		     	if(response.nb !== 0){
-		     		info=new Array(response.nb);
+		     		if(response.nb !== 0){
 		     		for(i=0;i<response.nb;i++){
-		     			info[i]=response.clubs[i];
+		     			for(j=0;j<response.clubs[i].length();j++){
+		     				
+		     			}
 		     		}
-		     		console.log(info);
+		     		console.log(clubs);
 		     	}else{
 		     		console.log("pas de clubs suivis")
 		     	}

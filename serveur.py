@@ -12,6 +12,8 @@ app.secret_key = os.urandom(256)
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # la session dure une heure
    
 
+
+
 # ............................................................................................... #
 #gestion des url
 
@@ -138,8 +140,8 @@ def registerClub():
 		print(repRegClub)
 		if repRegClub == 0:
 			session['usernameClub']=request.form['login']
-			clubLogged = 'usernameClub' in session
-			return redirect( url_for('profileClub',login=request.form['login'],clubLogged=clubLogged))
+			clubLogged = session['usernameClub']
+			return redirect( url_for('profileClub',login=request.form['login']))
 		else:
 			flash("Erreur d'inscription!") 
 			rep=[]
@@ -232,11 +234,12 @@ def registerMember():
 	#GET :
 	return render_template('registerMember.html')
 
-@app.route('/home/<login>')
+@app.route('/home/<login>',methods=['GET','POST'])
 def home(login): 
 	if request.method=='GET':
 		nbEvents, events=server_function.getNumberEvent(login,"member")
 		print(nbEvents, events)	
+		
 	return "home"
 
 
@@ -264,7 +267,7 @@ def profileClub(login):
 			return redirect(url_for('profileMember',login=session['usernameMember']))
 	else: 
 		result = server_function.getClubProfile(login) 
-		clubLogged = 'usernameClub' in session
+		clubLogged = session['usernameClub']
 		#print(result)
 		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,clubLogged=clubLogged)
 
@@ -301,8 +304,9 @@ def addLicense(loginClub):
 		if request.form['subBtn'] == "Ajouter les licences":
 			
 			return redirect(url_for("profileClub",login=loginClub))
-			
-	return render_template('addLicense.html',loginClub=loginClub)
+	
+	clubLogged=session['usernameClub']		
+	return render_template('addLicense.html',loginClub=loginClub,clubLogged=clubLogged)
 
 
 
@@ -352,8 +356,8 @@ def createEvent(loginClub):
 					print("error on event creation")
 					return redirect(url_for('createEvent',loginClub=loginClub))
 
-			
-	return render_template('createEvent.html')
+	clubLogged=session['usernameClub']		
+	return render_template('createEvent.html',clubLogged=clubLogged)
 
 @app.route('/profileEvent')
 def profileEvent():
