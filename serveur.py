@@ -20,15 +20,15 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # la session dure une heure
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if 'usernameMember' in session: 
+	if 'mtype' in session: 
 		#A CHANGER PAR HOME QUAND ON AURA FINI LA PAGE HTML HOME  
-		result = server_function.getMemberProfile(session['usernameMember'])
-		return redirect(url_for('profileMember',login=session['usernameMember']))
-	elif 'usernameClub' in session: 
-		clubLogged = 'usernameClub' in session
-		result = server_function.getClubProfile(session['usernameClub']) 
-		print(result)
-		return redirect(url_for('profileClub',login=session['usernameClub'],clubLogged=clubLogged))
+		if session['mtype']=='Member': 
+			result = server_function.getMemberProfile(session['username'])
+			return redirect(url_for('home',login=session['username']))
+		elif session['mtype']=='Club': 
+			result = server_function.getClubProfile(session['username']) 
+			#print(result)
+			return redirect(url_for('profileClub',session['username'],clubLogged=True))
 	else: 
 		if request.method =='POST' : 
 			
@@ -65,15 +65,17 @@ def login():
 			    	if oklog== True: #signIn has worked
 	    				mtype=mtype.capitalize()
 	    				if mtype=='Club':
-	    					session['usernameClub']=login 
+	    					session['username']=login 
+	    					session['mtype']='Club'
 	    				else : 
-	    					session['usernameMember']=login 
-	    				return redirect(url_for("profile"+mtype, login=login))
+	    					session['username']=login 
+	    					session['mtype']='Member'
+	    				return redirect(url_for('home',login=session['username']))
 	    			else: 
 	    				if repLog == True:
-	    					flash("Echec de connexion : Le mot de passe est incorrect");
+	    					flash("Echec de connexion : Le mot de passe est incorrect")
 	    				else :
-	    					flash("Echec de connexion : Le login est incorrect");
+	    					flash("Echec de connexion : Le login est incorrect")
 	    				return redirect('/login')
 		
 			#redirect to appropriate signUp	
@@ -139,9 +141,11 @@ def registerClub():
 		repRegClub=server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation'])
 		print(repRegClub)
 		if repRegClub == 0:
-			session['usernameClub']=request.form['login']
-			clubLogged = session['usernameClub']
-			return redirect( url_for('profileClub',login=request.form['login']))
+
+			session['username']=request.form['login']
+			session['mtype']='Club'
+			return redirect( url_for('profileClub',session['username'],clubLogged=True))
+
 		else:
 			flash("Erreur d'inscription!") 
 			rep=[]
@@ -212,10 +216,10 @@ def registerMember():
 		repRegMem=server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd'])
 		
 		if repRegMem == 0:
-			#session['username']=request.form['login']
-			session['usernameMember']=request.form['login']
+			session['username']=request.form['login']
+			session['mtype']='Member'
 
-			return redirect( url_for('profileMember',login=request.form['login']))
+			return redirect( url_for('profileMember',session['username']))
 		else: 
 			flash("Erreur d'inscription!") 
 			rep=[]
@@ -236,11 +240,12 @@ def registerMember():
 
 @app.route('/home/<login>',methods=['GET','POST'])
 def home(login): 
-	if request.method=='GET':
-		nbEvents, events=server_function.getNumberEvent(login,"member")
-		print(nbEvents, events)	
-		
-	return "home"
+
+	#if request.method=='GET':
+		#nbEvents, events=server_function.getNumberEvent(login,"member")
+		#print(nbEvents, events)	
+	return render_template('home.html')
+
 
 
 @app.route('/home/profileClub/<login>',methods = ['GET','POST'])
@@ -248,33 +253,38 @@ def profileClub(login):
 	if request.method =='POST' :
 	 
 		if request.form['subBtn'] == 'Creer des Evenements':
-			return redirect(url_for('createEvent',loginClub=login))
+			return redirect(url_for('createEvent',session['username']))
 			
 		elif request.form['subBtn'] == 'Ajouter des Licencies': 
-			return redirect(url_for('addLicense',loginClub=login))
+			return redirect(url_for('addLicense',session['username']))
 			
 		elif request.form ['subBtn']== 'Modifier': 
 			return redirect(url_for('main')) 
 			
 		elif request.form['subBtn']=='Suivre':
-			loginMember= session['usernameMember'] 
+			loginMember= session['username'] 
 			print(loginMember) #debug
 			licenseNo= server_function.getLicenseFromLogin(loginMember)
 			print(licenseNo) #debug
 			clubId=server_function.getClubId(login)
 			print(clubId)
 			server_function.addFollower(licenseNo,clubId[0])
-			return redirect(url_for('profileMember',login=session['usernameMember']))
+			return redirect(url_for('profileMember',login=session['username']))
 	else: 
 		result = server_function.getClubProfile(login) 
-		clubLogged = session['usernameClub']
+
+		if session['mtype'] == 'Member':
+			clubLogged = False
+		else:
+			clubLogged= True 
+
 		#print(result)
 		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,clubLogged=clubLogged)
 
 	
 @app.route('/home/profileMember/<login>',methods=['GET','POST'])
 def profileMember(login): 
-
+	login=session['username']
 	if request.method == 'GET':
 		#ajax handler
 		if request.json :
@@ -347,21 +357,27 @@ def createEvent(loginClub):
 		
 			if server_function.checkNameEvent(nameEvent) == True : 
 				flash("Erreur de creation d'evenements : le nom de l'evenement existe deja, veuillez en choisir un autre")
-				return redirect(url_for("createEvent",loginClub=loginClub))
+				return redirect(url_for("createEvent",session['username']))
 			else : 
 				if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId[0],imageLink)==1: 
 					print("SUCCESS !" )
 					return redirect(url_for('profileEvent'))
 				else: 
 					print("error on event creation")
-					return redirect(url_for('createEvent',loginClub=loginClub))
+					return redirect(url_for('createEvent',session['username']))
 
 	clubLogged=session['usernameClub']		
 	return render_template('createEvent.html',clubLogged=clubLogged)
 
-@app.route('/profileEvent')
-def profileEvent():
-	return "MAIN"
+@app.route('/profileEvent/<eventName>')
+def profileEvent(eventName):
+	arg= eventName.replace("_"," ") #On remplace les ? par des espaces 
+	#print(arg)
+	result = server_function.getEvent(arg)
+	#print(result)
+	#Permet de modifier le lien pour l image 
+	
+	return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3]) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':
