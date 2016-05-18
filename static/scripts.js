@@ -5,6 +5,35 @@ function newLicence(){
 	i++;
 }
 
+function newSection(){
+	console.log(document.URL);
+	var pos = document.URL.lastIndexOf('/');
+	var login = document.URL.substring(pos+1, document.URL.length);
+	console.log(login);
+	var outbound_message = { msg : 'hello' };
+	$.ajax({
+		type : 'POST',
+		url: '/home/'+login,
+		data : JSON.stringify(outbound_message),
+		dataType : 'json',
+		contentType : 'application/json; charset=utf-8',
+		
+		success : function(response){
+			var nbEventTotal=response.N;
+			console.log(nbEventTotal);
+			var events = response.listeEvent;
+			console.log(events);
+			for(var j=0; j<nbEventTotal; j++){
+				document.getElementById("container").innerHTML +="\n\t<a href='http://localhost:5000/home/profileEvent/"+events[j][0]+"'><section id='event_"+j+"'>\n<h4>"+events[j][0]+"</h4>\n<p>"+events[j][1]+"</p>\n<p>"+events[j][2]+"</p>\n<p>"+events[j][3]+"</p>\n</section></a>";
+		
+			}
+		},
+		error : function(){
+			console.log("do not work");
+		}
+	});
+}
+
 function testDate(id){
 	console.log("recherche date");
 	today=Tdate();
@@ -57,15 +86,3 @@ function testEnd(){
 	document.getElementById("end").setAttribute("min",valStart);
 	testHour();
 }
-
-
-
-
-function newSection(){
-	var nbEventTotal=10;
-	for(var j=0; j<nbEventTotal; j++){
-			document.getElementById("container").innerHTML +="\n\t<section id='event_"+j+"'></section>";
-		
-	}
-}
-
