@@ -12,6 +12,8 @@ app.secret_key = os.urandom(256)
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # la session dure une heure
    
 
+
+
 # ............................................................................................... #
 #gestion des url
 
@@ -139,9 +141,11 @@ def registerClub():
 		repRegClub=server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation'])
 		print(repRegClub)
 		if repRegClub == 0:
+
 			session['username']=request.form['login']
 			session['mtype']='Club'
 			return redirect( url_for('profileClub',session['username'],clubLogged=True))
+
 		else:
 			flash("Erreur d'inscription!") 
 			rep=[]
@@ -212,7 +216,6 @@ def registerMember():
 		repRegMem=server_function.sign_up_member(request.form['userNo'],request.form['userName'],request.form['userFirstName'],request.form['bday'],request.form['userMail'],request.form['clubId'],request.form['login'],request.form['pswrd'])
 		
 		if repRegMem == 0:
-			#session['username']=request.form['login']
 			session['username']=request.form['login']
 			session['mtype']='Member'
 
@@ -235,12 +238,14 @@ def registerMember():
 	#GET :
 	return render_template('registerMember.html')
 
-@app.route('/home/<login>')
+@app.route('/home/<login>',methods=['GET','POST'])
 def home(login): 
+
 	#if request.method=='GET':
 		#nbEvents, events=server_function.getNumberEvent(login,"member")
 		#print(nbEvents, events)	
 	return render_template('home.html')
+
 
 
 @app.route('/home/profileClub/<login>',methods = ['GET','POST'])
@@ -267,11 +272,12 @@ def profileClub(login):
 			return redirect(url_for('profileMember',login=session['username']))
 	else: 
 		result = server_function.getClubProfile(login) 
+
 		if session['mtype'] == 'Member':
 			clubLogged = False
 		else:
 			clubLogged= True 
-		#print("VALEUR DE MTYPE = "+mtype+" ET CLUBLOGGED =" + clubLogged)
+
 		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,clubLogged=clubLogged)
 
 	
@@ -307,8 +313,9 @@ def addLicense(loginClub):
 		if request.form['subBtn'] == "Ajouter les licences":
 			
 			return redirect(url_for("profileClub",login=loginClub))
-			
-	return render_template('addLicense.html',loginClub=loginClub)
+	
+	clubLogged=session['usernameClub']		
+	return render_template('addLicense.html',loginClub=loginClub,clubLogged=clubLogged)
 
 
 
@@ -358,15 +365,15 @@ def createEvent(loginClub):
 					print("error on event creation")
 					return redirect(url_for('createEvent',session['username']))
 
-			
-	return render_template('createEvent.html')
+	clubLogged=session['usernameClub']		
+	return render_template('createEvent.html',clubLogged=clubLogged)
 
 @app.route('/profileEvent/<eventName>')
 def profileEvent(eventName):
 	arg= eventName.replace("_"," ") #On remplace les ? par des espaces 
-	print(arg)
+	#print(arg)
 	result = server_function.getEvent(arg)
-	print(result)
+	#print(result)
 	#Permet de modifier le lien pour l image 
 	
 	return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1]) #AAAAA VOIR 
