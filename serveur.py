@@ -302,7 +302,7 @@ def profileMember(login):
 			if result [0] != False :
 				userName=result[0]+" "+result[1]
 
-	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[3],userMail=result[4], userLogin=login)
+	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[4],userMail=result[5], userLogin=login,userCat=result[3])
 
 
 @app.route('/home/profileClub/<loginClub>/addLicense',methods = ['GET','POST'])
