@@ -248,10 +248,10 @@ def profileClub(login):
 	if request.method =='POST' :
 	 
 		if request.form['subBtn'] == 'Creer des Evenements':
-			return redirect(url_for('createEvent',session['username']))
+			return redirect(url_for('createEvent',loginClub=session['username']))
 			
 		elif request.form['subBtn'] == 'Ajouter des Licencies': 
-			return redirect(url_for('addLicense',session['username']))
+			return redirect(url_for('addLicense',loginClub=session['username']))
 			
 		elif request.form ['subBtn']== 'Modifier': 
 			return redirect(url_for('main')) 
