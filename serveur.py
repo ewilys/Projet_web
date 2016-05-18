@@ -278,8 +278,7 @@ def profileClub(login):
 		else:
 			clubLogged= True 
 		nbLicensed= server_function.getNumberOfLicensed(login)
-		print("NNNNNNOOOOMBRE LICENNNNNCCCCCIEEEEEEEEESSSSS!!!!==== >> "+nbLicensed[0])
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,clubLogged=clubLogged)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,clubLogin=login,clubLogged=clubLogged)
 
 	
 @app.route('/home/profileMember/<login>',methods=['GET','POST'])
