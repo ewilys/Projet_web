@@ -267,11 +267,11 @@ def profileClub(login):
 			return redirect(url_for('profileMember',login=session['username']))
 	else: 
 		result = server_function.getClubProfile(login) 
-		if 'mtype' == 'Member':
-			clubLogged = True
+		if session['mtype'] == 'Member':
+			clubLogged = False
 		else:
-			clubLogged= False 
-		#print(result)
+			clubLogged= True 
+		#print("VALEUR DE MTYPE = "+mtype+" ET CLUBLOGGED =" + clubLogged)
 		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,clubLogged=clubLogged)
 
 	
