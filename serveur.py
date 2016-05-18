@@ -144,7 +144,7 @@ def registerClub():
 
 			session['username']=request.form['login']
 			session['mtype']='Club'
-			return redirect( url_for('profileClub',session['username'],clubLogged=True))
+			return redirect( url_for('profileClub',login=session['username'],clubLogged=True))
 
 		else:
 			flash("Erreur d'inscription!") 
