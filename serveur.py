@@ -219,7 +219,7 @@ def registerMember():
 			session['username']=request.form['login']
 			session['mtype']='Member'
 
-			return redirect( url_for('profileMember',session['username']))
+			return redirect( url_for('profileMember',login=session['username']))
 		else: 
 			flash("Erreur d'inscription!") 
 			rep=[]

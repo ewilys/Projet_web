@@ -216,7 +216,7 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 	ce=checkEmail(userMail,"member")
 	cc=checkClubId(clubId)
 
-	pwd=crypter(password)
+	pwd=crypter(pswrd)
 
 	try: 
 	
