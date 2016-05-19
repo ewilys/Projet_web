@@ -277,8 +277,8 @@ def profileClub(login):
 			clubLogged = False
 		else:
 			clubLogged= True 
-
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],clubLogin=login,clubLogged=clubLogged)
+		nbLicensed= server_function.getNumberOfLicensed(login)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,clubLogin=login,clubLogged=clubLogged)
 
 	
 @app.route('/home/profileMember/<login>',methods=['GET','POST'])
@@ -299,16 +299,16 @@ def profileMember(login):
 		else : #affichage debut
 			#nom, prenom, categorie, club, email 
 			result = server_function.getMemberProfile(login) 
+			print result
 			if result [0] != False :
 				userName=result[0]+" "+result[1]
 
-	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[3],userMail=result[4], userLogin=login)
+	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[4],userMail=result[5], userLogin=login,userCat=result[3])
 
 
 @app.route('/home/profileClub/<loginClub>/addLicense',methods = ['GET','POST'])
 def addLicense(loginClub): 
 	clubId=server_function.getClubId(loginClub)
-	
 	if request.method =='POST' : 
 		if request.form['subBtn'] == "Ajouter les licences":
 			

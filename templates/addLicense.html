@@ -3,11 +3,12 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="http://localhost:5000/static/css/formsStyleSheet.css" />
-
-		<title>Ajout licence</title>
+		<title>Ajout license</title>
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script language="javascript" src="http://localhost:5000/static/scripts.js"></script>
 		<script language="javascript" src="http://localhost:5000/static/signIn.js"></script>	
+
 	</head>
 	
 	<body>
@@ -20,15 +21,18 @@
 				<ul class="nav">
 					<li>Menu Principal</li>
 					<ul class="menu">
-						<li><a href="#">Mon Profil</a></li>
+						<li><a id="home" href="http://localhost:5000/home/{{ session['username'] }}">Accueil</a></li>
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Mon Profil<a></li>
 						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
-						<li><a href="http:/localhost:5000/">Créer un évènement</a></li>
+						{% if clubLogged %}
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}/creaEvent">Créer un évènement</a></li>
+						{% endif %}
 					</ul>
 				</ul>
 			</nav>
 		</header>
 		<h2>Ajout de licences</h2>
-		<formn method="POST">
+		<form>
 		<p>
 			Cliquez sur le bouton <strong>[+]</strong> pour ajouter une licence et entrez le numéro de licence.
 		</p>
@@ -36,7 +40,7 @@
 		<div class="button">
 			<input type="button" class="btn" onClick="javascript:newLicence()" value="+" />
 		</p>
-			<div class="button">
+		<div class="button">
 				<input type="submit" class="btn" name="subBtn" value="Ajouter les licences" />
 			</div>
 		</div>

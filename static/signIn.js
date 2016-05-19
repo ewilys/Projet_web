@@ -148,3 +148,52 @@ function checkNameEvent() {
 		     }
        	});
 }
+
+
+function checkDupLicence(id, i) {
+		
+		var outbound_message = {
+	   			'licence': $(id).val(),
+	   			'num':i,
+  		};
+		$.ajax({
+        		type: 'POST',
+		     url: document.URL,
+		     data: JSON.stringify(outbound_message),         
+	    		dataType: 'json',
+	    		contentType: 'application/json; charset=utf-8', 
+		       
+		     success: function(response) {
+		     	if(response.nameE !== ""){
+		     		$("#test_duplicate_licence").text(response.dL);
+		     	}
+		     },
+		     error: function() {
+		           console.log("do not work");
+		     }
+       	});
+}
+
+function checkDupEmail(id, i) {
+		
+		var outbound_message = {
+	   			'email': $(id).val(),
+	   			'num':i,
+  		};
+		$.ajax({
+        		type: 'POST',
+		     url: document.URL,
+		     data: JSON.stringify(outbound_message),         
+	    		dataType: 'json',
+	    		contentType: 'application/json; charset=utf-8', 
+		       
+		     success: function(response) {
+		     	if(response.nameE !== ""){
+		     		$("#test_duplicate_email").text(response.dE);
+		     	}
+		     },
+		     error: function() {
+		           console.log("do not work");
+		     }
+       	});
+}

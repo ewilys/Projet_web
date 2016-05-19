@@ -233,6 +233,8 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 			#si pas de redondance on peut inserer login et mot de passe		
 
 			insert("Connex_Membre",("login_membre","mdp_membre","licence"),(login,pwd,licenseNo))
+			cat=CategorieMember(login)
+			insert("Categories",("licence","categorie"),(licenseNo,cat))
 			return 0		
 
 		else: 
@@ -265,14 +267,16 @@ def getClubProfile(login):
 		db.close()
 
 #Returns the tuple associated to the profile of a member with all the datas. 
+#Returns the tuple associated to the profile of a member with all the datas. 
 def getMemberProfile(login): 
 	db= sqlite3.connect('dtb.db')
 	try: 
-		row = db.execute('SELECT m.nom,m.prenom,c.nom_club, m.date_n, m.email FROM Membres AS m, Connex_Membre AS cm, Clubs AS c WHERE m.club_id=c.club_id AND m.licence=cm.licence AND cm.login_membre=:who', {"who": login}).fetchone()
+		row = db.execute('SELECT m.nom,m.prenom,c.nom_club,ca.categorie, m.date_n, m.email FROM Membres AS m, Categories AS ca,Connex_Membre AS cm, Clubs AS c WHERE m.club_id=c.club_id AND ca.licence=m.licence AND m.licence=cm.licence AND cm.login_membre=:who', {"who": login}).fetchone()
 		if row is None: 
 			return False
 		else :
 			return row
+		print row
 	except: 
 		print("error in getting member profile")
 	finally: 
@@ -486,3 +490,45 @@ def checkFollowedClub (license,clubId):
 
 def addLicenseClub(license,clubId): 
 	pass
+
+def getNumberOfLicensed(loginClub):
+	clubId= getClubId(loginClub)
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute("SELECT club_id FROM Membres WHERE club_id=:id",{"id":clubId[0]}).fetchone()
+		print("LOGIN CLUB___________________ = "+clubId[0])
+		a=len(row)
+		print(a)
+		return len(row)
+		
+	except: 
+		print("Problem with getNumberOfLicensed")
+	finally: 
+		db.close()
+		
+def CategorieMember(login): 
+	db= sqlite3.connect('dtb.db')
+	try:
+		row = db.execute("SELECT m.date_n FROM Membres as m,Connex_Membre as c WHERE m.licence=c.licence AND c.login_membre=:login",{"login":login}).fetchone()
+		today=date.today()
+		print login
+		print today.year#all poussin ado jeune senior
+		print row		
+		print row[0][4:] 
+		a=row[0][4:]
+		cat=today.year-int(a)
+		if cat<10:
+			 return "poussin"
+		
+		if 10<=cat<=18:
+			return "ado"
+		if 18<cat<=25:
+			return "jeune"
+		if cat>25:
+			return "senior"
+	except:
+		print("Probleme de categorie membre")
+
+	finally:
+		db.close() 
+
