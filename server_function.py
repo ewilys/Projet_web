@@ -38,7 +38,7 @@ def insert(table, fields=(), values=()):
 #verifie si login est unique , return False si n'existe pas, true si deja dans base
 def checklog (login, mtype):
 	db= sqlite3.connect('dtb.db')
-	if mtype == "member":#member
+	if mtype == "Member":#member
 	
 		try: 
 			row = db.execute('SELECT login_membre FROM Connex_Membre WHERE login_membre=:who', {"who": login}).fetchone()
@@ -138,7 +138,7 @@ def checkNameEvent (nameE):
 #verifie email , return False si email n'existe pas , True si existe	
 def checkEmail(email, mtype):
 	db= sqlite3.connect('dtb.db')
-	if mtype=="member" :
+	if mtype=="Member" :
 		try: 
 			row = db.execute('SELECT email FROM Membres WHERE email=:which', {"which": email}).fetchone()
 			if row is None: 
@@ -166,7 +166,7 @@ def checkEmail(email, mtype):
 def sign_in (login, password, mtype):
 	db= sqlite3.connect('dtb.db')
 	pwd=crypter(password)
-	if mtype == "member":#member
+	if mtype == "Member":#member
 		
 		try: 
 			row = db.execute('SELECT login_membre,mdp_membre FROM Connex_Membre WHERE login_membre=:who AND mdp_membre=:pass',{"who": login, "pass": pwd}).fetchone()
@@ -197,9 +197,9 @@ def sign_in (login, password, mtype):
 #Retourne 0 si l'ajout est un succes, res des requetes si une des exigences n'est pas respectee et -1 si erreur	
 def sign_up_club(clubName,city,email,login,password,clubId):
 
-	cl=checklog(login,"club")
+	cl=checklog(login,"Club")
 	ci=checkClubId(clubId)
-	ce=checkEmail(email, "club")
+	ce=checkEmail(email, "Club")
 	cn=checkClubName(clubName)
 
 	pwd=crypter(password)
@@ -223,8 +223,8 @@ def sign_up_club(clubName,city,email,login,password,clubId):
 def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,pswrd):
 
 	cli=checkLicense(licenseNo)
-	clo=checklog(login,"member")
-	ce=checkEmail(userMail,"member")
+	clo=checklog(login,"Member")
+	ce=checkEmail(userMail,"Member")
 	cc=checkClubId(clubId)
 
 	pwd=crypter(pswrd)
@@ -368,7 +368,7 @@ def getNumberEvent(login,mtype):
 	c=db.cursor()	
 	club_id=[]
 	events=[]
-	if mtype == "member":
+	if mtype == "Member":
 		try: 
 			row = c.execute('SELECT club_id FROM Suivis AS s, Connex_Membre AS cm WHERE s.licence=cm.licence AND cm.login_membre=:who ',{"who":login}).fetchall()
 			if row is not None: 
@@ -421,7 +421,7 @@ def getEventForLogin(club_id,mtype):
 	db=sqlite3.connect('dtb.db')
 	c=db.cursor()	
 	club_id=''.join(club_id)
-	if mtype == "member":
+	if mtype == "Member":
 		try:
 			row = c.execute('SELECT e.nom_ev,c.nom_club,e.categorie,e.date_e,e.heure_e FROM Evenements AS e, Clubs AS c WHERE c.club_id=e.club_id AND e.club_id=:which',{"which":club_id}).fetchall()
 			if row is not None: 

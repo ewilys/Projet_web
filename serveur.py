@@ -113,7 +113,7 @@ def registerClub():
 				
 			if login != "":
 				#duplicate login :
-				if server_function.checklog(login,"club") == False:
+				if server_function.checklog(login,"Club") == False:
 					login="login valide"
 				else : 
 					login="ce login existe deja , veuillez en choisir un autre"
@@ -129,7 +129,7 @@ def registerClub():
 			
 			if email != "":
 				#validate email:
-				if server_function.checkEmail(email, "club") == False :
+				if server_function.checkEmail(email, "Club") == False :
 					email="email valide"
 				else:
 					email="cet email existe deja, veuillez en choisir un autre"
@@ -187,7 +187,7 @@ def registerMember():
 				
 			if login != "":
 				#duplicate login :
-				if server_function.checklog(login,"member") == False:
+				if server_function.checklog(login,"Member") == False:
 					login="login valide"
 				else : 
 					login="ce login existe deja , veuillez en choisir un autre"
@@ -203,7 +203,7 @@ def registerMember():
 			
 			if email != "":
 				#validate email:
-				if server_function.checkEmail(email,"member") == False :
+				if server_function.checkEmail(email,"Member") == False :
 					email="email valide"
 				else:
 					email="cet email existe deja, veuillez en choisir un autre"
@@ -322,7 +322,7 @@ def addLicense(loginClub):
 			if action=="chkDupEm":
 				email=request.json['email']
 				#check si email existe deja dans la table membre
-				if server_function.checkEmail(email,"member")==False:
+				if server_function.checkEmail(email,"Member")==False:
 					dE= "email "+numero+" valide"
 				else: 
 					dE="email "+numero+" deja existant dans la base de donnee,un compte existe deja"
