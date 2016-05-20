@@ -233,6 +233,7 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 			#si pas de redondance on peut inserer login et mot de passe		
 
 			insert("Connex_Membre",("login_membre","mdp_membre","licence"),(login,pwd,licenseNo))
+			print(login)
 			cat=CategorieMember(login)
 			insert("Categories",("licence","categorie"),(licenseNo,cat))
 			return 0		
@@ -509,6 +510,7 @@ def getNumberOfLicensed(loginClub):
 def CategorieMember(login): 
 	db= sqlite3.connect('dtb.db')
 	try:
+		print("HELLLLLLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
 		row = db.execute("SELECT m.date_n FROM Membres as m,Connex_Membre as c WHERE m.licence=c.licence AND c.login_membre=:login",{"login":login}).fetchone()
 		today=date.today()
 		print login
