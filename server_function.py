@@ -586,7 +586,8 @@ def registerEvent(license,nomEv):
 	if checkFollowedEvent(license,nomEv)==True: 
 		print("DEJA ASSOCIE")
 	else: 
-		insert("inscriptions",("licence","nom_ev"),(license,nomEv))
+		print("inscriptions")
+		insert("Inscriptions",("licence","nom_ev"),(license,nomEv))
 
 
 
@@ -594,7 +595,7 @@ def registerEvent(license,nomEv):
 def checkFollowedEvent (license,nomEv): 
 	db= sqlite3.connect('dtb.db')
 	try: 
-		row = db.execute("SELECT * FROM inscriptions WHERE licence=:licence AND nom_ev=:nom_ev",{"licence":license,"nom_ev":nomEv}).fetchone()
+		row = db.execute("SELECT * FROM Inscriptions WHERE licence=:licence AND nom_ev=:nom_ev",{"licence":license,"nom_ev":nomEv}).fetchone()
 		if row is None: 
 			return False
 		else: 

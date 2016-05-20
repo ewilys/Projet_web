@@ -319,7 +319,7 @@ def profileClub(login):
 		elif request.form['subBtn'] == 'Creer des Evenements':
 			return redirect(url_for('createEvent',loginClub=login))
 			
-		elif request.form['subBtn'] == 'Ajouter des Licencies': 
+		elif request.form['subBtn'] == 'Ajouter des Licences': 
 			return redirect(url_for('addLicense',loginClub=login))
 				
 		#suivre
@@ -329,7 +329,7 @@ def profileClub(login):
 			licenseNo= server_function.getLicenseFromLogin(loginMember)
 			clubId=server_function.getClubId(login)
 			server_function.addFollower(licenseNo,clubId[0])
-			clubFollowed = server_function.checkFollowedClub(licenseNo,clubId[0])
+			#clubFollowed = server_function.checkFollowedClub(licenseNo,clubId[0])
 
 			return redirect(url_for('profileClub',login=login))
 
@@ -338,10 +338,16 @@ def profileClub(login):
 
 		if session['mtype'] == 'Member':
 			clubLogged = False
+			licenseNo= server_function.getLicenseFromLogin(session['username'])
+			clubId=server_function.getClubId(login)
+			clubFollowed = server_function.checkFollowedClub(licenseNo,clubId[0])
 		else:
 			clubLogged= True 
+			clubFollowed=False
+			
 		nbLicensed= server_function.getNumberOfLicensed(login)
 		nbFollo=server_function.getNumberOfFollower(login)
+		
 		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,nbFollowers=nbFollo,clubLogin=login,clubLogged=clubLogged,checkFollowedClub=clubFollowed)
 
 	
@@ -352,10 +358,10 @@ def profileMember(login):
 		#ajax handler
 		if request.json :
 			action=request.json['action']
-			print("IMIN")
+			#print("IMIN")
 			if action == "getEventFollowed":
 				nbEv,Ev=server_function.getEventFollowed(session['username'])
-				return jsonify({'nb':nbEv,'Ev':Ev})
+				return jsonify({'nb':nbEv,'events':Ev})
 			else :
 				print("IMIN")
 				nbClub,Clubs=server_function.getClubFollowed(session['username'])
@@ -421,9 +427,8 @@ def createEvent(loginClub):
 	if request.method == 'POST': 
 
 		if request.json:
-		
 			nameE=request.json['nameE']
-						
+			print(nameE)			
 			if nameE!="" :
 				#duplicate nameE :
 				if server_function.checkNameEvent(nameE) == False : 
@@ -445,14 +450,14 @@ def createEvent(loginClub):
 		
 			if server_function.checkNameEvent(nameEvent) == True : 
 				flash("Erreur de creation d'evenements : le nom de l'evenement existe deja, veuillez en choisir un autre")
-				return redirect(url_for("createEvent",session['username']))
+				return redirect(url_for("createEvent",loginClub=session['username']))
 			else : 
 				if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId[0],imageLink)==1: 
 					print("SUCCESS !" )
-					return redirect(url_for('profileEvent',eventName=nameEvent))
+					return redirect(url_for('profileEvent',eventName=nameEvent.replace(" ","_")))
 				else: 
 					print("error on event creation")
-					return redirect(url_for('createEvent',session['username']))
+					return redirect(url_for('createEvent',loginClub=session['username']))
 
 	clubLogged=True	
 	return render_template('createEvent.html',clubLogged=clubLogged)
@@ -477,9 +482,9 @@ def profileEvent(eventName):
 	if session['mtype']=="Club":
 		clubLogged=True
 	if session['mtype']=="Member": 
-		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
+		return render_template("profileEvent.html",eventName=nomEv,descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
 	else: 
-		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged,alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
+		return render_template("profileEvent.html",eventName=nomEv,descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged,alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':

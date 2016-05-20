@@ -127,7 +127,6 @@ function checkNameEvent() {
 		
 		var outbound_message = {
 	   			'nameE': $("#nameEvent").val(),
-	   			
   		};
 		$.ajax({
         		type: 'POST',

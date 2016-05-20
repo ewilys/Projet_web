@@ -1,5 +1,5 @@
 function toUnderScore(str){
-	return str.replace(" ","_");
+	return str.replace(/ /g,"_");
 }
 
 
@@ -83,7 +83,7 @@ function getEventFollowed(){
 		     success: function(response) {
 		     	if(response.nb !== 0){
 		     		for(j=0;j<response.nb;j++){
-		     			document.getElementById("events").innerHTML +="\n\t<a href='http://localhost:5000/profileEvent/"+toUnderScore(events[j][0])+"'><section id='event_"+j+"'>\n<h4>"+events[j][0]+"</h4>\n<p>"+events[j][1]+"</p>\n<p>"+events[j][2]+"</p>\n<p>"+events[j][3]+"</p>\n</section></a>";
+		     			document.getElementById("events").innerHTML +="\n\t<a href='http://localhost:5000/profileEvent/"+toUnderScore(response.events[j][0])+"'><section id='event_"+j+"'>\n<h4>"+response.events[j][0]+"</h4>\n<p>"+response.events[j][1]+"</p>\n<p>"+response.events[j][2]+"</p>\n<p>"+response.events[j][3]+"</p>\n</section></a>";
 		     		}
 		     	}
 		     	else{
