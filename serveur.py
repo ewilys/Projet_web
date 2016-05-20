@@ -403,21 +403,27 @@ def createEvent(loginClub):
 
 @app.route('/profileEvent/<eventName>',methods=['GET','POST'])
 def profileEvent(eventName):
-	arg= eventName.replace("_"," ") #On remplace les _ par des espaces 
-	result = server_function.getEvent(arg)
+	nomEv= eventName.replace("_"," ") #On remplace les _ par des espaces 
+	result = server_function.getEvent(nomEv)
+	if (session['mtype']=='Member'):
+		license= server_function.getLicenseFromLogin(session['username'])
+		alreadyRegistered= server_function.checkFollowedEvent(license,nomEv)
+	else: 
+		alreadyRegistered=False
 	if request.method == 'POST' :
 		if request.form['subBtn'] == 'Retourner sur son profil':
 			return redirect(url_for('profileClub',login=session['username']))
-			
-		else :
-			pass
+		elif request.form['subBtn']== "S'inscrire":
+			license= server_function.getLicenseFromLogin(session['username'])
+			server_function.registerEvent(license,nomEv)
+			return redirect(url_for('profileEvent',eventName))
 	
 	if session['mtype']=="Club":
 		clubLogged=True
 	if session['mtype']=="Member": 
-		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4]) #AAAAA VOIR 
+		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
 	else: 
-		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged) #AAAAA VOIR 
+		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged,alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':

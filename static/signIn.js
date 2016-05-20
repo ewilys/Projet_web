@@ -179,7 +179,7 @@ function checkDupLicence(id, i) {
 function checkDupEmail(id, i) {
 		
 		var outbound_message = {
-	   			'email': document.getElementById(id).value),
+	   			'email': document.getElementById(id).value,
 	   			'num':""+i+"",
 	   			'action': "chkDupEm",
   		};

@@ -69,11 +69,14 @@ def checklog (login, mtype):
 def checkLicense (license):
 	db= sqlite3.connect('dtb.db')
 	try: 
-		row = db.execute('SELECT licence FROM Membres WHERE licence=:who', {"who": license}).fetchone()
+		row = db.execute('SELECT licence,nom FROM Membres WHERE licence=:who', {"who": license}).fetchone()
 		if row is None: 
 			return False
 		else :
-			return True
+			if row[1] is None: 
+				return False 
+			else: 
+				return True
 	except: 
 		print("login error")
 	finally: 
@@ -473,8 +476,8 @@ def getLicenseFromLogin (login):
 def addFollower(license,clubId): 
 	db=sqlite3.connect('dtb.db')
 	try: 
-		print("LICENSE = "+license)
-		print("CLUBID = "+clubId)
+		#print("LICENSE = "+license)
+		#print("CLUBID = "+clubId)
 		if checkFollowedClub(license,clubId)==False: 
 			insert("suivis",("licence","club_id"),(license,clubId))
 		else: 
@@ -491,8 +494,8 @@ def addFollower(license,clubId):
 def checkFollowedClub (license,clubId): 
 	db= sqlite3.connect('dtb.db')
 	try: 
-		print("LICENSE CHECK = "+str(license))
-		print("CLUBID CHECK = "+str(clubId))
+		#print("LICENSE CHECK = "+str(license))
+		#print("CLUBID CHECK = "+str(clubId))
 		row = db.execute("SELECT * FROM Suivis WHERE club_id=:idClub AND licence=:licenceNo",{"idClub":clubId,"licenceNo":license}).fetchone()
 		if row is None: 
 			return False
@@ -514,7 +517,7 @@ def getNumberOfLicensed(loginClub):
 	db= sqlite3.connect('dtb.db')
 	try: 
 		row = db.execute("SELECT club_id FROM Membres WHERE club_id=:id",{"id":clubId[0]}).fetchall()
-		print("LOGIN CLUB___________________ = "+clubId[0])
+		#print("LOGIN CLUB___________________ = "+clubId[0])
 		a=len(row)
 		print(a)
 		return len(row)
@@ -552,5 +555,26 @@ def CategorieMember(bday):
 		return "jeune"
 	else:
 		return "senior"
-	
 
+def registerEvent(license,nomEv): 
+	print("LICENSE = "+license)
+	print("NOMEV = "+nomEv)
+	if checkFollowedEvent(license,nomEv)==True: 
+		print("DEJA ASSOCIE")
+	else: 
+		insert("inscriptions",("licence","nom_ev"),(license,nomEv))
+
+#On retourne vrai si le membre est deja inscrit a l'event.
+def checkFollowedEvent (license,nomEv): 
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute("SELECT * FROM inscriptions WHERE licence=:licence AND nom_ev=:nom_ev",{"licence":license,"nom_ev":nomEv}).fetchone()
+		if row is None: 
+			return False
+		else: 
+			return True  #deja associe
+		
+	except: 
+		print("Problem with checkFollowedClub")
+	finally: 
+		db.close()
