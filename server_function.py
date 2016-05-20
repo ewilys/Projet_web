@@ -611,6 +611,18 @@ def searchResult (city,categorie,nameEvent,date,clubName):
 	finally: 
 		db.close()
 
+def updateAvailablePlace(nomEv): 
+	db= sqlite3.connect('dtb.db')
+	try: 
+		nbPlace= db.execute("SELECT nb_places FROM evenements WHERE nom_ev=:nomEv",{"nomEv":nomEv}).fetchone()
+		print("NOMBRE DE PLACES= "+nbPlace[0])
+		newNbPlace= int(nbPlace[0])
+		print("NEW NB PLACE = "+newNbPlace)
+		row = db.execute("UPDATE evenements SET nb_places:= nbPlace WHERE nom_ev:=nomEv",{"nbPlace":newNbPlace,"nomEv":nomEv}).fetchone()
+	except: 
+		print("Problem with updateAvailablePlace")
+	finally: 
+		db.close()
 
 
 

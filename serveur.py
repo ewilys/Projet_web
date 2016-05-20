@@ -426,6 +426,7 @@ def profileEvent(eventName):
 		elif request.form['subBtn']== "S'inscrire":
 			license= server_function.getLicenseFromLogin(session['username'])
 			server_function.registerEvent(license,nomEv)
+			server_function.updateAvailablePlace(nomEv); 
 			return redirect(url_for('profileEvent',eventName=eventName))
 	
 	if session['mtype']=="Club":
