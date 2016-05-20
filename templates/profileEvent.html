@@ -27,6 +27,7 @@
 				</ul>
 			</nav>
 		</header>
+		
 		<div class="container">
 		<article>
 			<h2>{{ eventName }}</h2>
@@ -52,18 +53,15 @@
 					Quand ? A partir de {{startHour}} le {{dateEvent}}<br/>
 				</div>
 				{% if clubLogged %}
-				<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Retouner sur mon profil<a></li>
-				
+					<!--Bouton pour regagner son profil-->
 				{% else %}
-				<form method = 'POST' >
-					<div class="ctrl" >
-						{% if alreadyRegistered %}
-						<input type="text" name="subBtn" value="Déjà inscrit bitch" id="signUp" class="btn"/>
-						{% else %} 
-						<input type="submit" name="subBtn" value="S'inscrire" id="signUp" class="btn"/>
-						{%endif%}
-					</div>
-				</form>
+				<div class="ctrl">
+					{% if alreadyRegistered %}
+						<input type="button" value="Vous êtes inscrit à cette évènement" class="btn"/>
+					{% else %}	
+						<input type="button" value="S'inscrire" id="signUp" class="btn"/>
+					{% endif %}
+				</div>
 				{% endif %}
 			</p>
 		</article>
