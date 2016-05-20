@@ -5,8 +5,8 @@ function toUnderScore(str){
 
 
 function modification(){
-
-	
+	var el = document.getElementById("modif");
+	el.setAttribute("value", "Filled");
 }
 
 function checkNewInfoClub(){
