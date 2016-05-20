@@ -6,10 +6,47 @@ function toUnderScore(str){
 
 function modification(){
 
+	
+}
+
+function checkNewInfoClub(){
+
 	var outbound_message = {
-	   			'login': $("#userID").val(),
-	   			'pswrd': $("#pswrd").val(), 
-	   			'memtype': $("input[type=radio][name=memberType]:checked").attr('value')
+	   			'newE': $("#newEmail").val(),
+	   			'newL': $("#newLogin").val(),
+  		};
+  		console.log(document.URL);
+		$.ajax({
+        		type: 'POST',
+		     url: document.URL,
+		     data: JSON.stringify(outbound_message),         
+	    		dataType: 'json',
+	    		contentType: 'application/json; charset=utf-8', 
+		       
+		     success: function(response) {
+		     	if(response.newE !== ""){
+		     		$("#test_duplicate_email").text(response.newE);
+		     		var el=document.getElementById("test_duplicate_email");
+		     		el.setAttribute("value", "logFilled");
+		     	}
+		     	if(response.newL !== ""){
+		     		$("#test_duplicate_login").text(response.newL);
+		     		var el=document.getElementById("test_duplicate_login");
+		     		el.setAttribute("value", "logFilled");
+		     	}
+		     		
+		     },
+		     error: function() {
+		           console.log("do not work");
+		     }
+       	});
+}
+
+function checkNewInfoSportif(){
+
+	var outbound_message = {
+	   			'newE': $("#email").val(),
+	   			
   		};
 		$.ajax({
         		type: 'POST',
@@ -19,13 +56,11 @@ function modification(){
 	    		contentType: 'application/json; charset=utf-8', 
 		       
 		     success: function(response) {
-		     	if(response.user !== ""){
-		     		$("#test_valid_ID").text(response.user);
-		     		var el=document.getElementById("test_valid_ID");
+		     	if(response.newE !== ""){
+		     		$("#test_valid_ID").text(response.newE);
+		     		var el=document.getElementById("test_duplicate_email");
 		     		el.setAttribute("value", "logFilled");
-		     	}
-		     		
-		     	
+		     	}	
 		     },
 		     error: function() {
 		           console.log("do not work");

@@ -559,6 +559,27 @@ def CategorieMember(bday):
 	else:
 		return "senior"
 
+
+
+#update les info du club	
+def updateInfoClub(table,fields,values,login):
+	clubId=getClubId(login)
+	db = sqlite3.connect('dtb.db')
+	#cur = db.cursor()
+
+	query = 'UPDATE %s SET %s = "%s" WHERE club_id= "%s"' % (table,fields,values,"".join(clubId))
+	print (query)
+	try: 
+		db.execute(query)
+		db.commit()
+		return 0
+	except: 
+		print("UPDAT ERROR in ",table) 
+	finally: 
+		db.close()
+		
+
+
 def registerEvent(license,nomEv): 
 	print("LICENSE = "+license)
 	print("NOMEV = "+nomEv)
@@ -566,6 +587,8 @@ def registerEvent(license,nomEv):
 		print("DEJA ASSOCIE")
 	else: 
 		insert("inscriptions",("licence","nom_ev"),(license,nomEv))
+
+
 
 #On retourne vrai si le membre est deja inscrit a l'event.
 def checkFollowedEvent (license,nomEv): 

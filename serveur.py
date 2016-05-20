@@ -144,7 +144,7 @@ def registerClub():
 
 			session['username']=request.form['login']
 			session['mtype']='Club'
-			return redirect( url_for('profileClub',login=session['username'],clubLogged=True))
+			return redirect( url_for('profileClub',login=session['username']))
 
 		else:
 			flash("Erreur d'inscription!") 
@@ -256,29 +256,83 @@ def home(login):
 
 @app.route('/home/profileClub/<login>',methods = ['GET','POST'])
 def profileClub(login): 
-	licenseNo= server_function.getLicenseFromLogin(session['username'])
-	clubId=server_function.getClubId(login)
-	clubFollowed = server_function.checkFollowedClub(licenseNo,clubId[0])	
-	
+
 	if request.method =='POST' :
-	 
-		if request.form['subBtn'] == 'Creer des Evenements':
+	
+		#ajax handler
+	 	if request.json:
+	 		newL=request.json['newL']
+			newE=request.json['newE']
+			
+			if newL != "":
+				#duplicate login :
+				if server_function.checklog(newL,"Club") == False:
+					newL="login valide"
+				else : 
+					newL="ce login existe deja , veuillez en choisir un autre"
+					
+			if newE != "":
+				#validate email:
+				if server_function.checkEmail(newE, "Club") == False :
+					newE="email valide"
+				else:
+					newE="cet email existe deja, veuillez en choisir un autre"
+					
+			return jsonify({'newE':newE, 'newL':newL})
+			
+			
+		#modif info
+		if request.form ['subBtn'] == 'Enregistrer les modifications': 
+			newL=request.form['newLogin']
+			newE=request.form['newEmail']
+			newP=request.form['newPswrd']
+
+			if newL != "":
+				cl=server_function.checklog(newL,"Club")
+				if cl ==False : 
+					if server_function.updateInfoClub("Connex_Club","login_club",newL,session['username']) == 0:
+						session['username']=newL
+						print ("okay changemnt log")
+					else : 
+						print ("error update")
+				else : 
+					flash(" Login deja existant, veuillez en choisir un autre")
+					
+			if newE != "":
+				ce=server_function.checkEmail(newE, "Club")
+				if ce ==False : 
+					if server_function.updateInfoClub("Clubs","email",newE,session['username']) == 0:
+						print("okay changemnt email")
+					else : 
+						print ("error update")
+				else : 
+					flash(" Email deja existant, veuillez en choisir un autre")
+					
+			if newP != "":
+				pwd=server_function.crypter(newP)
+				if server_function.updateInfoClub("Connex_Club","mdp_club",pwd,session['username']) == 0:
+					print("okay changemnt psw")
+				else : 
+					print ("error update")
+			return redirect(url_for('profileClub',login=session['username'])) 
+		
+		elif request.form['subBtn'] == 'Creer des Evenements':
 			return redirect(url_for('createEvent',loginClub=login))
 			
 		elif request.form['subBtn'] == 'Ajouter des Licencies': 
 			return redirect(url_for('addLicense',loginClub=login))
-			
-		elif request.form ['subBtn']== 'Modifier': 
-			return redirect(url_for('main')) 
-			
+				
+		#suivre
 		elif request.form['subBtn']=='Suivre':
 			
 			loginMember= session['username'] 
 			licenseNo= server_function.getLicenseFromLogin(loginMember)
 			clubId=server_function.getClubId(login)
-			print(clubId)
 			server_function.addFollower(licenseNo,clubId[0])
+			clubFollowed = server_function.checkFollowedClub(licenseNo,clubId[0])
+
 			return redirect(url_for('profileClub',login=login))
+
 	else: 
 		result = server_function.getClubProfile(login) 
 
