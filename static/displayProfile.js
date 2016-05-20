@@ -1,5 +1,5 @@
 function toUnderScore(str){
-	return str.replace(" ","_");
+	return str.replace(/ /g,"_");
 }
 
 
