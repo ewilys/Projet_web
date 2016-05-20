@@ -658,44 +658,17 @@ def updateAvailablePlace(nomEv):
 	try: 
 		nbPlace= db.execute("SELECT nb_places FROM Evenements WHERE nom_ev=:nomEv",{"nomEv":nomEv}).fetchone()
 		print("NOMBRE DE PLACES= "+nbPlace[0])
-		newNbPlace= str(int(nbPlace[0])-1) #Ne marche pas 
+		Place= int(nbPlace[0])-1
+		newNbPlace= str(Place)
 		print("NEW NB PLACE = "+newNbPlace)
-		
-		db.execute('UPDATE Evenements SET nb_places="%s" WHERE nom_ev="%s"'% (newNbPlace,nomEv)) 
+		print("le nom DEV est "+nomEv)
+		db.execute("UPDATE Evenements SET nb_places=:nbPlace WHERE nom_ev=:nomEv",{"nbPlace":newNbPlace,"nomEv":nomEv})
+		row =db.execute("SELECT nb_places FROM Evenements WHERE nom_ev=:nomEv",{"nomEv":nomEv}).fetchone()
+		print row[0]
+		return row[0]
 	except: 
 		print("Problem with updateAvailablePlace")
 	finally: 
 		db.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
