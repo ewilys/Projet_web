@@ -5,6 +5,7 @@
 		<link rel="stylesheet" href="http://localhost:5000/static/css/profileStyleSheet.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/displayProfile.js"></script>
 		<title>{{clubName}}</title>
 	</head>
 	
@@ -31,6 +32,7 @@
 		<article>
 			<h2>{{clubName}}</h2>
 			<p>
+			<form method='POST' action="/home/profileClub/{{ session['username'] }}">
 				<div class="field">
 					Ville : {{clubCity}}<br />
 				</div>
@@ -40,15 +42,40 @@
 				<div class="field">
 					E-mail : {{clubEmail}}<br />
 				</div>
-				<div class="field">
-					Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
-				</div>
+				<label for="email">  Nouvel email : </label>
+				<input type="email" name="newEmail" id="newEmail" onkeyup="javascript:checkNewInfoClub();"/>
+				<span class="info" id="test_duplicate_email" value="_blank"></span>
+				
+				<label for="login"> Nouvel identifiant : </label>
+				<input type="text" name="newLogin" id="newLogin" onkeyup="javascript:checkNewInfoClub();" />
+				<span class="info" id="test_duplicate_login" value="_blank"></span>
+				<br />
+				<label for="pswrd">Nouveau mot de passe : </label>
+				<input type="password" name="newPswrd" id="newPswrd" />
+				
+				<input type="submit"  name="subBtn" value="Enregistrer les modifications" id="change" class="btn" />
+				
+				{% with messages = get_flashed_messages() %}
+      			{% if messages %}
+        				{% for message in messages %}
+          				<div class="alert alert-danger">{{ message }}</div>
+        				{% endfor %}
+      			{% endif %}     			
+    				{% endwith %}
+				
+				
+			</form>
 			</p>
 				{% if clubLogged %}
 				<div class="ctrl">
+				
+					<div class="field">
+						Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
+					</div>
+				
 					<form method='POST'>
 						<p>
-							<input type="button" value="Modifier" id="setup" class="btn"/>
+							<input type="button" value="Modifier" id="setup" onclick="javascript:modification();" class="btn"/>
 							<input type="submit"  name="subBtn" value="Creer des Evenements" id="events" class="btn" />
 							<input type="submit" name="subBtn" value="Ajouter des Licencies" id="players" class="btn"/>
 						</p>

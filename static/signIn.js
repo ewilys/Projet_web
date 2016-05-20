@@ -168,6 +168,8 @@ function checkDupLicence(id, i) {
 		     	if(response.dL !== ""){
 		     		console.log(response.dL)
 		     		$("#test_duplicate_licence").text(response.dL);
+		     		var el=document.getElementById("test_duplicate_licence");
+		     		el.setAttribute("value", "Filled")
 		     	}
 		     },
 		     error: function() {
@@ -179,7 +181,7 @@ function checkDupLicence(id, i) {
 function checkDupEmail(id, i) {
 		
 		var outbound_message = {
-	   			'email': document.getElementById(id).value),
+	   			'email': document.getElementById(id).value,
 	   			'num':""+i+"",
 	   			'action': "chkDupEm",
   		};
@@ -193,6 +195,8 @@ function checkDupEmail(id, i) {
 		     success: function(response) {
 		     	if(response.dE !== ""){
 		     		$("#test_duplicate_email").text(response.dE);
+		     		var el=document.getElementById("test_duplicate_email");
+		     		el.setAttribute("value", "Filled")
 		     	}
 		     },
 		     error: function() {
