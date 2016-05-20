@@ -9,6 +9,26 @@ function toUnderScore(str){
 	return str.replace(" ","_");
 }
 
+function testRadio(){
+	console.log("testRadio a été appelé");
+	var outbound_message = {
+	   			'searchtype': $("input[type=radio][name=searchType]:checked").attr('value')
+  		};
+	console.log(outbound_message.searchtype);
+	if(outbound_message.searchtype === "event"){
+		var el = document.getElementById("searchEvent");
+		el.setAttribute("value", "Filled");
+		el = document.getElementById("searchClub");
+		el.setAttribute("value", "_blank");
+	}
+	else{
+		var el = document.getElementById("searchClub");
+		el.setAttribute("value", "Filled");
+		el = document.getElementById("searchEvent");
+		el.setAttribute("value", "_blank");
+	}
+}
+
 //var nbEventTotal=evaluateNbEvent();
 function newSection(){
 	console.log(document.URL);
