@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="http://localhost:5000/static/css/formsStyleSheet.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
 		<title>Recherche</title>
 	</head>
 	<body>
@@ -14,41 +16,59 @@
 				<ul class="nav">
 					<li>Menu Principal</li>
 					<ul class="menu">
-						<li><a href="#">Mon Profil</a></li>
+						<li><a id="home" href="http://localhost:5000/home/{{ session['username'] }}">Accueil</a></li>
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Mon Profil<a></li>
 						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
-						<li><a href="http:/localhost:5000/">Créer un évènement</a></li>
+						{% if clubLogged %}
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}/creaEvent">Créer un évènement</a></li>
+						{% endif %}
 					</ul>
 				</ul>
 			</nav>
 		</header>
 		<h2>Recherche</h2>
-		<form method="POST" action="">
-			<p>
-				<label for="categorie">Catégorie d'âge : </label>
-				<select name="categorie" id="categorie">
-					<option value="all">Toutes catégories</option>
-					<option value="poussin">Moins de 10 ans</option>
-					<option value="ado">10-18 ans</option>
-					<option value="jeune">19-25 ans</option>
-					<option value="senior">Plus de 25 ans</option>
-				</select>
-				<br/>
-				<label for="date" title="jj/mm/aaaa">Date : </label>
-				<input type="text" name="date" id="date" placeholder="jj/mm/aaaa"/>
-				<br/>
-				<label for="club">Club : </label>
-				<input type="text" name="club" id="club"/>
-				<br/>
-				<label for="place">Lieu (Ville) : </label>
-				<input type="text" name="place" id="place"/>
-				<br/>
-				<label for="other">Nom de l'évènement</label>
-				<input type="search" name="NameEvent" id="NameEvent" placeholder="Ex : barbecue"/>
-				<br/>
-				<div class="button">
-					<input type="submit" class="btn" value="Rechercher"/>
-				</div>
+		
+			<p id="searchType">
+				<label for="searchType">Vous recherchez :</label><br/>
+				<input type="radio" name="searchType" id="typeClub" value="club" onclick="javascript:testRadio()"/><label for="typeClub">Un club</label>
+				<input type="radio" name="searchType" id="typeEvent" value="event" onclick="javascript:testRadio()"/><label for="typeClub">Un évènement</label><br/>
 			</p>
-		</form>
+			<form method="POST" action="/home/search/" id="searchEvent" value="_blank">
+				<p>
+					<label for="categorie">Catégorie d'âge : </label>
+						<select name="categorie" id="categorie">
+						<option value="Toutes les categories">Toutes catégories</option>
+						<option value="enfant">Moins de 10 ans</option>
+						<option value="ado">10-18 ans</option>
+						<option value="jeune">19-25 ans</option>
+						<option value="senior">Plus de 25 ans</option>
+					</select>
+					<br/>
+					<label for="date" title="jj/mm/aaaa">Date : </label>
+					<input type="text" name="date" id="date" placeholder="jj/mm/aaaa"/>
+					<br/>
+					<label for="club">Nom : </label>
+					<input type="text" name="eventName" id="eventName"/>
+					<br/>
+					<label for="place">Lieu (Ville) : </label>
+					<input type="text" name="place" id="place"/>
+					<div class="button">
+						<input type="submit" class="btn" value="Rechercher"/>
+					</div>
+				</p>
+			</form>
+			<form method="POST" action="/home/search/" id="searchClub" value="_blank">
+				<p>
+					<label for="other">Nom : </label>
+					<input type="text" name="clubName" id="clubName"/>
+					<br/>
+					<label for="place">Ville : </label>
+					<input type="text" name="place" id="place"/>
+					<br/>
+					<div class="button">
+						<input type="submit" class="btn" value="Rechercher"/>
+					</div>
+				</p>
+			</form>
 	</body>
 </html>
