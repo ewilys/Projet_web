@@ -55,9 +55,15 @@
 				<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Retouner sur mon profil<a></li>
 				
 				{% else %}
-				<div method='POST' class="ctrl">
-					<input type="submit" name="subBtn" value="S'inscrire" id="signUp" class="btn"/>
-				</div>
+				<form method = 'POST' >
+					<div class="ctrl" >
+						{% if alreadyRegistered %}
+						<input type="text" name="subBtn" value="Déjà inscrit bitch" id="signUp" class="btn"/>
+						{% else %} 
+						<input type="submit" name="subBtn" value="S'inscrire" id="signUp" class="btn"/>
+						{%endif%}
+					</div>
+				</form>
 				{% endif %}
 			</p>
 		</article>

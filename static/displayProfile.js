@@ -1,3 +1,9 @@
+function toUnderScore(str){
+	return str.replace(" ","_");
+}
+
+
+
 function modification(){
 
 	
@@ -65,11 +71,10 @@ function checkNewInfoSportif(){
 function getEventFollowed(){
 	
 	var outbound_message = {
-	   			'login': $("#userLogin").val(),
 	   			'action' : "getEventFollowed",
   		};
 		$.ajax({
-        		type: 'GET',
+        		type: 'POST',
 		     url: document.URL,
 		     data: JSON.stringify(outbound_message),         
 	    		dataType: 'json',
@@ -77,14 +82,12 @@ function getEventFollowed(){
 		       
 		     success: function(response) {
 		     	if(response.nb !== 0){
-		     		for(i=0;i<response.nb;i++){
-		     			for(j=0;j<response.Ev[i].length();j++){
-		     				
-		     			}
+		     		for(j=0;j<response.nb;j++){
+		     			document.getElementById("events").innerHTML +="\n\t<a href='http://localhost:5000/profileEvent/"+toUnderScore(events[j][0])+"'><section id='event_"+j+"'>\n<h4>"+events[j][0]+"</h4>\n<p>"+events[j][1]+"</p>\n<p>"+events[j][2]+"</p>\n<p>"+events[j][3]+"</p>\n</section></a>";
 		     		}
-		     		console.log(Ev);
-		     	}else{
-		     		console.log("pas d'évènements suivis")
+		     	}
+		     	else{
+		     		console.log("pas d'évènements suivis");
 		     	}
 		     		
 		     },
@@ -97,32 +100,27 @@ function getEventFollowed(){
 function getClubFollowed(){
 	
 	var outbound_message = {
-	   			'login': $("#userID").val(),
 	   			'action': "getClubFollowed",
   		};
 		$.ajax({
-        		type: 'GET',
-		     url: document.URL,
-		     data: JSON.stringify(outbound_message),         
-	    		dataType: 'json',
-	    		contentType: 'application/json; charset=utf-8', 
+        	type: 'POST',
+		   url: document.URL,
+	    	data: JSON.stringify(outbound_message),         
+	    	dataType: 'json',
+	   	contentType: 'application/json; charset=utf-8', 
 		       
-		     success: function(response) {
-		     	if(response.nb !== 0){
+		   success: function(response) {
+		   	if(response.nb !== 0){
 		     		for(i=0;i<response.nb;i++){
-		     			for(j=0;j<response.clubs[i].length();j++){
-		     				
-		     			}
+		     			document.getElementById("clubs").innerHTML +="\n\t<a href='http://localhost:5000/home/profileClub/"+response.clubs[i][0]+"'><section><h4>"+response.clubs[i][1]+"</h4><p>"+response.clubs[i][2]+"</p></section></a>";
 		     		}
-		     		console.log(clubs);
-		     		
-		     	}else{
-		     		console.log("pas de clubs suivis")
 		     	}
-		     
-		     },
-		     error: function() {
-		           console.log("do not work");
-		     }
-       	});
+		     	else{
+		     		console.log("pas de clubs suivis");
+		     	}
+			},
+		   error: function() {
+		   	console.log("do not work");
+		   }
+    });
 }

@@ -1,10 +1,35 @@
 var i=0;
 
 function newLicence(){
-	document.getElementById("players").innerHTML += "\n<br/><label for='licence_"+i+"'>Licence "+i+" : </label>\n<input type='number' name='licence_"+i+"' id='licence_"+i+"' onkeyup='javascript:checkDupLicence(id,"+i+");' required/>\n<label for='email_"+i+"'>Email du sportif "+i+" : </label>\n<input type='email' name='email_"+i+"' id='email_"+i+"' onkeyup='javascript:checkDupEmail(id,"+i+");'/>\n<br/>\n";
+	document.getElementById("players").innerHTML += "\n<br/><label for='licence_"+i+"'>Licence "+i+" : </label>\n<input type='number' name='licence_"+i+"' id='licence_"+i+"' required/>\n<label for='email_"+i+"'>Email du sportif "+i+" : </label>\n<input type='email' name='email_"+i+"' id='email_"+i+"' />";
 	i++;
 }
 
+function toUnderScore(str){
+	return str.replace(" ","_");
+}
+
+function testRadio(){
+	console.log("testRadio a été appelé");
+	var outbound_message = {
+	   			'searchtype': $("input[type=radio][name=searchType]:checked").attr('value')
+  		};
+	console.log(outbound_message.searchtype);
+	if(outbound_message.searchtype === "event"){
+		var el = document.getElementById("searchEvent");
+		el.setAttribute("value", "Filled");
+		el = document.getElementById("searchClub");
+		el.setAttribute("value", "_blank");
+	}
+	else{
+		var el = document.getElementById("searchClub");
+		el.setAttribute("value", "Filled");
+		el = document.getElementById("searchEvent");
+		el.setAttribute("value", "_blank");
+	}
+}
+
+//var nbEventTotal=evaluateNbEvent();
 function newSection(){
 	console.log(document.URL);
 	var pos = document.URL.lastIndexOf('/');
@@ -24,7 +49,7 @@ function newSection(){
 			var events = response.listeEvent;
 			console.log(events);
 			for(var j=0; j<nbEventTotal; j++){
-				document.getElementById("container").innerHTML +="\n\t<a href='http://localhost:5000/home/profileEvent/"+events[j][0]+"'><section id='event_"+j+"'>\n<h4>"+events[j][0]+"</h4>\n<p>"+events[j][1]+"</p>\n<p>"+events[j][2]+"</p>\n<p>"+events[j][3]+"</p>\n</section></a>";
+				document.getElementById("container").innerHTML +="\n\t<a href='http://localhost:5000/profileEvent/"+toUnderScore(events[j][0])+"'><section id='event_"+j+"'>\n<h4>"+events[j][0]+"</h4>\n<p>"+events[j][1]+"</p>\n<p>"+events[j][2]+"</p>\n<p>"+events[j][3]+"</p>\n</section></a>";
 		
 			}
 		},
@@ -54,9 +79,6 @@ function testHour(){
 	console.log(today, date);
 	if(valStart==today){
 		hours=date.getHours();
-		if (hours <10) {
-			hours='0'+hours;
-		}
 		minutes=date.getMinutes();
 		hour=''+hours+':'+minutes+'';
 		console.log(hour);
@@ -89,3 +111,12 @@ function testEnd(){
 	document.getElementById("end").setAttribute("min",valStart);
 	testHour();
 }
+
+function modifProfileMember(){
+	document.getElementById("container").innerHTML +="\n<form method='POST' action=''>\n"
+	for(var i=0; i<6; i++){
+		document.getElementById("field").innerHTML +="\n<input type='text' />"
+	}
+	document.getElementById()
+}
+	

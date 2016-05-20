@@ -113,7 +113,7 @@ def registerClub():
 				
 			if login != "":
 				#duplicate login :
-				if server_function.checklog(login,"club") == False:
+				if server_function.checklog(login,"Club") == False:
 					login="login valide"
 				else : 
 					login="ce login existe deja , veuillez en choisir un autre"
@@ -129,7 +129,7 @@ def registerClub():
 			
 			if email != "":
 				#validate email:
-				if server_function.checkEmail(email, "club") == False :
+				if server_function.checkEmail(email, "Club") == False :
 					email="email valide"
 				else:
 					email="cet email existe deja, veuillez en choisir un autre"
@@ -187,7 +187,7 @@ def registerMember():
 				
 			if login != "":
 				#duplicate login :
-				if server_function.checklog(login,"member") == False:
+				if server_function.checklog(login,"Member") == False:
 					login="login valide"
 				else : 
 					login="ce login existe deja , veuillez en choisir un autre"
@@ -203,7 +203,7 @@ def registerMember():
 			
 			if email != "":
 				#validate email:
-				if server_function.checkEmail(email,"member") == False :
+				if server_function.checkEmail(email,"Member") == False :
 					email="email valide"
 				else:
 					email="cet email existe deja, veuillez en choisir un autre"
@@ -240,10 +240,12 @@ def registerMember():
 
 @app.route('/home/<login>',methods=['GET','POST'])
 def home(login): 
-
-	#if request.method=='GET':
-		#nbEvents, events=server_function.getNumberEvent(login,"member")
-		#print(nbEvents, events)	
+	login=session['username']
+	if request.method=='POST':
+		if request.json:
+			nbEvents, events=server_function.getNumberEvent(login,session["mtype"])
+			print(nbEvents, events)
+			return jsonify({'N' : nbEvents, 'listeEvent' : events})	
 	if session['mtype']=='Club':
 		clubLogged=True
 	else :
@@ -254,7 +256,7 @@ def home(login):
 
 @app.route('/home/profileClub/<login>',methods = ['GET','POST'])
 def profileClub(login): 
-	
+
 	if request.method =='POST' :
 	
 		#ajax handler
@@ -264,14 +266,14 @@ def profileClub(login):
 			
 			if newL != "":
 				#duplicate login :
-				if server_function.checklog(newL,"club") == False:
+				if server_function.checklog(newL,"Club") == False:
 					newL="login valide"
 				else : 
 					newL="ce login existe deja , veuillez en choisir un autre"
 					
 			if newE != "":
 				#validate email:
-				if server_function.checkEmail(newE, "club") == False :
+				if server_function.checkEmail(newE, "Club") == False :
 					newE="email valide"
 				else:
 					newE="cet email existe deja, veuillez en choisir un autre"
@@ -286,7 +288,7 @@ def profileClub(login):
 			newP=request.form['newPswrd']
 
 			if newL != "":
-				cl=server_function.checklog(newL,"club")
+				cl=server_function.checklog(newL,"Club")
 				if cl ==False : 
 					if server_function.updateInfoClub("Connex_Club","login_club",newL,session['username']) == 0:
 						session['username']=newL
@@ -297,7 +299,7 @@ def profileClub(login):
 					flash(" Login deja existant, veuillez en choisir un autre")
 					
 			if newE != "":
-				ce=server_function.checkEmail(newE, "club")
+				ce=server_function.checkEmail(newE, "Club")
 				if ce ==False : 
 					if server_function.updateInfoClub("Clubs","email",newE,session['username']) == 0:
 						print("okay changemnt email")
@@ -322,14 +324,15 @@ def profileClub(login):
 				
 		#suivre
 		elif request.form['subBtn']=='Suivre':
+			
 			loginMember= session['username'] 
 			licenseNo= server_function.getLicenseFromLogin(loginMember)
 			clubId=server_function.getClubId(login)
 			server_function.addFollower(licenseNo,clubId[0])
-			return redirect(url_for('profileMember',login=session['username']))
-				
-	 	
-		
+			clubFollowed = server_function.checkFollowedClub(licenseNo,clubId[0])
+
+			return redirect(url_for('profileClub',login=login))
+
 	else: 
 		result = server_function.getClubProfile(login) 
 
@@ -339,33 +342,32 @@ def profileClub(login):
 			clubLogged= True 
 		nbLicensed= server_function.getNumberOfLicensed(login)
 		nbFollo=server_function.getNumberOfFollower(login)
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,nbFollowers=nbFollo,clubLogin=login,clubLogged=clubLogged)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,nbFollowers=nbFollo,clubLogin=login,clubLogged=clubLogged,checkFollowedClub=clubFollowed)
 
 	
 @app.route('/home/profileMember/<login>',methods=['GET','POST'])
 def profileMember(login): 
 	login=session['username']
-	if request.method == 'GET':
+	if request.method == 'POST':
 		#ajax handler
 		if request.json :
 			action=request.json['action']
-			login=request.json['login']
-			
+			print("IMIN")
 			if action == "getEventFollowed":
-				nbEv,Ev=server_function.getEventFollowed(login)
+				nbEv,Ev=server_function.getEventFollowed(session['username'])
 				return jsonify({'nb':nbEv,'Ev':Ev})
 			else :
-				nbClub,Clubs=server_function.getClubFollowed(login)
+				print("IMIN")
+				nbClub,Clubs=server_function.getClubFollowed(session['username'])
 				return jsonify({'nb':nbClub,'clubs':Clubs})
-		else : #affichage debut
+	else : #affichage debut
 			#nom, prenom, categorie, club, email 
-			result = server_function.getMemberProfile(login) 
-			print result
-			if result [0] != False :
-				userName=result[0]+" "+result[1]
+		result = server_function.getMemberProfile(session['username']) 
+		print result
+		if result [0] != False :
+			userName=result[0]+" "+result[1]
 
-	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[4],userMail=result[5], userLogin=login,userCat=result[3])
-
+	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[4],userMail=result[5], userLogin=session['username'],userCat=result[3])
 
 @app.route('/home/profileClub/<loginClub>/addLicense',methods = ['GET','POST'])
 def addLicense(loginClub): 
@@ -378,7 +380,7 @@ def addLicense(loginClub):
 			if action=="chkDupEm":
 				email=request.json['email']
 				#check si email existe deja dans la table membre
-				if server_function.checkEmail(email,"member")==False:
+				if server_function.checkEmail(email,"Member")==False:
 					dE= "email "+numero+" valide"
 				else: 
 					dE="email "+numero+" deja existant dans la base de donnee,un compte existe deja"
@@ -457,18 +459,27 @@ def createEvent(loginClub):
 
 @app.route('/profileEvent/<eventName>',methods=['GET','POST'])
 def profileEvent(eventName):
-	arg= eventName.replace("_"," ") #On remplace les _ par des espaces 
-	result = server_function.getEvent(arg)
+	nomEv= eventName.replace("_"," ") #On remplace les _ par des espaces 
+	result = server_function.getEvent(nomEv)
+	if (session['mtype']=='Member'):
+		license= server_function.getLicenseFromLogin(session['username'])
+		alreadyRegistered= server_function.checkFollowedEvent(license,nomEv)
+	else: 
+		alreadyRegistered=False
 	if request.method == 'POST' :
 		if request.form['subBtn'] == 'Retourner sur son profil':
 			return redirect(url_for('profileClub',login=session['username']))
-			
-		else :
-			pass
+		elif request.form['subBtn']== "S'inscrire":
+			license= server_function.getLicenseFromLogin(session['username'])
+			server_function.registerEvent(license,nomEv)
+			return redirect(url_for('profileEvent',eventName=eventName))
 	
 	if session['mtype']=="Club":
 		clubLogged=True
-	return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged) #AAAAA VOIR 
+	if session['mtype']=="Member": 
+		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
+	else: 
+		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged,alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':
