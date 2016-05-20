@@ -28,7 +28,7 @@ def login():
 		elif session['mtype']=='Club': 
 			result = server_function.getClubProfile(session['username']) 
 			#print(result)
-			return redirect(url_for('profileClub',session['username'],clubLogged=True))
+			return redirect(url_for('home',login=session['username']))
 	else: 
 		if request.method =='POST' : 
 			
@@ -244,7 +244,11 @@ def home(login):
 	#if request.method=='GET':
 		#nbEvents, events=server_function.getNumberEvent(login,"member")
 		#print(nbEvents, events)	
-	return render_template('home.html')
+	if session['mtype']=='Club':
+		clubLogged=True
+	else :
+		clubLogged=False
+	return render_template('home.html',clubLogged=clubLogged)
 
 
 
@@ -253,10 +257,10 @@ def profileClub(login):
 	if request.method =='POST' :
 	 
 		if request.form['subBtn'] == 'Creer des Evenements':
-			return redirect(url_for('createEvent',loginClub=session['username']))
+			return redirect(url_for('createEvent',loginClub=login))
 			
 		elif request.form['subBtn'] == 'Ajouter des Licencies': 
-			return redirect(url_for('addLicense',loginClub=session['username']))
+			return redirect(url_for('addLicense',loginClub=login))
 			
 		elif request.form ['subBtn']== 'Modifier': 
 			return redirect(url_for('main')) 
@@ -278,7 +282,8 @@ def profileClub(login):
 		else:
 			clubLogged= True 
 		nbLicensed= server_function.getNumberOfLicensed(login)
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,clubLogin=login,clubLogged=clubLogged)
+		nbFollo=server_function.getNumberOfFollower(login)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,nbFollowers=nbFollo,clubLogin=login,clubLogged=clubLogged)
 
 	
 @app.route('/home/profileMember/<login>',methods=['GET','POST'])
@@ -310,11 +315,37 @@ def profileMember(login):
 def addLicense(loginClub): 
 	clubId=server_function.getClubId(loginClub)
 	if request.method =='POST' : 
+		#ajax handler: 
+		if request.json : 
+			numero=request.json['num']
+			action=request.json['action']
+			if action=="chkDupEm":
+				email=request.json['email']
+				#check si email existe deja dans la table membre
+				if server_function.checkEmail(email,"member")==False:
+					dE= "email "+numero+" valide"
+				else: 
+					dE="email "+numero+" deja existant dans la base de donnee,un compte existe deja"
+				return jsonify({'dE':dE})
+			elif action == "chkDupLi" : 
+				licence=request.json['licence']
+				if len(licence)==8 :
+					if server_function.checkLicense(licence) == False : 
+						dL="licence "+numero+" valide"
+
+					else :
+						dL="licence "+numero+" deja existant dans la base de donnee,un compte existe deja"
+				elif licence !="":
+					dL ="veuillez entrez un numero de licence a 8 chiffres"
+								
+				return jsonify({'dL':dL})
+				
+				
+		#submission: 	
 		if request.form['subBtn'] == "Ajouter les licences":
-			
 			return redirect(url_for("profileClub",login=loginClub))
 	
-	clubLogged=session['usernameClub']		
+	clubLogged=True		
 	return render_template('addLicense.html',loginClub=loginClub,clubLogged=clubLogged)
 
 
@@ -360,23 +391,28 @@ def createEvent(loginClub):
 			else : 
 				if server_function.createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId[0],imageLink)==1: 
 					print("SUCCESS !" )
-					return redirect(url_for('profileEvent'))
+					return redirect(url_for('profileEvent',eventName=nameEvent))
 				else: 
 					print("error on event creation")
 					return redirect(url_for('createEvent',session['username']))
 
-	clubLogged=session['usernameClub']		
+	clubLogged=True	
 	return render_template('createEvent.html',clubLogged=clubLogged)
 
-@app.route('/profileEvent/<eventName>')
+@app.route('/profileEvent/<eventName>',methods=['GET','POST'])
 def profileEvent(eventName):
-	arg= eventName.replace("_"," ") #On remplace les ? par des espaces 
-	#print(arg)
+	arg= eventName.replace("_"," ") #On remplace les _ par des espaces 
 	result = server_function.getEvent(arg)
-	#print(result)
-	#Permet de modifier le lien pour l image 
+	if request.method == 'POST' :
+		if request.form['subBtn'] == 'Retourner sur son profil':
+			return redirect(url_for('profileClub',login=session['username']))
+			
+		else :
+			pass
 	
-	return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1]) #AAAAA VOIR 
+	if session['mtype']=="Club":
+		clubLogged=True
+	return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':

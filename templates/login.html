@@ -6,6 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="http://localhost:5000/static/css/loginStyleSheet.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script language="JavaScript" src="http://localhost:5000/static/signIn.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
 	</head>
 	
 	<body>
@@ -15,7 +16,7 @@
 				{% with messages = get_flashed_messages() %}
       			{% if messages %}
         				{% for message in messages %}
-          				<div class="alert alert-danger">{{ message }}</div>
+          				<div class="alert-danger">{{ message }}</div>
         				{% endfor %}
       			{% endif %}
     			{% endwith %}

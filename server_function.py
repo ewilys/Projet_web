@@ -5,14 +5,18 @@ from sqlalchemy import *
 import os, hashlib
 import sqlite3 
 import sys 
+import time
 
 reload(sys) 
 sys.setdefaultencoding('utf8')
 
+#cryptage des mdp
 def crypter(pswrd): 
 	mdp=pswrd.encode()
 	return hashlib.sha1(mdp).hexdigest()    
-
+	
+	
+#insertion des champs dans les differentes tables
 def insert(table, fields=(), values=()):
 	db = sqlite3.connect('dtb.db')
 	#cur = db.cursor()
@@ -31,6 +35,7 @@ def insert(table, fields=(), values=()):
 	finally: 
 		db.close()
 
+#verifie si login est unique , return False si n'existe pas, true si deja dans base
 def checklog (login, mtype):
 	db= sqlite3.connect('dtb.db')
 	if mtype == "member":#member
@@ -56,7 +61,9 @@ def checklog (login, mtype):
 			print("login error")
 		finally: 
 			db.close()
-	
+			
+			
+#verifie unicicte licence, return False si licence n'existe pas, True si existe	
 def checkLicense (license):
 	db= sqlite3.connect('dtb.db')
 	try: 
@@ -70,6 +77,7 @@ def checkLicense (license):
 	finally: 
 		db.close()
 
+#verifie unicite clubId, return False si clubid n'existe pas, True si existe (attention gestion differente pour le coup)
 def checkClubId (clubId): 
 	db= sqlite3.connect('dtb.db')
 	try: 
@@ -83,7 +91,7 @@ def checkClubId (clubId):
 	finally: 
 		db.close()
 		
-		
+#recupere le clubId	, pour un login	
 def getClubId(login):
 	db= sqlite3.connect('dtb.db')
 	try: 
@@ -98,7 +106,7 @@ def getClubId(login):
 		db.close()
 		
 		
-
+#verifie unicite clubName, return False si nom n'existe pas, True si existe
 def checkClubName (clubName): 
 	db= sqlite3.connect('dtb.db')
 	try: 
@@ -112,6 +120,7 @@ def checkClubName (clubName):
 	finally: 
 		db.close()
 
+#verifie unicite nameEvent, return False si nom n'existe pas, True si existe
 def checkNameEvent (nameE): 
 	db= sqlite3.connect('dtb.db')
 	try: 
@@ -123,8 +132,10 @@ def checkNameEvent (nameE):
 	except: 
 		print("nameEvent error")
 	finally: 
-		db.close()			
+		db.close()	
 		
+				
+#verifie email , return False si email n'existe pas , True si existe	
 def checkEmail(email, mtype):
 	db= sqlite3.connect('dtb.db')
 	if mtype=="member" :
@@ -233,8 +244,8 @@ def sign_up_member(licenseNo, userName,userFirstName,bday,userMail,clubId,login,
 			#si pas de redondance on peut inserer login et mot de passe		
 
 			insert("Connex_Membre",("login_membre","mdp_membre","licence"),(login,pwd,licenseNo))
-			print(login)
-			cat=CategorieMember(login)
+			cat=CategorieMember(bday)
+			print(cat)
 			insert("Categories",("licence","categorie"),(licenseNo,cat))
 			return 0		
 
@@ -284,7 +295,7 @@ def getMemberProfile(login):
 		db.close()
 
 
-
+#creation d'un evenement
 def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId,imageLink): 
 	db=sqlite3.connect('dtb.db')
 	try: 
@@ -296,7 +307,7 @@ def createEvent(nameEvent,categorie,nbPlace,desc,adress,start,hour,clubId,imageL
 	finally: 
 		db.close()
 
-
+#recupere info event pour le profile Event
 def getEvent(eventName):
 	db=sqlite3.connect('dtb.db')
 	try: 
@@ -312,7 +323,7 @@ def getEvent(eventName):
 		db.close()
 
 
-#recupere les clubs suivis pour un login
+#recupere nb club et clubs suivis pour un login
 def getClubFollowed(login):
 
 	db=sqlite3.connect('dtb.db')
@@ -333,7 +344,7 @@ def getClubFollowed(login):
 		db.close()
 			
 		
-#recupere les evenements auquel un login est inscrit			
+#recupere nb event et evenements auquel un login est inscrit			
 def getEventFollowed(login):
 	db=sqlite3.connect('dtb.db')
 	c=db.cursor()	
@@ -350,7 +361,7 @@ def getEventFollowed(login):
 		db.close()
 
 
-
+#recupere nb event et events des clubs suivis si sportif ou tous les events si club 
 def getNumberEvent(login,mtype):
 	db=sqlite3.connect('dtb.db')
 	print(login)
@@ -405,7 +416,7 @@ def getNumberEvent(login,mtype):
 			db.close()
 	
 
-
+#renvoi tous les events pour un club_id suivant le mtype 
 def getEventForLogin(club_id,mtype):
 	db=sqlite3.connect('dtb.db')
 	c=db.cursor()	
@@ -441,7 +452,7 @@ def getEventForLogin(club_id,mtype):
 			print("get information associated to event for this login") 
 			db.close()
 
-
+#recupere licence associe a login
 def getLicenseFromLogin (login):
 	db= sqlite3.connect('dtb.db')
 	try: 
@@ -473,6 +484,7 @@ def addFollower(license,clubId):
 	finally: 
 		db.close()
 
+#verif si licence suit deja le club
 def checkFollowedClub (license,clubId): 
 	db= sqlite3.connect('dtb.db')
 	try: 
@@ -489,14 +501,16 @@ def checkFollowedClub (license,clubId):
 	finally: 
 		db.close()
 
+#ajout licence par club 
 def addLicenseClub(license,clubId): 
 	pass
 
+#recupere le nombre de licencie associe a un club
 def getNumberOfLicensed(loginClub):
 	clubId= getClubId(loginClub)
 	db= sqlite3.connect('dtb.db')
 	try: 
-		row = db.execute("SELECT club_id FROM Membres WHERE club_id=:id",{"id":clubId[0]}).fetchone()
+		row = db.execute("SELECT club_id FROM Membres WHERE club_id=:id",{"id":clubId[0]}).fetchall()
 		print("LOGIN CLUB___________________ = "+clubId[0])
 		a=len(row)
 		print(a)
@@ -506,31 +520,34 @@ def getNumberOfLicensed(loginClub):
 		print("Problem with getNumberOfLicensed")
 	finally: 
 		db.close()
-		
-def CategorieMember(login): 
-	db= sqlite3.connect('dtb.db')
-	try:
-		print("HELLLLLLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-		row = db.execute("SELECT m.date_n FROM Membres as m,Connex_Membre as c WHERE m.licence=c.licence AND c.login_membre=:login",{"login":login}).fetchone()
-		today=date.today()
-		print login
-		print today.year#all poussin ado jeune senior
-		print row		
-		print row[0][4:] 
-		a=row[0][4:]
-		cat=today.year-int(a)
-		if cat<10:
-			 return "poussin"
-		
-		if 10<=cat<=18:
-			return "ado"
-		if 18<cat<=25:
-			return "jeune"
-		if cat>25:
-			return "senior"
-	except:
-		print("Probleme de categorie membre")
 
-	finally:
-		db.close() 
+#recupere le nombre de personnes suivant un club
+def getNumberOfFollower(loginClub):
+	clubId= getClubId(loginClub)
+	db= sqlite3.connect('dtb.db')
+	try: 
+		row = db.execute("SELECT licence FROM Suivis WHERE club_id=:id",{"id":clubId[0]}).fetchall()
+		return len(row)
+		
+	except: 
+		print("Problem with getNumberOffollower")
+	finally: 
+		db.close()
+		
+#calcul categorie pour les sportifs		
+def CategorieMember(bday): 
+	today=time.strftime('%y',time.localtime())
+	print(today)
+	today_year=int("20"+today)
+	a=bday[:4]	
+	cat=today_year-int(a)
+	if cat<10:
+		 return "poussin"	
+	elif 10<=cat<=18:
+		return "ado"
+	elif 18<cat<=25:
+		return "jeune"
+	else:
+		return "senior"
+	
 

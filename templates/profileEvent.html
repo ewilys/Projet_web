@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="http://localhost:5000/static/css/profileStyleSheet.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
 		<title>{{ eventName }}</title>
 	</head>
 	
@@ -15,9 +17,12 @@
 				<ul class="nav">
 					<li>Menu Principal</li>
 					<ul class="menu">
-						<li><a href="#">Mon Profil</a></li>
+						<li><a id="home" href="http://localhost:5000/home/{{ session['username'] }}">Accueil</a></li>
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Mon Profil<a></li>
 						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
-						<li><a href="http:/localhost:5000/">Créer un évènement</a></li>
+						{% if clubLogged %}
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}/creaEvent">Créer un évènement</a></li>
+						{% endif %}
 					</ul>
 				</ul>
 			</nav>
@@ -46,10 +51,14 @@
 				<div class="field">
 					Quand ? A partir de {{startHour}} le {{dateEvent}}<br/>
 				</div>
+				{% if clubLogged %}
+				<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Retouner sur mon profil<a></li>
 				
-				<div class="ctrl">
-					<input type="button" value="S'inscrire" id="signUp" class="btn"/>
+				{% else %}
+				<div method='POST' class="ctrl">
+					<input type="submit" name="subBtn" value="S'inscrire" id="signUp" class="btn"/>
 				</div>
+				{% endif %}
 			</p>
 		</article>
 	</body>

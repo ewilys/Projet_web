@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<link rel="stylesheet" href="http://localhost:5000/static/css/homeStyleSheet.css" />
 		<title>Accueil</title>
 	</head>
@@ -16,11 +17,11 @@
 				<ul class="nav">
 					<li>Menu Principal</li>
 					<ul class="menu">
-						<li><a href="#">Accueil</a></li>
-						<li><a href="#">Mon Profil</a></li>
+						<li><a id="home" href="http://localhost:5000/home/{{ session['username'] }}">Accueil</a></li>
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Mon Profil<a></li>
 						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
-						{% if usernameClub %}
-						<li><a href="http:/localhost:5000/">Créer un évènement</a></li>
+						{% if clubLogged %}
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}/creaEvent">Créer un évènement</a></li>
 						{% endif %}
 					</ul>
 				</ul>
