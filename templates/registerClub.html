@@ -15,7 +15,7 @@
 			{% with messages = get_flashed_messages() %}
       			{% if messages %}
         				{% for message in messages %}
-          				<div class="alert alert-danger">{{ message }}</div>
+          				<div class="alert-danger">{{ message }}</div>
         				{% endfor %}
       			{% endif %}     			
     		{% endwith %}
@@ -31,8 +31,8 @@
 			<h2>Informations pratiques</h2>
 			<p>
 				<label for="email">Email : </label>
-				<input type="email" name="email" id="email" onkeyup="javascript:checkSignUpClub();" required/>
-				<span class="info" id="test_duplicate_email" value="_blank"></span>
+				<input type="email" name="email" id="email" onkeyup="javascript:checkSignUpClub();"/>
+				<span class="info" id="test_duplicate_email" valu="_blank"></span>
 				<br />
 				<label for="noFederation" title="Donné par la fédération">Numéro d'identification : </label>
 				<input type="number" min="000001" max="999999" name="noFederation" id="noFederation" onkeyup="javascript:checkSignUpClub();" required/>
@@ -47,7 +47,7 @@
 			</p>
 			<p>
 				<div class="button">
-					<input type="submit" class="btn" name="subBtn" value="S'inscire"/>
+					<input type="submit" class="btn" name="subBtn" value="Envoyer"/>
 				</div>
 			</p>
 		</form>
