@@ -144,7 +144,7 @@ def registerClub():
 
 			session['username']=request.form['login']
 			session['mtype']='Club'
-			return redirect( url_for('profileClub',login=session['username']))
+			return redirect( url_for('profileClub',login=session['username'],clubLogged=True))
 
 		else:
 			flash("Erreur d'inscription!") 
@@ -256,83 +256,26 @@ def home(login):
 
 @app.route('/home/profileClub/<login>',methods = ['GET','POST'])
 def profileClub(login): 
-
 	if request.method =='POST' :
-	
-		#ajax handler
-	 	if request.json:
-	 		newL=request.json['newL']
-			newE=request.json['newE']
-			
-			if newL != "":
-				#duplicate login :
-				if server_function.checklog(newL,"Club") == False:
-					newL="login valide"
-				else : 
-					newL="ce login existe deja , veuillez en choisir un autre"
-					
-			if newE != "":
-				#validate email:
-				if server_function.checkEmail(newE, "Club") == False :
-					newE="email valide"
-				else:
-					newE="cet email existe deja, veuillez en choisir un autre"
-					
-			return jsonify({'newE':newE, 'newL':newL})
-			
-			
-		#modif info
-		if request.form ['subBtn'] == 'Enregistrer les modifications': 
-			newL=request.form['newLogin']
-			newE=request.form['newEmail']
-			newP=request.form['newPswrd']
-
-			if newL != "":
-				cl=server_function.checklog(newL,"Club")
-				if cl ==False : 
-					if server_function.updateInfoClub("Connex_Club","login_club",newL,session['username']) == 0:
-						session['username']=newL
-						print ("okay changemnt log")
-					else : 
-						print ("error update")
-				else : 
-					flash(" Login deja existant, veuillez en choisir un autre")
-					
-			if newE != "":
-				ce=server_function.checkEmail(newE, "Club")
-				if ce ==False : 
-					if server_function.updateInfoClub("Clubs","email",newE,session['username']) == 0:
-						print("okay changemnt email")
-					else : 
-						print ("error update")
-				else : 
-					flash(" Email deja existant, veuillez en choisir un autre")
-					
-			if newP != "":
-				pwd=server_function.crypter(newP)
-				if server_function.updateInfoClub("Connex_Club","mdp_club",pwd,session['username']) == 0:
-					print("okay changemnt psw")
-				else : 
-					print ("error update")
-			return redirect(url_for('profileClub',login=session['username'])) 
-		
-		elif request.form['subBtn'] == 'Creer des Evenements':
+	 
+		if request.form['subBtn'] == 'Creer des Evenements':
 			return redirect(url_for('createEvent',loginClub=login))
 			
 		elif request.form['subBtn'] == 'Ajouter des Licencies': 
 			return redirect(url_for('addLicense',loginClub=login))
-				
-		#suivre
-		elif request.form['subBtn']=='Suivre':
 			
+		elif request.form ['subBtn']== 'Modifier': 
+			return redirect(url_for('main')) 
+			
+		elif request.form['subBtn']=='Suivre':
 			loginMember= session['username'] 
+			print(loginMember) #debug
 			licenseNo= server_function.getLicenseFromLogin(loginMember)
+			print(licenseNo) #debug
 			clubId=server_function.getClubId(login)
+			print(clubId)
 			server_function.addFollower(licenseNo,clubId[0])
-			clubFollowed = server_function.checkFollowedClub(licenseNo,clubId[0])
-
-			return redirect(url_for('profileClub',login=login))
-
+			return redirect(url_for('profileMember',login=session['username']))
 	else: 
 		result = server_function.getClubProfile(login) 
 
@@ -342,7 +285,7 @@ def profileClub(login):
 			clubLogged= True 
 		nbLicensed= server_function.getNumberOfLicensed(login)
 		nbFollo=server_function.getNumberOfFollower(login)
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,nbFollowers=nbFollo,clubLogin=login,clubLogged=clubLogged,checkFollowedClub=clubFollowed)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,nbFollowers=nbFollo,clubLogin=login,clubLogged=clubLogged)
 
 	
 @app.route('/home/profileMember/<login>',methods=['GET','POST'])
@@ -355,7 +298,7 @@ def profileMember(login):
 			print("IMIN")
 			if action == "getEventFollowed":
 				nbEv,Ev=server_function.getEventFollowed(session['username'])
-				return jsonify({'nb':nbEv,'Ev':Ev})
+				return jsonify({'nb':nbEv,'events':Ev})
 			else :
 				print("IMIN")
 				nbClub,Clubs=server_function.getClubFollowed(session['username'])
@@ -368,6 +311,7 @@ def profileMember(login):
 			userName=result[0]+" "+result[1]
 
 	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[4],userMail=result[5], userLogin=session['username'],userCat=result[3])
+
 
 @app.route('/home/profileClub/<loginClub>/addLicense',methods = ['GET','POST'])
 def addLicense(loginClub): 
@@ -410,14 +354,13 @@ def addLicense(loginClub):
 
 @app.route('/home/search', methods=['GET', 'POST'])
 def search (): 
-	if request.method == 'POST': 
-		clubName= request.form['club']
-		categorie= request.form['categorie']
-		nameEvent= request.form['NameEvent']
-		date= request.form['date']
-		city= request.form['place']
-		ayoub=server_function.searchResult(city,categorie,nameEvent,date,clubName)
-		print(ayoub)
+	if request.method == 'POST':
+		if request.json:
+			result=request.json['input']
+			if result == 'event':
+				return render_template('search.html', event)
+			else :
+				return render_templates('search.html', club)
 	return render_template('search.html')
 
 
@@ -467,28 +410,21 @@ def createEvent(loginClub):
 
 @app.route('/profileEvent/<eventName>',methods=['GET','POST'])
 def profileEvent(eventName):
-	nomEv= eventName.replace("_"," ") #On remplace les _ par des espaces 
-	result = server_function.getEvent(nomEv)
-	if (session['mtype']=='Member'):
-		license= server_function.getLicenseFromLogin(session['username'])
-		alreadyRegistered= server_function.checkFollowedEvent(license,nomEv)
-	else: 
-		alreadyRegistered=False
+	arg= eventName.replace("_"," ") #On remplace les _ par des espaces 
+	result = server_function.getEvent(arg)
 	if request.method == 'POST' :
 		if request.form['subBtn'] == 'Retourner sur son profil':
 			return redirect(url_for('profileClub',login=session['username']))
-		elif request.form['subBtn']== "S'inscrire":
-			license= server_function.getLicenseFromLogin(session['username'])
-			server_function.registerEvent(license,nomEv)
-			server_function.updateAvailablePlace(nomEv); 
-			return redirect(url_for('profileEvent',eventName=eventName))
+			
+		else :
+			pass
 	
 	if session['mtype']=="Club":
 		clubLogged=True
 	if session['mtype']=="Member": 
-		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
+		return render_template("profileEvent.html",eventName=arg, descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4]) #AAAAA VOIR 
 	else: 
-		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged,alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
+		return render_template("profileEvent.html",descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':
