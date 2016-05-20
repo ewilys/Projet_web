@@ -43,18 +43,17 @@
 				<div class="field">
 					E-mail : {{clubEmail}}<br />
 				</div>
-				<div id="modif">
+				<div id="modif" value="_blank">
 					<label for="email">  Nouvel email : </label>
 					<input type="email" name="newEmail" id="newEmail" onkeyup="javascript:checkNewInfoClub();"/>
 					<span class="info" id="test_duplicate_email" value="_blank"></span>
 					<br/>
 					<label for="login"> Nouvel identifiant : </label>
 					<input type="text" name="newLogin" id="newLogin" onkeyup="javascript:checkNewInfoClub();" />
-					<span class="info" id="test_duplicate_login" value="_blank"></span>
+					<span class="info" id="test_duplicate_login"></span>
 					<br />
 					<label for="pswrd">Nouveau mot de passe : </label>
 					<input type="password" name="newPswrd" id="newPswrd" />
-					<br/>
 					<input type="submit"  name="subBtn" value="Enregistrer les modifications" id="change" class="btn" />
 				</div>
 				{% with messages = get_flashed_messages() %}
@@ -96,8 +95,7 @@
 					</form>
 				</div>
 				{% endif %}
-			</article>
+		</article>
 		</div>
 	</body>
 </html>
-		
