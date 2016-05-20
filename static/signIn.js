@@ -153,8 +153,9 @@ function checkNameEvent() {
 function checkDupLicence(id, i) {
 		
 		var outbound_message = {
-	   			'licence': $(id).val(),
-	   			'num':i,
+	   			'licence': document.getElementById(id).value,
+	   			'num':""+i+"",
+	   			'action': "chkDupLi",
   		};
 		$.ajax({
         		type: 'POST',
@@ -164,7 +165,8 @@ function checkDupLicence(id, i) {
 	    		contentType: 'application/json; charset=utf-8', 
 		       
 		     success: function(response) {
-		     	if(response.nameE !== ""){
+		     	if(response.dL !== ""){
+		     		console.log(response.dL)
 		     		$("#test_duplicate_licence").text(response.dL);
 		     	}
 		     },
@@ -177,8 +179,9 @@ function checkDupLicence(id, i) {
 function checkDupEmail(id, i) {
 		
 		var outbound_message = {
-	   			'email': $(id).val(),
-	   			'num':i,
+	   			'email': document.getElementById(id).value),
+	   			'num':""+i+"",
+	   			'action': "chkDupEm",
   		};
 		$.ajax({
         		type: 'POST',
@@ -188,7 +191,7 @@ function checkDupEmail(id, i) {
 	    		contentType: 'application/json; charset=utf-8', 
 		       
 		     success: function(response) {
-		     	if(response.nameE !== ""){
+		     	if(response.dE !== ""){
 		     		$("#test_duplicate_email").text(response.dE);
 		     	}
 		     },

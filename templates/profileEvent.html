@@ -51,10 +51,14 @@
 				<div class="field">
 					Quand ? A partir de {{startHour}} le {{dateEvent}}<br/>
 				</div>
+				{% if clubLogged %}
+				<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Retouner sur mon profil<a></li>
 				
+				{% else %}
 				<div method='POST' class="ctrl">
-					<input type="submit" value="S'inscrire" id="signUp" class="btn"/>
+					<input type="submit" name="subBtn" value="S'inscrire" id="signUp" class="btn"/>
 				</div>
+				{% endif %}
 			</p>
 		</article>
 	</body>

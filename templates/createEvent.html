@@ -3,8 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="http://localhost:5000/static/css/formsStyleSheet.css" />
-		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/signIn.js"></script>
+		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
 		<title>Créer un évènement</title>
 	</head>
 	
@@ -28,20 +30,27 @@
 			</nav>
 		</header>
 		<h2>Votre évènement</h2>
-		<form>
+		<form method='POST'>
 			<h3>Description de l'évènement</h3>
 			<p>
+				{% with messages = get_flashed_messages() %}
+      			{% if messages %}
+        				{% for message in messages %}
+          				<div class="alert-danger">{{ message }}</div>
+        				{% endfor %}
+      			{% endif %}
+    				{% endwith %}
 				<label for="nameEvent">Nom de l'évènement : </label>
 				<input type="text" name="nameEvent" id="nameEvent" onkeyup="javascript:checkNameEvent();" required>
-				<span id="test_duplicate_name"></span>
+				<span class='info' id="test_duplicate_name" value='_blank'></span>
 				<br/>
 				<label for="categorie">Catégorie : </label>
 				<select name="categorie" id="categorie" required>
 					<option value="Toutes categories">Toutes catégories</option>
-					<option value="enfant">Moins de 10 ans</option>
-					<option value="adolescent">10-18 ans</option>
-					<option value="jeune adulte">19-25 ans</option>
-					<option value="adulte">Plus de 25 ans</option>
+					<option value="poussin">Moins de 10 ans</option>
+					<option value="ado">10-18 ans</option>
+					<option value="jeune ">19-25 ans</option>
+					<option value="senior">Plus de 25 ans</option>
 				</select>
 				<br/>
 				<label for="nbPlace">Nombre de places : </label>
@@ -59,16 +68,15 @@
 				<input type="text" name="road" id="road" required>
 				<br/>
 				<label for="start" title="jj/mm/aaaa">Du : </label>
-				<input type="date" name="start" id="start" placeholder="jj/mm/aaaa" required>
-				<script type="text/javascript">window.onload = date("start");</script>
-				<span id="test_format_start_date"></span>
+				<input type="date" name="start" id="start" placeholder="jj/mm/aaaa" onchange="javascript:testEnd();"required>
+				
 				<label for="end" title="jj/mm/aaaa"> au : </label>
 				<input type="date" name="end" id="end" placeholder="jj/mm/aaaa" required>
 				<script type="text/javascript">window.onload = testDate("start");</script>
 				<br/>
 				<label for="hour">A : </label>
-				<input type="time" name="hour" id="hour" placeholder="Ex : 14h30" required>
-				<span id="test_format_hours"></span>
+				<input type="time" name="hour" id="hour" min="00:00"required>
+				
 			</p>
 			<p>
 			<div class="button">

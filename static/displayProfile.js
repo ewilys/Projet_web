@@ -74,16 +74,17 @@ function getClubFollowed(){
 		       
 		     success: function(response) {
 		     	if(response.nb !== 0){
-		     		if(response.nb !== 0){
 		     		for(i=0;i<response.nb;i++){
 		     			for(j=0;j<response.clubs[i].length();j++){
 		     				
 		     			}
 		     		}
 		     		console.log(clubs);
+		     		
 		     	}else{
 		     		console.log("pas de clubs suivis")
 		     	}
+		     
 		     },
 		     error: function() {
 		           console.log("do not work");
