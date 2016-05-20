@@ -256,6 +256,10 @@ def home(login):
 
 @app.route('/home/profileClub/<login>',methods = ['GET','POST'])
 def profileClub(login): 
+	licenseNo= server_function.getLicenseFromLogin(session['username'])
+	clubId=server_function.getClubId(login)
+	clubFollowed = server_function.checkFollowedClub(licenseNo,clubId[0])	
+	
 	if request.method =='POST' :
 	 
 		if request.form['subBtn'] == 'Creer des Evenements':
@@ -268,14 +272,13 @@ def profileClub(login):
 			return redirect(url_for('main')) 
 			
 		elif request.form['subBtn']=='Suivre':
+			
 			loginMember= session['username'] 
-			print(loginMember) #debug
 			licenseNo= server_function.getLicenseFromLogin(loginMember)
-			print(licenseNo) #debug
 			clubId=server_function.getClubId(login)
 			print(clubId)
 			server_function.addFollower(licenseNo,clubId[0])
-			return redirect(url_for('profileMember',login=session['username']))
+			return redirect(url_for('profileClub',login=login))
 	else: 
 		result = server_function.getClubProfile(login) 
 
@@ -285,7 +288,7 @@ def profileClub(login):
 			clubLogged= True 
 		nbLicensed= server_function.getNumberOfLicensed(login)
 		nbFollo=server_function.getNumberOfFollower(login)
-		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,nbFollowers=nbFollo,clubLogin=login,clubLogged=clubLogged)
+		return render_template('profileClub.html',clubName=result[0],clubCity=result[1],clubEmail=result[2],clubNumber=result[3],nbPlayers=nbLicensed,nbFollowers=nbFollo,clubLogin=login,clubLogged=clubLogged,checkFollowedClub=clubFollowed)
 
 	
 @app.route('/home/profileMember/<login>',methods=['GET','POST'])

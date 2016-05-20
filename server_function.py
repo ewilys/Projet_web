@@ -490,13 +490,16 @@ def addFollower(license,clubId):
 	finally: 
 		db.close()
 
-#verif si licence suit deja le club
+#retourne vrai si le licencie suit deja le club 
 def checkFollowedClub (license,clubId): 
 	db= sqlite3.connect('dtb.db')
+	print("License = "+license)
+	print("Ceci est le clubid"+str(clubId))
 	try: 
 		#print("LICENSE CHECK = "+str(license))
 		#print("CLUBID CHECK = "+str(clubId))
 		row = db.execute("SELECT * FROM Suivis WHERE club_id=:idClub AND licence=:licenceNo",{"idClub":clubId,"licenceNo":license}).fetchone()
+		print(row)
 		if row is None: 
 			return False
 		else: 
