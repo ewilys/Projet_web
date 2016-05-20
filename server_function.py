@@ -43,6 +43,7 @@ def checklog (login, mtype):
 		try: 
 			row = db.execute('SELECT login_membre FROM Connex_Membre WHERE login_membre=:who', {"who": login}).fetchone()
 			if row is None: 
+				print("JE PASSE ICI MTYPE = "+mtype) 
 				return False
 			else :
 				return True
@@ -54,6 +55,7 @@ def checklog (login, mtype):
 		try: 
 			row = db.execute('SELECT login_club FROM Connex_Club WHERE login_club=:who', {"who": login}).fetchone()
 			if row is None: 
+				print("JE PASSE ICI MTYPE = "+mtype) 
 				return False
 			else :
 				return True
@@ -173,6 +175,7 @@ def sign_in (login, password, mtype):
 			if row is not None: 
 				return True, True
 			else: 
+				print("MTYPE = "+mtype)
 				repLog=checklog(login, mtype);
 				return False, repLog
 		except: 
