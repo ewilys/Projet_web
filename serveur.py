@@ -240,10 +240,12 @@ def registerMember():
 
 @app.route('/home/<login>',methods=['GET','POST'])
 def home(login): 
-
-	#if request.method=='GET':
-		#nbEvents, events=server_function.getNumberEvent(login,"member")
-		#print(nbEvents, events)	
+	login=session['username']
+	if request.method=='POST':
+		if request.json:
+			nbEvents, events=server_function.getNumberEvent(login,session["mtype"])
+			print(nbEvents, events)
+			return jsonify({'N' : nbEvents, 'listeEvent' : events})	
 	if session['mtype']=='Club':
 		clubLogged=True
 	else :
