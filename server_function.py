@@ -581,3 +581,66 @@ def checkFollowedEvent (license,nomEv):
 		print("Problem with checkFollowedClub")
 	finally: 
 		db.close()
+		
+def searchResult (city,categorie,nameEvent,date,clubName):
+	db= sqlite3.connect('dtb.db')
+	ayoub=[]
+	try: 
+		if clubName != "": 
+			row = db.execute("SELECT nom_club FROM clubs WHERE nom_club=:nom_club",{"nom_club":clubName}).fetchone()
+			ayoub.append(row)
+		elif city != "":
+			row = db.execute("SELECT ville FROM clubs WHERE ville=:city",{"city":city}).fetchone()
+			ayoub.append(row)
+		elif categorie !="": 
+			row= db.execute("SELECT categorie FROM categories WHERE categorie=:categorie",{"categorie":categorie}).fetchone()
+			ayoub.append(row)
+		elif nameEvent !="": 
+			row= db.execute("SELECT nom_ev FROM evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchone()
+			ayoub.append(row)
+		elif date != "": 
+			row= db.execute("SELECT date_e FROM evenements WHERE date_e=:date",{"date":date}).fetchone()
+			ayoub.append(row)
+		else: 
+			return -1 
+		
+		print(ayoub)
+		return ayoub
+	except: 
+		print("Problem with searchResult")
+	finally: 
+		db.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
