@@ -335,7 +335,7 @@ def getClubFollowed(login):
 	db=sqlite3.connect('dtb.db')
 	c=db.cursor()	
 	try: 
-		row = c.execute('SELECT s.club_id, c.nom_club FROM Clubs AS c,Suivis AS s, Connex_Membre AS cm WHERE s.licence=cm.licence AND s.club_id=c.club_id AND cm.login_membre=:who ',{"who":login}).fetchall()
+		row = c.execute('SELECT cc.login_club, c.nom_club, c.ville FROM Clubs AS c, Suivis AS s, Connex_Club AS cc, Connex_Membre AS cm WHERE cc.club_id=c.club_id AND s.licence=cm.licence AND s.club_id=c.club_id AND cm.login_membre=:who ',{"who":login}).fetchall()
 		if row is not None: 
 			#print(row)
 			#for i in row:

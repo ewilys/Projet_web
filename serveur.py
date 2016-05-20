@@ -294,27 +294,26 @@ def profileClub(login):
 @app.route('/home/profileMember/<login>',methods=['GET','POST'])
 def profileMember(login): 
 	login=session['username']
-	if request.method == 'GET':
+	if request.method == 'POST':
 		#ajax handler
 		if request.json :
 			action=request.json['action']
-			login=request.json['login']
-			
+			print("IMIN")
 			if action == "getEventFollowed":
-				nbEv,Ev=server_function.getEventFollowed(login)
+				nbEv,Ev=server_function.getEventFollowed(session['username'])
 				return jsonify({'nb':nbEv,'Ev':Ev})
 			else :
-				nbClub,Clubs=server_function.getClubFollowed(login)
+				print("IMIN")
+				nbClub,Clubs=server_function.getClubFollowed(session['username'])
 				return jsonify({'nb':nbClub,'clubs':Clubs})
-		else : #affichage debut
+	else : #affichage debut
 			#nom, prenom, categorie, club, email 
-			result = server_function.getMemberProfile(login) 
-			print result
-			if result [0] != False :
-				userName=result[0]+" "+result[1]
+		result = server_function.getMemberProfile(session['username']) 
+		print result
+		if result [0] != False :
+			userName=result[0]+" "+result[1]
 
-	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[4],userMail=result[5], userLogin=login,userCat=result[3])
-
+	return render_template('profileMember.html', userName=userName, userClub=result[2],userDate=result[4],userMail=result[5], userLogin=session['username'],userCat=result[3])
 
 @app.route('/home/profileClub/<loginClub>/addLicense',methods = ['GET','POST'])
 def addLicense(loginClub): 
