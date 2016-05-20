@@ -6,7 +6,7 @@ function newLicence(){
 }
 
 function toUnderScore(str){
-	return str.replace(" ","_");
+	return str.replace(/ /,"_");
 }
 
 function testRadio(){
@@ -110,13 +110,5 @@ function testEnd(){
 	console.log(valStart);
 	document.getElementById("end").setAttribute("min",valStart);
 	testHour();
-}
-
-function modifProfileMember(){
-	document.getElementById("container").innerHTML +="\n<form method='POST' action=''>\n"
-	for(var i=0; i<6; i++){
-		document.getElementById("field").innerHTML +="\n<input type='text' />"
-	}
-	document.getElementById()
 }
 	
