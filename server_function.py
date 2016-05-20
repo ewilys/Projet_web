@@ -579,7 +579,6 @@ def updateInfoClub(table,fields,values,login):
 		db.close()
 		
 
-
 def registerEvent(license,nomEv): 
 	print("LICENSE = "+license)
 	print("NOMEV = "+nomEv)
@@ -639,9 +638,10 @@ def updateAvailablePlace(nomEv):
 	try: 
 		nbPlace= db.execute("SELECT nb_places FROM evenements WHERE nom_ev=:nomEv",{"nomEv":nomEv}).fetchone()
 		print("NOMBRE DE PLACES= "+nbPlace[0])
-		newNbPlace= int(nbPlace[0])
+		newNbPlace= int(nbPlace[0])-1 #Ne marche pas 
 		print("NEW NB PLACE = "+newNbPlace)
-		row = db.execute("UPDATE evenements SET nb_places:= nbPlace WHERE nom_ev:=nomEv",{"nbPlace":newNbPlace,"nomEv":nomEv}).fetchone()
+		
+		row = db.execute("UPDATE evenements SET nb_places=: nbPlace WHERE nom_ev=:nomEv",{"nbPlace":newNbPlace,"nomEv":nomEv}).fetchone() #Ne marche pas j ai test avec un nombre au pif pour newNbPlace
 	except: 
 		print("Problem with updateAvailablePlace")
 	finally: 
