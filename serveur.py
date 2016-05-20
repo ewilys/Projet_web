@@ -292,7 +292,7 @@ def profileClub(login):
 				if cl ==False : 
 					if server_function.updateInfoClub("Connex_Club","login_club",newL,session['username']) == 0:
 						session['username']=newL
-						print ("okay changemnt log")
+						flash("Changement de login effectue")
 					else : 
 						print ("error update")
 				else : 
@@ -302,7 +302,7 @@ def profileClub(login):
 				ce=server_function.checkEmail(newE, "Club")
 				if ce ==False : 
 					if server_function.updateInfoClub("Clubs","email",newE,session['username']) == 0:
-						print("okay changemnt email")
+						flash("Changement d'email effectue")
 					else : 
 						print ("error update")
 				else : 
@@ -311,7 +311,7 @@ def profileClub(login):
 			if newP != "":
 				pwd=server_function.crypter(newP)
 				if server_function.updateInfoClub("Connex_Club","mdp_club",pwd,session['username']) == 0:
-					print("okay changemnt psw")
+					flash("Changement de mot de passe effectue")
 				else : 
 					print ("error update")
 			return redirect(url_for('profileClub',login=session['username'])) 
@@ -358,14 +358,68 @@ def profileMember(login):
 		#ajax handler
 		if request.json :
 			action=request.json['action']
-			#print("IMIN")
+		
 			if action == "getEventFollowed":
 				nbEv,Ev=server_function.getEventFollowed(session['username'])
 				return jsonify({'nb':nbEv,'events':Ev})
-			else :
-				print("IMIN")
+			elif action == "getClubFollowed" :
 				nbClub,Clubs=server_function.getClubFollowed(session['username'])
 				return jsonify({'nb':nbClub,'clubs':Clubs})
+			else : 
+				newL=request.json['newL']
+				newE=request.json['newE']
+			
+				if newL != "":
+					#duplicate login :
+					if server_function.checklog(newL,"Member") == False:
+						newL="login valide"
+					else : 
+						newL="ce login existe deja , veuillez en choisir un autre"
+					
+				if newE != "":
+					#validate email:
+					if server_function.checkEmail(newE, "Member") == False :
+						newE="email valide"
+					else:
+						newE="cet email existe deja, veuillez en choisir un autre"
+					
+				return jsonify({'newE':newE, 'newL':newL})
+				
+				
+		if request.form ['subBtn'] == 'Enregistrer les modifications': 
+			newL=request.form['newLogin']
+			newE=request.form['newEmail']
+			newP=request.form['newPswrd']
+
+			if newL != "":
+				cl=server_function.checklog(newL,"Member")
+				if cl ==False : 
+					if server_function.updateInfoMember("Connex_Membre","login_membre",newL,session['username']) == 0:
+						session['username']=newL
+						flash("Changement de login effectue")
+					else : 
+						print ("error update")
+				else : 
+					flash(" Login deja existant, veuillez en choisir un autre")
+					
+			if newE != "":
+				ce=server_function.checkEmail(newE, "Member")
+				if ce ==False : 
+					if server_function.updateInfoMember("Membres","email",newE,session['username']) == 0:
+						flash("Changement d'email effectue")
+					else : 
+						print ("error update")
+				else : 
+					flash(" Email deja existant, veuillez en choisir un autre")
+					
+			if newP != "":
+				pwd=server_function.crypter(newP)
+				if server_function.updateInfoMember("Connex_Membre","mdp_membre",pwd,session['username']) == 0:
+					flash("Changement de mot de passe effectue")
+				else : 
+					print ("error update")
+			return redirect(url_for('profileMember',login=session['username'])) 		
+				
 	else : #affichage debut
 			#nom, prenom, categorie, club, email 
 		result = server_function.getMemberProfile(session['username']) 
@@ -414,8 +468,16 @@ def addLicense(loginClub):
 
 
 
-@app.route('/home/search')
+@app.route('/home/search', methods=['GET', 'POST'])
 def search (): 
+	if request.method == 'POST': 
+		clubName= request.form['club']
+		categorie= request.form['categorie']
+		nameEvent= request.form['NameEvent']
+		date= request.form['date']
+		city= request.form['place']
+		ayoub=server_function.searchResult(city,categorie,nameEvent,date,clubName)
+		print(ayoub)
 	return render_template('search.html')
 
 
@@ -477,6 +539,7 @@ def profileEvent(eventName):
 		elif request.form['subBtn']== "S'inscrire":
 			license= server_function.getLicenseFromLogin(session['username'])
 			server_function.registerEvent(license,nomEv)
+			server_function.updateAvailablePlace(nomEv); 
 			return redirect(url_for('profileEvent',eventName=eventName))
 	
 	if session['mtype']=="Club":

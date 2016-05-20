@@ -578,6 +578,23 @@ def updateInfoClub(table,fields,values,login):
 	finally: 
 		db.close()
 		
+		
+#update les info du membre	
+def updateInfoMember(table,fields,values,login):
+	licence=getLicenseFromLogin(login)
+	db = sqlite3.connect('dtb.db')
+	#cur = db.cursor()
+
+	query = 'UPDATE %s SET %s = "%s" WHERE licence= "%s"' % (table,fields,values,"".join(licence))
+	print (query)
+	try: 
+		db.execute(query)
+		db.commit()
+		return 0
+	except: 
+		print("UPDAT ERROR in ",table) 
+	finally: 
+		db.close()	
 
 
 def registerEvent(license,nomEv): 
@@ -605,3 +622,80 @@ def checkFollowedEvent (license,nomEv):
 		print("Problem with checkFollowedClub")
 	finally: 
 		db.close()
+	
+	
+def searchResult (city,categorie,nameEvent,date,clubName):
+	db= sqlite3.connect('dtb.db')
+	ayoub=[]
+	try: 
+		if clubName != "": 
+			row = db.execute("SELECT nom_club FROM Clubs WHERE nom_club=:nom_club",{"nom_club":clubName}).fetchall()
+			ayoub.append(row)
+		elif city != "":
+			row = db.execute("SELECT ville FROM Clubs WHERE ville=:city",{"city":city}).fetchone()
+			ayoub.append(row)
+		elif categorie !="": 
+			row= db.execute("SELECT categorie FROM Categories WHERE categorie=:categorie",{"categorie":categorie}).fetchone()
+			ayoub.append(row)
+		elif nameEvent !="": 
+			row= db.execute("SELECT nom_ev FROM Evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchone()
+			ayoub.append(row)
+		elif date != "": 
+			row= db.execute("SELECT date_e FROM Evenements WHERE date_e=:date",{"date":date}).fetchone()
+			ayoub.append(row)
+		else: 
+			return -1 
+		
+		print(ayoub)
+		return ayoub
+	except: 
+		print("Problem with searchResult")
+	finally: 
+		db.close()
+
+def updateAvailablePlace(nomEv): 
+	db= sqlite3.connect('dtb.db')
+	try: 
+		nbPlace= db.execute("SELECT nb_places FROM Evenements WHERE nom_ev=:nomEv",{"nomEv":nomEv}).fetchone()
+		print("NOMBRE DE PLACES= "+nbPlace[0])
+		newNbPlace= str(int(nbPlace[0])-1) #Ne marche pas 
+		print("NEW NB PLACE = "+newNbPlace)
+		
+		db.execute('UPDATE Evenements SET nb_places="%s" WHERE nom_ev="%s"'% (newNbPlace,nomEv)) 
+	except: 
+		print("Problem with updateAvailablePlace")
+	finally: 
+		db.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

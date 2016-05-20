@@ -5,8 +5,8 @@ function toUnderScore(str){
 
 
 function modification(){
-
-	
+	var el = document.getElementById("modif");
+	el.setAttribute("value", "Filled");
 }
 
 function checkNewInfoClub(){
@@ -42,12 +42,14 @@ function checkNewInfoClub(){
        	});
 }
 
-function checkNewInfoSportif(){
+function checkNewInfoMember(){
 
 	var outbound_message = {
-	   			'newE': $("#email").val(),
-	   			
+	   			'newE': $("#newEmail").val(),
+	   			'newL': $("#newLogin").val(),
+	   			'action' : "checkInfo",
   		};
+  		console.log(document.URL);
 		$.ajax({
         		type: 'POST',
 		     url: document.URL,
@@ -57,10 +59,16 @@ function checkNewInfoSportif(){
 		       
 		     success: function(response) {
 		     	if(response.newE !== ""){
-		     		$("#test_valid_ID").text(response.newE);
+		     		$("#test_duplicate_email").text(response.newE);
 		     		var el=document.getElementById("test_duplicate_email");
 		     		el.setAttribute("value", "logFilled");
-		     	}	
+		     	}
+		     	if(response.newL !== ""){
+		     		$("#test_duplicate_login").text(response.newL);
+		     		var el=document.getElementById("test_duplicate_login");
+		     		el.setAttribute("value", "logFilled");
+		     	}
+		     		
 		     },
 		     error: function() {
 		           console.log("do not work");

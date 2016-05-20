@@ -31,6 +31,16 @@
 		<article>
 			<h2>{{userName}}</h2><!-- Idem -->
 			<p>
+			<form method='POST' action="/home/profileMember/{{ session['username'] }}">
+			
+				{% with messages = get_flashed_messages() %}
+      			{% if messages %}
+        				{% for message in messages %}
+          				<div class="alert alert-danger">{{ message }}</div>
+        				{% endfor %}
+      			{% endif %}     			
+    				{% endwith %}
+    				
 				<div class="field" id="userLogin">
 					Login : {{userLogin}}<br />
 				</div>
@@ -46,6 +56,23 @@
 				<div class="field" id ="userMail">
 					Email : {{userMail}}<br />
 				</div>
+				<div id="modif" value="_blank">
+					<label for="email">  Nouvel email : </label>
+					<input type="email" name="newEmail" id="newEmail" onkeyup="javascript:checkNewInfoMember();"/>
+					<span class="info" id="test_duplicate_email" value="_blank"></span>
+					<br/>
+					<label for="login"> Nouvel identifiant : </label>
+					<input type="text" name="newLogin" id="newLogin" onkeyup="javascript:checkNewInfoMember();" />
+					<span class="info" id="test_duplicate_login" value="_blank"></span>
+					<br />
+					<label for="pswrd">Nouveau mot de passe : </label>
+					<input type="password" name="newPswrd" id="newPswrd" />
+					<br/>
+					<input type="submit"  name="subBtn" value="Enregistrer les modifications" id="change" class="btn" />
+				</div>
+				
+    				
+    				</form>
 				<div class="ctrl">
 					<input type="button" value="Modifier" id="setup" class="btn" onclick="javascript:modification();"/>
 					<input type="button" value="Evènements suivis" id="eventFollowed" class="btn" onclick="javascript:getEventFollowed();">

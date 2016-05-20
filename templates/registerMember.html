@@ -12,6 +12,13 @@
 	<body>
 		<h1>Inscription</h1>
 		<form method='POST' action={{ url_for('registerMember') }} >
+		{% with messages = get_flashed_messages() %}
+      	{% if messages %}
+        		{% for message in messages %}
+          		<div class="alert alert-danger">{{ message }}</div>
+        		{% endfor %}
+      	{% endif %}     			
+    		{% endwith %}
 			<h2>Informations personnelles</h2>
 			<p>
 				<label for="userName">Nom : </label>
