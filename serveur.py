@@ -470,14 +470,23 @@ def addLicense(loginClub):
 
 @app.route('/home/search', methods=['GET', 'POST'])
 def search (): 
+
 	if request.method == 'POST': 
-		clubName= request.form['club']
-		categorie= request.form['categorie']
-		nameEvent= request.form['NameEvent']
-		date= request.form['date']
-		city= request.form['place']
-		ayoub=server_function.searchResult(city,categorie,nameEvent,date,clubName)
-		print(ayoub)
+		if request.form['subBtn']=='Rechercher Clubs':
+			clubName= request.form['clubName']
+			city= request.form['place']
+			result=server_function.searchResultClub(clubName,city)
+			print(result)
+			
+			
+		if request.form['subBtn']=='Rechercher Evenements':
+			categorie= request.form['categorie']
+			nameEvent= request.form['eventName']
+			date= request.form['date']
+			city= request.form['place']
+			result=server_function.searchResultEv(city,categorie,nameEvent,date)
+			print(result)
+			
 	return render_template('search.html')
 
 
@@ -534,6 +543,7 @@ def profileEvent(eventName):
 		elif request.form['subBtn']== "S'inscrire":
 			license= server_function.getLicenseFromLogin(session['username'])
 			server_function.registerEvent(license,nomEv)
+			place=server_function.updateAvailablePlace(nomEv);
 			place=server_function.updateAvailablePlace(nomEv);
 			print(place) 
 			return redirect(url_for('profileEvent',eventName=eventName))

@@ -624,30 +624,40 @@ def checkFollowedEvent (license,nomEv):
 		db.close()
 	
 	
-def searchResult (city,categorie,nameEvent,date,clubName):
+def searchResultEv (city,categorie,nameEvent,date):
 	db= sqlite3.connect('dtb.db')
-	ayoub=[]
 	try: 
-		if clubName != "": 
-			row = db.execute("SELECT nom_club FROM Clubs WHERE nom_club=:nom_club",{"nom_club":clubName}).fetchall()
-			ayoub.append(row)
+		if nameEvent !="": 
+			row= db.execute("SELECT nom_ev,ville FROM Evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchone()
 		elif city != "":
-			row = db.execute("SELECT ville FROM Clubs WHERE ville=:city",{"city":city}).fetchone()
-			ayoub.append(row)
+			row = db.execute("SELECT nom_ev,ville FROM Evenements WHERE ville=:city",{"city":city}).fetchall()
 		elif categorie !="": 
-			row= db.execute("SELECT categorie FROM Categories WHERE categorie=:categorie",{"categorie":categorie}).fetchone()
-			ayoub.append(row)
-		elif nameEvent !="": 
-			row= db.execute("SELECT nom_ev FROM Evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchone()
-			ayoub.append(row)
+			row= db.execute("SELECT nom_ev,ville FROM Evenements WHERE categorie=:categorie",{"categorie":categorie}).fetchall()
 		elif date != "": 
-			row= db.execute("SELECT date_e FROM Evenements WHERE date_e=:date",{"date":date}).fetchone()
-			ayoub.append(row)
+			row= db.execute("SELECT nom_ev,ville FROM Evenements WHERE date_e=:date",{"date":date}).fetchall()
 		else: 
 			return -1 
 		
-		print(ayoub)
-		return ayoub
+		print(row)
+		return row
+	except: 
+		print("Problem with searchResult")
+	finally: 
+		db.close()
+	
+def searchResultClub (clubName,city):
+	db= sqlite3.connect('dtb.db')
+	try: 
+		if clubName != "" and city !="": 
+			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club AND ville=:ville",{"nom_club":clubName,"ville":city}).fetchone()
+		elif city != "":
+			row = db.execute("SELECT nom_club,ville FROM Clubs WHERE ville=:city",{"city":city}).fetchall()
+		elif clubName != "":
+			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club ",{"nom_club":clubName})	
+		else: 
+			return -1 
+		print(row)
+		return row
 	except: 
 		print("Problem with searchResult")
 	finally: 

@@ -33,7 +33,7 @@
 				<input type="radio" name="searchType" id="typeClub" value="club" onclick="javascript:testRadio()"/><label for="typeClub">Un club</label>
 				<input type="radio" name="searchType" id="typeEvent" value="event" onclick="javascript:testRadio()"/><label for="typeClub">Un évènement</label><br/>
 			</p>
-			<form method="POST" action="/home/search/" id="searchEvent" value="_blank">
+			<form method="POST" action="/home/search" id="searchEvent" value="_blank">
 				<p>
 					<label for="categorie">Catégorie d'âge : </label>
 						<select name="categorie" id="categorie">
@@ -53,11 +53,11 @@
 					<label for="place">Lieu (Ville) : </label>
 					<input type="text" name="place" id="place"/>
 					<div class="button">
-						<input type="submit" class="btn" value="Rechercher"/>
+						<input type="submit" name="subBtn" class="btn" value="Rechercher Evenements"/>
 					</div>
 				</p>
 			</form>
-			<form method="POST" action="/home/search/" id="searchClub" value="_blank">
+			<form method="POST" action="/home/search" id="searchClub" value="_blank">
 				<p>
 					<label for="other">Nom : </label>
 					<input type="text" name="clubName" id="clubName"/>
@@ -66,7 +66,7 @@
 					<input type="text" name="place" id="place"/>
 					<br/>
 					<div class="button">
-						<input type="submit" class="btn" value="Rechercher"/>
+						<input type="submit" name="subBtn" class="btn" value="Rechercher Clubs"/>
 					</div>
 				</p>
 			</form>
