@@ -11,6 +11,30 @@ function toUnderScore(str){
 
 }
 
+function resultSearch(){
+	var outbound_message = { msg : 'hello' };
+	$.ajax({
+		type: 'POST',
+		url: document.URL,
+		data : JSON.stringify(outbound_message),
+		dataType: 'json',
+		contentType : 'application/json; charset=utf-8',
+		success : function(response){
+			if(response.resSearch !== null){
+				for(var i=0; i<response.resSearch.length; i++){
+					document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element_"+i+"'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
+				}
+			}
+			else{
+				document.getElementById("result").innerHTML += "\n\t<section id='no_response'><p>Aucune réponse ne correspond à votre recherche</p></section>";
+			}
+		},
+		error : function(){
+			console.log("do not work");
+		}
+	});
+}
+
 function testRadio(){
 	console.log("testRadio a été appelé");
 	var outbound_message = {
