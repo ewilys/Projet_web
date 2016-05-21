@@ -471,22 +471,30 @@ def addLicense(loginClub):
 @app.route('/home/search', methods=['GET', 'POST'])
 def search (): 
 
-	if request.method == 'POST': 
+	if request.method == 'POST':
+		print('POST recieved') 
+		#if request.json:
 		if request.form['subBtn']=='Rechercher Clubs':
+			print('Club search recieved')
 			clubName= request.form['clubName']
 			city= request.form['place'].capitalize()
 			result=server_function.searchResultClub(clubName,city)
-			print(result)
+			print(result)	
 			
-			
-		if request.form['subBtn']=='Rechercher Evenements':
+		elif request.form['subBtn']=='Rechercher Evenements':
+			printf('Event search recieved')
 			categorie= request.form['categorie']
 			nameEvent= request.form['eventName']
 			date= request.form['date']
 			city= request.form['place']
 			result=server_function.searchResultEv(city,categorie,nameEvent,date)
 			print(result)
+			return jsonify({'resSearch' : result, 'searchType' : 'Event' })
 			
+		if request.json:
+			print('JSON recieved')
+			return jsonify({ 'resSearch' : result, 'searchType' : 'Club' })
+		
 	return render_template('search.html')
 
 
