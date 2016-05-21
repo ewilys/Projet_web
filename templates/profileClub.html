@@ -30,55 +30,54 @@
 		</header>
 		
 		<div class="container">
-		<article>
-			<h2>{{clubName}}</h2>
-			<p>
-			<form method='POST' action="/home/profileClub/{{ session['username'] }}">
-				<div class="field">
-					Ville : {{clubCity}}<br />
-				</div>
-				<div class="field">
-					Nombres de licenciés : {{nbPlayers}}<br />
-				</div>
-				<div class="field">
-					E-mail : {{clubEmail}}<br />
-				</div>
-				<div id="modif" value="_blank">
-					<label for="email">  Nouvel email : </label>
-					<input type="email" name="newEmail" id="newEmail" onkeyup="javascript:checkNewInfoClub();"/>
-					<span class="info" id="test_duplicate_email" value="_blank"></span>
-					<br/>
-					<label for="login"> Nouvel identifiant : </label>
-					<input type="text" name="newLogin" id="newLogin" onkeyup="javascript:checkNewInfoClub();" />
-					<span class="info" id="test_duplicate_login" value="_blank"></span>
-					<br />
-					<label for="pswrd">Nouveau mot de passe : </label>
-					<input type="password" name="newPswrd" id="newPswrd" />
-					<br/>
-					<input type="submit"  name="subBtn" value="Enregistrer les modifications" id="change" class="btn" />
-				</div>
-				{% with messages = get_flashed_messages() %}
-      			{% if messages %}
-        				{% for message in messages %}
-          				<div class="alert alert-danger">{{ message }}</div>
-        				{% endfor %}
-      			{% endif %}     			
+			<article>
+				<h2>{{clubName}}</h2>
+				<p>
+				<form method='POST' action="/home/profileClub/{{ session['username'] }}">
+					<div class="field">
+						Ville : {{clubCity}}<br />
+					</div>
+					<div class="field">
+						Nombres de licenciés : {{nbPlayers}}<br />
+					</div>
+					<div class="field">
+						E-mail : {{clubEmail}}<br />
+					</div>
+					<div id="modif" value="_blank">
+						<div class="field">
+							<label for="email">  Nouvel email : </label>
+							<input type="email" name="newEmail" id="newEmail" onkeyup="javascript:checkNewInfoClub();"/>
+							<span class="info" id="test_duplicate_email" value="_blank"></span>
+						</div>
+						<div class="field">
+							<label for="login"> Nouvel identifiant : </label>
+							<input type="text" name="newLogin" id="newLogin" onkeyup="javascript:checkNewInfoClub();" />
+							<span class="info" id="test_duplicate_login" value="_blank"></span>
+						</div>
+						<div class="field">
+							<label for="pswrd">Nouveau mot de passe : </label>
+							<input type="password" name="newPswrd" id="newPswrd" />
+						</div>
+						<input type="submit"  name="subBtn" value="Enregistrer les modifications" id="change" class="btn" />
+					</div>
+					{% with messages = get_flashed_messages() %}
+      				{% if messages %}
+        					{% for message in messages %}
+          					<div class="alert alert-danger">{{ message }}</div>
+        					{% endfor %}
+      				{% endif %}     			
     				{% endwith %}
-				
-				
-			</form>
-			</p>
-				{% if clubLogged %}
-				<div class="ctrl">
-				
+				</form>
 					<div class="field">
 						Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
 					</div>
-				
+				</p>
+				{% if clubLogged %}
+				<div class="ctrl">
 					<form method='POST'>
 						<p>
 							<input type="button" value="Modifier" id="setup" onclick="javascript:modification();" class="btn"/>
-							<input type="submit"  name="subBtn" value="Creer des Evenements" id="events" class="btn" />
+							<input type="submit"  name="subBtn" value="Créer des Evenements" id="events" class="btn" />
 							<input type="submit" name="subBtn" value="Ajouter des Licences" id="players" class="btn"/>
 						</p>
 					</form>
@@ -100,4 +99,3 @@
 		</div>
 	</body>
 </html>
-		
