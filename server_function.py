@@ -662,7 +662,7 @@ def searchResultClub (clubName,city):
 		print("Problem with searchResult")
 	finally: 
 		db.close()
-
+		
 def updateAvailablePlace(nomEv): 
 	db= sqlite3.connect('dtb.db')
 	try: 
