@@ -52,8 +52,9 @@
 					Quand ? A partir de {{startHour}} le {{dateEvent}}<br/>
 				</div>
 				{% if clubLogged %}
-				<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Retourner sur mon profil<a></li>
-				
+				<div class="ctrl">
+					<a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Retourner sur mon profil<a>
+				</div>	
 				{% else %}
 				<form method = 'POST' >
 					<div class="ctrl" >
