@@ -142,8 +142,21 @@ h2
 
 #modif[value="Filled"]
 {
-	display: block;	
+	display: block;
+	text-align: center;	
 }
+
+#change
+{
+	width: 80%;
+	background-color: rgb(250,167,25);
+}
+
+#change:hover
+{
+	background-color: silver;
+}
+
 strong
 {
 	color: gray;
@@ -169,7 +182,7 @@ strong:hover
 	font-size: 1em;
 	text-align: center;
 	margin-top: 30px;
-	min-width: 250px;
+	min-width: 300px;
 }
 
 .btn:hover
@@ -180,9 +193,65 @@ strong:hover
 .ctrl
 {
 	display: flex;
+	width: 100%;
 	align-items: center;
 	justify-content: space-around;
 	flex-wrap: wrap;
+}
+
+.informations[value="Filled"]
+{
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	background-color: white;
+	border-radius: 8px;
+	font-family: 'robotoregular', sans-serif;
+	box-shadow: 3px 3px 16px black;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	text-align: center;
+	margin-top: 1em;
+}
+
+.informations[value="_blank"]
+{
+	display: none;
+}
+
+.informations a
+{
+	display: block;
+	width: 30%;
+	background-color: rgb(247,27,119);
+	margin: 1%;
+	margin-top: 0.5em;
+	border-radius: 4px;
+	text-decoration: none;
+}
+
+#clubs a
+{
+	background-color: rgb(247,27,119);
+	color: rgb(104,63,171);
+}
+
+#events a
+{
+	background-color: rgb(250,222,65);
+	color: gray;
+}
+
+#no_event, #no_club
+{
+	font-size: 1.2em;	
+}
+
+section h4
+{
+	font-family: 'Pacifico', sans-serif;
+	font-size: 1.2em;
+	font-weight: normal;
 }
 
 .info[value="_blank"]
