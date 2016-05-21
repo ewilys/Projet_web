@@ -57,17 +57,20 @@
 					Email : {{userMail}}<br />
 				</div>
 				<div id="modif" value="_blank">
+					<div class="field">
 					<label for="email">  Nouvel email : </label>
 					<input type="email" name="newEmail" id="newEmail" onkeyup="javascript:checkNewInfoMember();"/>
 					<span class="info" id="test_duplicate_email" value="_blank"></span>
-					<br/>
+					</div>
+					<div class="field">
 					<label for="login"> Nouvel identifiant : </label>
 					<input type="text" name="newLogin" id="newLogin" onkeyup="javascript:checkNewInfoMember();" />
 					<span class="info" id="test_duplicate_login" value="_blank"></span>
-					<br />
+					</div>
+					<div class="field">
 					<label for="pswrd">Nouveau mot de passe : </label>
 					<input type="password" name="newPswrd" id="newPswrd" />
-					<br/>
+					</div>
 					<input type="submit"  name="subBtn" value="Enregistrer les modifications" id="change" class="btn" />
 				</div>
 				
@@ -81,8 +84,8 @@
 			</p>
 		</article>
 		</div>
-		<div id="events" class="informations">
+		<div id="events" class="informations" value="_blank">
 		</div>
-		<div id="clubs" class="informations">
+		<div id="clubs" class="informations" value="_blank">
 	</body>
 </html>
