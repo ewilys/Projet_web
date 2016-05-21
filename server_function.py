@@ -628,13 +628,13 @@ def searchResultEv (city,categorie,nameEvent,date):
 	db= sqlite3.connect('dtb.db')
 	try: 
 		if nameEvent !="": 
-			row= db.execute("SELECT nom_ev,ville FROM Evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchone()
+			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchone()
 		elif city != "":
-			row = db.execute("SELECT nom_ev,ville FROM Evenements WHERE ville=:city",{"city":city}).fetchall()
+			row = db.execute("SELECT nom_ev,adresse FROM Evenements WHERE adresse=:city",{"city":city}).fetchall()
 		elif categorie !="": 
-			row= db.execute("SELECT nom_ev,ville FROM Evenements WHERE categorie=:categorie",{"categorie":categorie}).fetchall()
+			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE categorie=:categorie",{"categorie":categorie}).fetchall()
 		elif date != "": 
-			row= db.execute("SELECT nom_ev,ville FROM Evenements WHERE date_e=:date",{"date":date}).fetchall()
+			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE date_e=:date",{"date":date}).fetchall()
 		else: 
 			return -1 
 		

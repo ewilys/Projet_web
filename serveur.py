@@ -138,7 +138,7 @@ def registerClub():
 			
 		#submission :	
 
-		repRegClub=server_function.sign_up_club(request.form['userName'],request.form['city'],request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation'])
+		repRegClub=server_function.sign_up_club(request.form['userName'],request.form['city'].capitalize(),request.form['email'],request.form['login'],request.form['pswrd'],request.form['noFederation'])
 		print(repRegClub)
 		if repRegClub == 0:
 
@@ -474,7 +474,7 @@ def search ():
 	if request.method == 'POST': 
 		if request.form['subBtn']=='Rechercher Clubs':
 			clubName= request.form['clubName']
-			city= request.form['place']
+			city= request.form['place'].capitalize()
 			result=server_function.searchResultClub(clubName,city)
 			print(result)
 			
@@ -510,7 +510,7 @@ def createEvent(loginClub):
 		
 		else :				
 		#submission :
-			adress=request.form['city']+" "+ request.form['road']
+			adress=request.form['city'].capitalize()+" "+ request.form['road']
 			nameEvent=request.form['nameEvent']
 			categorie=request.form['categorie']
 			nbPlace=request.form['nbPlace']
