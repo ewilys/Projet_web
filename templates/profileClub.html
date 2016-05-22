@@ -20,10 +20,11 @@
 					<ul class="menu">
 						<li><a id="home" href="http://localhost:5000/home/{{ session['username'] }}">Accueil</a></li>
 						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Mon Profil<a></li>
-						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
 						{% if clubLogged %}
 						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}/creaEvent">Créer un évènement</a></li>
 						{% endif %}
+						<li><a href="http://localhost:5000/home/search">Rechercher</a></li>
+						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
 					</ul>
 				</ul>
 			</nav>
@@ -72,7 +73,7 @@
 						Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
 					</div>
 				</p>
-				{% if clubLogged %}
+				{% if clubLogged and session['username'] == clubLogin %}
 				<div class="ctrl">
 					<form method='POST'>
 						<p>
@@ -82,7 +83,7 @@
 						</p>
 					</form>
 				</div>
-				{% else %}
+				{% elif not clubLogged %}
 				<div class="ctrl">
 					<form method='POST'>
 						<p>
