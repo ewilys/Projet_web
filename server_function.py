@@ -624,7 +624,7 @@ def checkFollowedEvent (license,nomEv):
 		db.close()
 	
 	
-def searchResultEv (city,categorie,nameEvent,date):
+def searchResultEv (categorie,nameEvent,date):
 	db= sqlite3.connect('dtb.db')
 	
 		
@@ -652,11 +652,11 @@ def searchResultClub (clubName,city):
 	
 	try: 
 		if clubName != "" and city !="": 
-			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club AND ville=:ville",{"nom_club":clubName,"ville":city}).fetchall()
+			row = db.execute("SELECT nom_club, ville, login_club FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id=cc.club_id AND nom_club=:nom_club AND ville=:ville",{"nom_club":clubName,"ville":city}).fetchall()
 		elif city != "":
-			row = db.execute("SELECT nom_club,ville FROM Clubs WHERE ville=:city",{"city":city}).fetchall()
+			row = db.execute("SELECT nom_club, ville, login_club FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id=cc.club_id AND ville=:city",{"city":city}).fetchall()
 		elif clubName != "":
-			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club ",{"nom_club":clubName}).fetchall()	
+			row = db.execute("SELECT nom_club, ville, login_club FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id=cc.club_id AND nom_club=:nom_club ",{"nom_club":clubName}).fetchall()	
 		else: 
 			return -1 
 		print(row)
@@ -669,10 +669,10 @@ def searchResultClub (clubName,city):
 def updateAvailablePlace(nomEv): 
 	db= sqlite3.connect('dtb.db')
 	try: 
-		nbPlace= db.execute("SELECT nb_places FROM Evenements WHERE nom_ev=:nomEv",{"nomEv":nomEv}).fetchone()
+		nbPlace = db.execute("SELECT nb_places FROM Evenements WHERE nom_ev=:nomEv",{"nomEv":nomEv}).fetchone()
 		print("NOMBRE DE PLACES= "+nbPlace[0])
-		Place= int(nbPlace[0])-1
-		newNbPlace= str(Place)
+		Place = int(nbPlace[0])-1
+		newNbPlace = str(Place)
 		print("NEW NB PLACE = "+newNbPlace)
 		print("le nom DEV est "+nomEv)
 		db.execute("UPDATE Evenements SET nb_places=:nbPlace WHERE nom_ev=:nomEv",{"nbPlace":newNbPlace,"nomEv":nomEv})
@@ -683,5 +683,3 @@ def updateAvailablePlace(nomEv):
 		print("Problem with updateAvailablePlace")
 	finally: 
 		db.close()
-
-
