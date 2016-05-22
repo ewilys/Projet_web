@@ -18,10 +18,11 @@
 					<ul class="menu">
 						<li><a id="home" href="http://localhost:5000/home/{{ session['username'] }}">Accueil</a></li>
 						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Mon Profil<a></li>
-						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
 						{% if clubLogged %}
 						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}/creaEvent">Créer un évènement</a></li>
 						{% endif %}
+						<li><a href="http://localhost:5000/home/search">Rechercher</a></li>
+						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
 					</ul>
 				</ul>
 			</nav>
@@ -59,7 +60,7 @@
 			</form>
 			<form method="POST" action="/home/search" id="searchClub" value="_blank">
 				<p>
-					<label for="other">Nom : </label>
+					<label for="clubName">Nom : </label>
 					<input type="text" name="clubName" id="clubName"/>
 					<br/>
 					<label for="place">Ville : </label>
