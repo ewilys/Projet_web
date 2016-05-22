@@ -626,15 +626,17 @@ def checkFollowedEvent (license,nomEv):
 	
 def searchResultEv (city,categorie,nameEvent,date):
 	db= sqlite3.connect('dtb.db')
+	
+		
 	try: 
 		if nameEvent !="": 
 			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchone()
 		elif city != "":
 			row = db.execute("SELECT nom_ev,adresse FROM Evenements WHERE adresse=:city",{"city":city}).fetchall()
-		elif categorie !="": 
-			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE categorie=:categorie",{"categorie":categorie}).fetchall()
 		elif date != "": 
 			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE date_e=:date",{"date":date}).fetchall()
+		elif categorie !="": 
+			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE categorie=:categorie",{"categorie":categorie}).fetchall()
 		else: 
 			return -1 
 		
@@ -647,6 +649,7 @@ def searchResultEv (city,categorie,nameEvent,date):
 	
 def searchResultClub (clubName,city):
 	db= sqlite3.connect('dtb.db')
+	
 	try: 
 		if clubName != "" and city !="": 
 			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club AND ville=:ville",{"nom_club":clubName,"ville":city}).fetchone()

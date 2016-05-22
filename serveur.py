@@ -473,27 +473,26 @@ def search ():
 
 	if request.method == 'POST':
 		print('POST recieved') 
-		#if request.json:
-		if request.form['subBtn']=='Rechercher Clubs':
-			print('Club search recieved')
-			clubName= request.form['clubName']
-			city= request.form['place'].capitalize()
-			result=server_function.searchResultClub(clubName,city)
-			print(result)	
-			
-		elif request.form['subBtn']=='Rechercher Evenements':
-			printf('Event search recieved')
-			categorie= request.form['categorie']
-			nameEvent= request.form['eventName']
-			date= request.form['date']
-			city= request.form['place']
-			result=server_function.searchResultEv(city,categorie,nameEvent,date)
-			print(result)
-			return jsonify({'resSearch' : result, 'searchType' : 'Event' })
 			
 		if request.json:
 			print('JSON recieved')
-			return jsonify({ 'resSearch' : result, 'searchType' : 'Club' })
+			stype=request.json['stype']
+			print (stype)
+			if stype == "club" :
+				clubName= request.json['clubName']
+				city= request.json['place'].capitalize()
+				result=server_function.searchResultClub(clubName,city)
+				return jsonify({ 'resSearch' : result, 'searchType' : 'Club' })
+			else :
+				categorie= request.json['categorie']
+				nameEvent= request.json['eventName']
+				date= request.json['date']
+				city= request.json['place']
+				result=server_function.searchResultEv(city,categorie,nameEvent,date)
+				print(result)
+				return jsonify({'resSearch' : result, 'searchType' : 'Event' })
+			
+			
 		
 	return render_template('search.html')
 

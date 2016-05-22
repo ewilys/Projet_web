@@ -23,6 +23,7 @@ create table Evenements (
     heure_e text,
     nb_places text,
     etat text,
+    ville text,
     adresse text,
     description text,
     lien_image text,

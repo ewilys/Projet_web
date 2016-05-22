@@ -129,6 +129,13 @@ h2
 	border-radius: 6px;
 }
 
+.alert-danger
+{
+	color: rgb(160, 0, 0);
+	font-weight: bold;
+	font-family: 'robotoregular', sans-serif;
+}
+
 .field
 {
 	margin-top: 20px;

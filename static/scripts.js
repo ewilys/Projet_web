@@ -12,7 +12,26 @@ function toUnderScore(str){
 }
 
 function resultSearch(){
-	var outbound_message = { msg : 'hello' };
+	type = $("input[type=radio][name=searchType]:checked").attr('value') ;
+	console.log(type);
+	if (type == "club"){
+		
+		var outbound_message = { 
+					'stype' : 'club',
+					'clubName': $("#clubName").val(),
+		   			'place': $("#cplace").val(), 
+		   		 };
+		 console.log(outbound_message);
+	}
+	else{
+		var outbound_message = { 
+					'stype' : 'event',
+					'categorie': $("#categorie").val(),
+					'date':$("#date").val(),
+					'eventName': $("#eventName").val(),
+		   			'place': $("#eplace").val(), 
+		   		 };
+	}
 	$.ajax({
 		type: 'POST',
 		url: document.URL,
@@ -21,11 +40,20 @@ function resultSearch(){
 		contentType : 'application/json; charset=utf-8',
 		success : function(response){
 			if(response.resSearch !== null){
-				for(var i=0; i<response.resSearch.length; i++){
-					document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element_"+i+"'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
+				if (type == 'club'){
+					for(var i=0; i<response.resSearch.length; i++){
+						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/home/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element_"+i+"'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
+					}
+				}
+				else{
+					console.log(response.resSearch);
+					for(var i=0; i<response.resSearch.length; i++){
+						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element_"+i+"'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
+					}
 				}
 			}
 			else{
+				console.log ("pas de réponse" );
 				document.getElementById("result").innerHTML += "\n\t<section id='no_response'><p>Aucune réponse ne correspond à votre recherche</p></section>";
 			}
 		},
