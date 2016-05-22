@@ -1,14 +1,12 @@
 var i=0;
 
 function newLicence(){
-	document.getElementById("players").innerHTML += "\n<br/><label for='licence_"+i+"'>Licence "+i+" : </label>\n<input type='number' name='licence_"+i+"' id='licence_"+i+"' onkeyup='javascript:checkDupLicence(id,"+i+");' required/>\n<label for='email_"+i+"'>Email du sportif "+i+" : </label>\n<input type='email' name='email_"+i+"' id='email_"+i+"' onkeyup='javascript:checkDupEmail(id,"+i+");'/>";
+	document.getElementById("players").innerHTML += "\n<br/><label for='licence_"+i+"'>Licence "+i+" : </label>\n<input type='number' name='licence_"+i+"' id='licence_"+i+"' required/>\n<label for='email_"+i+"'>Email du sportif "+i+" : </label>\n<input type='email' name='email_"+i+"' id='email_"+i+"' />";
 	i++;
 }
 
 function toUnderScore(str){
-
 	return str.replace(/ /g,"_");
-
 }
 
 function resultSearch(){
@@ -39,16 +37,21 @@ function resultSearch(){
 		dataType: 'json',
 		contentType : 'application/json; charset=utf-8',
 		success : function(response){
+		
+			var el = document.getElementById("result");
+			var errase = el.innerHTML.replace(/<a[\s\S]*\/a>/,"");
+			document.getElementById("result").innerHTML=errase;
+			
 			if(response.resSearch !== null){
 				if (type == 'club'){
 					for(var i=0; i<response.resSearch.length; i++){
-						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/home/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element_"+i+"'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
+						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/home/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][2])+"'>\n\t<section id='element'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
 					}
 				}
 				else{
 					console.log(response.resSearch[0]);
 					for(var i=0; i<response.resSearch.length; i++){
-						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element_"+i+"'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
+						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
 					}
 				}
 			}
@@ -62,6 +65,7 @@ function resultSearch(){
 		}
 	});
 }
+			
 
 function testRadio(){
 	console.log("testRadio a été appelé");
@@ -83,7 +87,6 @@ function testRadio(){
 	}
 }
 
-//var nbEventTotal=evaluateNbEvent();
 function newSection(){
 	console.log(document.URL);
 	var pos = document.URL.lastIndexOf('/');
@@ -164,5 +167,13 @@ function testEnd(){
 	console.log(valStart);
 	document.getElementById("end").setAttribute("min",valStart);
 	testHour();
+}
+
+function modifProfileMember(){
+	document.getElementById("container").innerHTML +="\n<form method='POST' action=''>\n"
+	for(var i=0; i<6; i++){
+		document.getElementById("field").innerHTML +="\n<input type='text' />"
+	}
+	document.getElementById()
 }
 	
