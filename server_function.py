@@ -630,9 +630,9 @@ def searchResultEv (city,categorie,nameEvent,date):
 		
 	try: 
 		if nameEvent !="": 
-			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchone()
-		elif city != "":
-			row = db.execute("SELECT nom_ev,adresse FROM Evenements WHERE adresse=:city",{"city":city}).fetchall()
+			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE nom_ev=:nameEvent",{"nameEvent":nameEvent}).fetchall()
+		#elif city != "":
+			#row = db.execute("SELECT nom_ev,adresse FROM Evenements WHERE adresse=:city",{"city":city}).fetchall()
 		elif date != "": 
 			row= db.execute("SELECT nom_ev,adresse FROM Evenements WHERE date_e=:date",{"date":date}).fetchall()
 		elif categorie !="": 
@@ -652,11 +652,11 @@ def searchResultClub (clubName,city):
 	
 	try: 
 		if clubName != "" and city !="": 
-			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club AND ville=:ville",{"nom_club":clubName,"ville":city}).fetchone()
+			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club AND ville=:ville",{"nom_club":clubName,"ville":city}).fetchall()
 		elif city != "":
 			row = db.execute("SELECT nom_club,ville FROM Clubs WHERE ville=:city",{"city":city}).fetchall()
 		elif clubName != "":
-			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club ",{"nom_club":clubName})	
+			row = db.execute("SELECT nom_club, ville FROM Clubs WHERE nom_club=:nom_club ",{"nom_club":clubName}).fetchall()	
 		else: 
 			return -1 
 		print(row)

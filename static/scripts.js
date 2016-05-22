@@ -29,7 +29,7 @@ function resultSearch(){
 					'categorie': $("#categorie").val(),
 					'date':$("#date").val(),
 					'eventName': $("#eventName").val(),
-		   			'place': $("#eplace").val(), 
+		   			//'place': $("#eplace").val(), 
 		   		 };
 	}
 	$.ajax({
@@ -46,7 +46,7 @@ function resultSearch(){
 					}
 				}
 				else{
-					console.log(response.resSearch);
+					console.log(response.resSearch[0]);
 					for(var i=0; i<response.resSearch.length; i++){
 						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element_"+i+"'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
 					}

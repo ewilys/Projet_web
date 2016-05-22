@@ -487,7 +487,7 @@ def search ():
 				categorie= request.json['categorie']
 				nameEvent= request.json['eventName']
 				date= request.json['date']
-				city= request.json['place']
+				#city= request.json['place']
 				result=server_function.searchResultEv(city,categorie,nameEvent,date)
 				print(result)
 				return jsonify({'resSearch' : result, 'searchType' : 'Event' })
