@@ -258,7 +258,7 @@ def home(login):
 def profileClub(login): 
 
 	if request.method =='POST' :
-	
+		print("POST detected")
 		#ajax handler
 	 	if request.json:
 	 		newL=request.json['newL']
@@ -317,6 +317,7 @@ def profileClub(login):
 			return redirect(url_for('profileClub',login=session['username'])) 
 		
 		elif request.form['subBtn'] == 'Creer des Evenements':
+		#	print("I want to create events !")
 			return redirect(url_for('createEvent',loginClub=login))
 			
 		elif request.form['subBtn'] == 'Ajouter des Licences': 
@@ -488,13 +489,15 @@ def search ():
 				nameEvent= request.json['eventName']
 				date= request.json['date']
 				#city= request.json['place']
-				result=server_function.searchResultEv(city,categorie,nameEvent,date)
+				result=server_function.searchResultEv(categorie,nameEvent,date)
 				print(result)
 				return jsonify({'resSearch' : result, 'searchType' : 'Event' })
 			
 			
-		
-	return render_template('search.html')
+	if session['mtype'] == 'Club':
+		return render_template('search.html', clubLogged=True)
+	else:	
+		return render_template('search.html')
 
 
 
