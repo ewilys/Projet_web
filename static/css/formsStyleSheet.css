@@ -214,6 +214,7 @@ label
 {
 	text-align: center;
 }
+	
 
 .btn:hover
 {
@@ -234,15 +235,36 @@ label
 	border-radius: 3px;
 }
 
-footer
+#result
 {
-	position: absolute;
-	right: 0%;
-	bottom: 0%;
+	display: flex;
 	width: 100%;
-	height: 3em;
+	justify-content: center;
+	align-items: center;
+}
+
+#element
+{
+	background-color: rgb(12, 135, 173);
+	border: none;
+	border-radius: 8px;
 	color: white;
-	background-color: black;
 	text-align: center;
+	font-size: 1em;
+	padding: 1em;
+	margin: 3%;
+	text-decoration: none;
+	min-width: 180px;
+}
+
+#result a
+{
+	text-decoration: none;
 	font-family: 'robotoregular', sans-serif;
+}
+
+#element h4
+{
+	font-family: 'Pacifico', sans-serif;
+	font-size: 1.2em;
 }
