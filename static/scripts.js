@@ -42,23 +42,25 @@ function resultSearch(){
 			var errase = el.innerHTML.replace(/<a[\s\S]*\/a>/,"");
 			document.getElementById("result").innerHTML=errase;
 			
-			if(response.resSearch !== null){
+			if (response.resSearch[0]=="null"){
+				console.log ("pas de réponse" );
+				document.getElementById("result").innerHTML += "\n\t<section id='element'><p>Aucune réponse ne correspond à votre recherche</p></section>";
+			}
+			else{
+				console.log(response.resSearch[0]);
 				if (type == 'club'){
 					for(var i=0; i<response.resSearch.length; i++){
 						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/home/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][2])+"'>\n\t<section id='element'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
 					}
 				}
 				else{
-					console.log(response.resSearch[0]);
+					
 					for(var i=0; i<response.resSearch.length; i++){
 						document.getElementById("result").innerHTML += "\n\t<a href='http://localhost:5000/profile"+response.searchType+"/"+toUnderScore(response.resSearch[i][0])+"'>\n\t<section id='element'><h4>"+response.resSearch[i][0]+"</h4>\n\t<p>"+response.resSearch[i][1]+"</p></section></a>";
 					}
 				}
 			}
-			else{
-				console.log ("pas de réponse" );
-				document.getElementById("result").innerHTML += "\n\t<section id='no_response'><p>Aucune réponse ne correspond à votre recherche</p></section>";
-			}
+			 
 		},
 		error : function(){
 			console.log("do not work");
@@ -174,6 +176,4 @@ function modifProfileMember(){
 	for(var i=0; i<6; i++){
 		document.getElementById("field").innerHTML +="\n<input type='text' />"
 	}
-	document.getElementById()
 }
-	

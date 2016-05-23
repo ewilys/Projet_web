@@ -659,6 +659,8 @@ def searchResultClub (clubName,city):
 			row = db.execute("SELECT nom_club, ville, login_club FROM Clubs AS c, Connex_Club AS cc WHERE c.club_id=cc.club_id AND nom_club=:nom_club ",{"nom_club":clubName}).fetchall()	
 		else: 
 			return -1 
+		if row ==[] :
+			row=[("null",)]	
 		print(row)
 		return row
 	except: 
@@ -674,11 +676,15 @@ def updateAvailablePlace(nomEv):
 		Place = int(nbPlace[0])-1
 		newNbPlace = str(Place)
 		print("NEW NB PLACE = "+newNbPlace)
-		print("le nom DEV est "+nomEv)
-		db.execute("UPDATE Evenements SET nb_places=:nbPlace WHERE nom_ev=:nomEv",{"nbPlace":newNbPlace,"nomEv":nomEv})
+		db.execute('UPDATE Evenements SET %s = "%s" WHERE nom_ev= "%s"' % ("nb_places",newNbPlace,nomEv))
+		db.commit()
 		row =db.execute("SELECT nb_places FROM Evenements WHERE nom_ev=:nomEv",{"nomEv":nomEv}).fetchone()
 		print row[0]
+		if row[0] == "0":
+			db.execute('UPDATE Evenements SET %s = "%s" WHERE nom_ev= "%s"' % ("etat","close",nomEv))
+			db.commit()
 		return row[0]
+		
 	except: 
 		print("Problem with updateAvailablePlace")
 	finally: 

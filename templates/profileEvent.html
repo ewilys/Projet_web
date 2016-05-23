@@ -33,9 +33,15 @@
 			<h2>{{ eventName }}</h2>
 			<p>
 				<h3>L'évènement</h3>
-				<div class="field">
-					Il reste <strong>{{nbPlaceStillAvailable}}</strong> places<br />
-				</div>
+				{% if nbPlaceStillAvailable == "0" %}
+					<div class="field">
+						<strong>Il ne reste plus de places, cet évènement est complet</strong><br />
+					</div>
+				{% else %}
+					<div class="field">
+						Il reste <strong>{{nbPlaceStillAvailable}}</strong> places<br />
+					</div>
+				{% endif %}
 				<div class="field">
 					Catégorie ciblée : {{categorie}}<br />
 				</div>
@@ -45,6 +51,13 @@
 						{{descEvent}}
 					</p>
 				</div>
+				<!--<div class="field">
+				<h4>Image de l'évènement</h4>
+					<p>
+						<center><img src= '/Meilleur_fond_ecran_nature.jpg' alt="" WIDTH=150
+ HEIGHT=70 ></center>
+					</p>
+				</div>-->
 				<h3>Infos pratiques</h3>
 				<div class="field">
 					Où ? {{cityEvent}} <br />
@@ -60,7 +73,7 @@
 				<form method = 'POST' >
 					<div class="ctrl" >
 						{% if alreadyRegistered %}
-						<input type="button"  value="Déjà inscrit bitch" id="AlreadySignUp" class="btn"/>
+						<input type="button"  value="Déjà inscrit " id="AlreadySignUp" class="btn"/>
 						{% else %} 
 						<input type="submit" name="subBtn" value="S'inscrire" id="signUp" class="btn"/>
 						{%endif%}

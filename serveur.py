@@ -554,7 +554,6 @@ def profileEvent(eventName):
 			license= server_function.getLicenseFromLogin(session['username'])
 			server_function.registerEvent(license,nomEv)
 			place=server_function.updateAvailablePlace(nomEv);
-			place=server_function.updateAvailablePlace(nomEv);
 			print(place) 
 			return redirect(url_for('profileEvent',eventName=eventName))
 	
@@ -568,7 +567,7 @@ def profileEvent(eventName):
 			alreadyRegistered=False
 			clubLogged=True
 	
-		return render_template("profileEvent.html",eventName=nomEv,descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged,alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
+		return render_template("profileEvent.html",eventName=nomEv,image=result[8],descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged,alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':
