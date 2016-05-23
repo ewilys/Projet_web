@@ -23,6 +23,7 @@
 						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}/creaEvent">Créer un évènement</a></li>
 						{% endif %}
 						<li><a href="http://localhost:5000/home/search">Rechercher</a></li>
+						<li><a href="http://localhost:5000/about">A propos</a></li>
 						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
 					</ul>
 				</ul>
@@ -51,11 +52,10 @@
 						{{descEvent}}
 					</p>
 				</div>
-				<!--<div class="field">
-				<h4>Image de l'évènement</h4>
+				<div class="field">
+				<!--<h4>Image de l'évènement</h4>
 					<p>
-						<center><img src= '/Meilleur_fond_ecran_nature.jpg' alt="" WIDTH=150
- HEIGHT=70 ></center>
+						<img src="http://localhost:5000/static/css/img/{{ image }}" alt="image de l'évènement">
 					</p>
 				</div>-->
 				<h3>Infos pratiques</h3>
