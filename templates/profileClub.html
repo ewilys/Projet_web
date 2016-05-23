@@ -68,17 +68,17 @@
         					{% endfor %}
       				{% endif %}     			
     				{% endwith %}
+				{% if clubLogged and session['username'] == clubLogin %}
 				</form>
 					<div class="field">
 						Vous êtes suivi par <strong>{{nbFollowers}}</strong> personnes <br />
 					</div>
 				</p>
-				{% if clubLogged and session['username'] == clubLogin %}
 				<div class="ctrl">
 					<form method='POST'>
 						<p>
 							<input type="button" value="Modifier" id="setup" onclick="javascript:modification();" class="btn"/>
-							<input type="submit"  name="subBtn" value="Créer des Evenements" id="events" class="btn" />
+							<input type="submit"  name="subBtn" value="Creer des Evenements" id="events" class="btn" />
 							<input type="submit" name="subBtn" value="Ajouter des Licences" id="players" class="btn"/>
 						</p>
 					</form>
