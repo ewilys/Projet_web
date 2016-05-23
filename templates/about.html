@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script language="JavaScript" src="http://localhost:5000/static/scripts.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<link rel="stylesheet" href="http://localhost:5000/static/css/aboutStyleSheet.css" />
+		<title>A propos</title>
+	</head>
+	
+	<body>
+		<header>
+			<p>
+				<img src="http://localhost:5000/static/css/img/banniere.png" alt="banniere du site" />
+			</p>
+			<nav>
+				<ul class="nav">
+					<li>Menu Principal</li>
+					<ul class="menu">
+						<li><a id="home" href="http://localhost:5000/home/{{ session['username'] }}">Accueil</a></li>
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}">Mon Profil<a></li>
+						{% if clubLogged %}
+						<li><a id="profile" href="http://localhost:5000/home/profile{{ session['mtype'] }}/{{ session['username'] }}/creaEvent">Créer un évènement</a></li>
+						{% endif %}
+						<li><a href="http://localhost:5000/home/search">Rechercher</a></li>
+						<li><a href="http://localhost:5000/about">A propos</a></li>
+						<li><a href="http://localhost:5000/logout">Déconnexion</a></li>
+					</ul>
+				</ul>
+			</nav>
+		</header>
+		<article>
+			<div class="diapo" id="intro">
+			<h1>A propos de Ev&Sport</h1>
+			<p>
+				Ev&Sport est un modèle de site qui nous a été proposé par la StartUp MatchMe. Le principe du site web est de proposer une 		plateforme de partage d’évènements à des fédérations sportives encore peu développées dans le domaine numérique. L’objectif est de permettre autant à des clubs ou ligues qu’à des sportifs de s’inscrire sur le site et de pouvoir se tenir au courant des évènements proposés par les clubs d’une même fédération.
+    La principale difficulté réside dans la dualité des utilisateurs du site web. En effet, les services se doivent d’être différents selon que l’on est un club ou un sportif. L’agencement global du site web est décrit dans l’image ci-dessous.
+			</p>
+			<p>
+				<img src="http://localhost:5000/static/css/img/arborescence.png" alt="arborescence du site"/>
+			</p>
+		</div>
+		<div class="diapo" id="CC">
+		<h2>Cahier des charges</h2>
+		<p>
+			Le site doit être fonctionnel pour deux types d’adhérents : les clubs et les sportifs. Il doit cependant rester accessible à tous : n'importe quel utilisateur doit pouvoir s'incrire.
+		</p>
+		<div class="CC">
+		<section>
+			<h3>Un sportif...</h3>
+			<p>
+			<ul>
+				<li>...peut-être rattaché à un club (par sa licence) ou non et suivre autant de clubs qu’il le souhaite pour être informé des évènements proposés par ces clubs (par mail, par l'affichage du site...)</li>
+				<li>...peut s’inscrire à autant d’évènements qu’il le souhaite, dans la limite des places disponibles de chaque évènement.</li>
+			</ul>
+			</p>
+		</section>
+		<section>
+			<h3>Les deux types de comptes...</h3>
+			<p>
+			<ul>
+				<li>...doivent pouvoir modifier leurs informations</li>
+				<li>...doivent avoir accès à un service de recherche d’évènements et clubs</li>
+				<li>...doivent bénéficier d’une page d’accueil personnalisée</li>
+			</ul>
+			</p>
+		</section>
+		<section>
+			<h3>Un club...</h3>
+			<p>
+			<ul>
+				<li>...peut créer autant d’évènements qu’il le souhaite</li>
+				<li>...peut rajouter autant de licenciés qu’il le souhaite</li>
+			</ul>
+			</p>
+		</section>
+		</div>
+		</div>
+		<div class="diapo" id="introBE">
+		<h2>Back-End</h2>
+		<h3>Choix techniques généraux</h3>
+		<p>
+			De plus, nous souhaitions respecter le MVC (Model View Controller) et donc séparer l’affichage et le traitement des données. L’utilisation combinée de HTML pour les pages Web et Python pour la génération des pages permet de respecter le MVC. Le modèle correspond au HTML, View et Controlleur seront gérés en Python comme nous le verrons plus tard. <br/>
+			Le python est aussi de plus en plus présent dans le monde du web de nos jours, il était donc intéressant pour nous de travailler avec un langage auquel nous pourrions être confrontés dans l’avenir.<br/>
+Nous utilisons également le framework Flask afin de faciliter la gestion des différentes routes et le développement d’un serveur web. Bien que ce ne soit pas le framework python le plus répandu, nous avons opté pour celui-ci pour sa facilité d’utilisation et de prise en main.<br/>
+Finalement, nous avons deux fichiers python qui permettent de faire tourner notre serveur. Le premier génère et gère les différentes routes tandis que le second contient toutes les fonctions nécessaires à la génération de ces routes. Nous avons en effet trouvé utile de séparer la partie routage de la partie fonctionnelle du serveur. Ce deuxième fichier python contient également toutes les requêtes vers la base de données nécessaires au fonctionnement du site.
+		</p>
+		</div>
+		<div class="diapo" id="precisionsBE">
+		<h3>Sessions</h3>
+		<p>
+			Afin que notre site puisse fonctionner convenablement, nous avons mis en place des sessions chez le client grâce à l’objet “session” inclus dans le framework Flask. Cet objet de type dictionnaire contient nativement différents champs utiles à la définition d’une session comme la durée d’une session et l’ont peut ajouter les attributs qui nous semblent utiles.<br/>
+Lorsqu’un membre ou un club s’identifie ou s’inscrit sur le site, le serveur met à jour l’objet session avec le login du membre ou du club ainsi que le type d’utilisateur (membre ou club). Cet outil permet de simplifier l’accès aux différentes fonctions. En effet, par exemple pour la page profileClub, l’affichage ne se fera pas de la même manière que l’on soit un club ou un membre. Lorsque c’est un membre qui accède à la page, seul un bouton suivre sera affiché (ou un bouton déjà suivi dans le cas où le membre suit déjà le club) alors que si c’est un club qui y accède il y aura des options comme “créer un évènement”, “modifier” ou encore “ajouter des licenciés”.<br/>
+Une session est configuré pour rester active durant 1h. Une fois ce délai dépassé, l’utilisateur (que cela soit un membre ou un club) devra se reconnecter. 
+		</p>
+		<h3>Accession à la base de données et génération des pages</h3>
+		<p>
+			Pour générer les pages HTML, nous avions besoin d’accéder à la base de donnée. Pour cela, nous avons plusieurs fonctions présentes dans le fichier python associé aux fonctions et qui permettent de réaliser les requêtes SQL via l’API de SQLite3. Ce fichier correspond en fait au  Controller du MVC décrit dans l’introduction.
+		</p>
+		<p>
+			Le retour de ces fonctions se fait soit par des booléens (True ou False) dans le cas de vérifications de login / mot de passe par exemple soit sous forme de tuple que l’on peut ensuite traiter afin de générer correctement la page HTML. 
+		</p>
+		<h3>Cryptage des mots de passe</h3>
+		<p>	
+			En ce qui concerne le cryptage des mots de passe, nous avons décidé d’utiliser la bibliothèque hashlib de python permettant de générer un hash correspondant à un algorithme de cryptage donné. Dans notre cas, nous avons opté pour l’utilisation de l’algorithme sha1.<br/>
+Ainsi on transforme le mot de passe en hash qu’on stocke dans la base de données et dès lors qu’un utilisateur se connecte on effectue le hashage du mot de passe entré et on vérifie qu’il correspond bien au hash présent dans notre base de données.
+		</p>
+		</div>
+		<div class="diapo" id="BDD">
+		<h3>Gestion de la base de données</h3>
+		<p>
+			La base de données a été mise en place à l’aide de SQLite3 permettant une manipulation facile des données tout en respectant le cadre de notre projet qui ne nécessite pas un grand flux de données ni la gestion des accès concurrents. De plus, notre objectif était de présenter un modèle de site avec les outils à notre disposition tout en le gardant suffisamment flexible pour pouvoir changer d’outil sans trop de difficulté. Ce choix a été fait sachant qu’à tout moment le passage en MySQL était possible et ne devait pas poser de problèmes.
+		<p>
+			Notre base est constitué de 9 tables dans un fichier d’extension “.sql” étant:
+			<ul>
+				<li>Membres : contenant les informations globales du client qui dans notre cas est un sportif</li>
+				<li>Clubs : contenant les informations et l’identifiant des clubs tels qu’ils sont donnés par les fédérations sportives</li>
+				<li>Evenements : contant toutes les informations relatives un événement donné comme la date, le lieu, la catégorie visée, le club organisateur</li>
+				<li>Inscriptions : faisant la relation entre les membres et les événements auxquels ils sont inscrits</li>
+				<li>Catégorie : Représentant la catégorie du sportif (suivant son âge et les fédérations) : Poussin, Ado, Jeune, Senior</li>
+				<li>Suivis : faisant la relation entre les membres et les clubs qu’ils suivent. Ceci permet par la suite d’afficher les événements correspondants aux clubs suivis pouvant susciter l'intérêt du sportif</li>
+				<li>Connex_membre et Connex_club : comportant le login et le mot de passe hashé. Ces tables ont pour principal but d’effectuer la vérification des données saisies lors de l’authentification soit pour un club ou pour un sportif</li>
+				<li>Listes_catégories : contenant une référence vers le champs catégorie de la table Catégories ne pouvant pas être une clé primaire</li>
+			</ul>
+		</p>
+		<p>
+			<img src="http://localhost:5000/static/css/img/diagramUML.png" alt="diagramme de la DTB"/>
+		</p>
+		<p>
+			D’autre part, les requêtes ont été générées grâce au module sqlite3 de python et ont été testées séparément en utilisant le plugin SqliteManager. Généralement, le résultat de nos requêtes (select) est stocké dans un tuple dont les valeurs sont soit utilisées pour compléter des html, soit pour effectuer des test de présence dans notre base de données.
+		</p>
+		</div>
+		<div class="diapo" id="introFE">
+		<h2>Front-End</h2>
+		<p>	
+			Le front-end repose sur 10 templates HTML5 mis en forme grâce à CSS3. Tout le web design a été codé en dur afin de bien comprendre le fonctionnement de base des langages piliers du web que sont HTML/CSS et de faciliter, par la suite, la prise en main de framework tels que Bootstrap.<br/>
+Les templates sont dynamisés par des scripts javascript qui échangent des données avec le back-end via Ajax et le format JSON. Ainsi, ce sont ces scripts qui permettent l’affichage personnalisé d’une page de profil par exemple. Ces scripts viennent aussi dynamiser les feuilles de style CSS afin d’obtenir des pages initiales légères qui demandent moins de temps de chargement.<br/>
+La start-up MatchMe nous avait transmis leur feuilles de style, pour nous inspirer. Nous voulions l’intégrer à notre site mais l’adaptation était trop longue et nous aurait demandé beaucoup plus de temps. D’autant plus que leur site est à 80% fait via Word Press, donc une partie du CSS y est rattaché.
+		</p>
+		</div>
+		<div class="diapo" id="AJAX">
+		<h3>AJAX</h3>
+		<p>
+			Pour rendre le site le plus dynamique possible sans devoir recharger les pages à chaque changement , nous avons décidé d’utiliser AJAX et jQuery. Pour garantir une expérience utilisateur de qualité, nous avons choisi de le guider un maximum lors de sa connexion ou de son inscription. En effet, nous estimons que l’utilisateur ne doit pas attendre d’envoyer les formulaires de connexion ou d’inscription pour savoir s’il s’est trompé. C’est pour cela que nous affichons dès la première lettre si l’identifiant est correct, ou si l’adresse e-mail est déjà prise. Dans ce cas, AJAX permet le lien entre le back-end qui s’occupe de faire les requêtes nécessaires dans la bases de données, et transmettre les bons messages et le front-end qui les affiche.<br/>
+En plus des vérifications des informations entrées par l’utilisateur, nous utilisons AJAX pour récupérer des données pour afficher des informations supplémentaires dans les pages de profil par exemple ou bien générer la page d’accueil personnalisée.
+		</p>
+		<p>
+			Par ailleurs, nous utilisons également un objet Flash, proposé par le framework Flask, qui permet de faire l’affichage de messages d’alertes si des données erronées sont entrées dans les formulaires. Suivant les résultats des requêtes sql le flash est mis à jour dans le fichier python et est directement utilisable dans les html, ce qui permet son affichage.
+		<p>
+		</div>
+		<div class="diapo" id="suite">
+		<h2>La suite</h2>
+		<p>
+			En plus des fonctionnalités déjà présentes, il reste beaucoup de mécanismes à mettre en oeuvre pour remplir le cahier des charges et transmettre un site modèle valide :
+			<ul>
+				<li>Gérer l’envoi d’e-mail depuis l’application en utilisant l’extension Flask-Mail pour :
+				<ul>
+					<li>Valider les e-mails des utilisateurs avant leur première connexion</li>
+					<li>Envoyer des mails aux licenciés ajoutés par les clubs, indiquant le nom du site, leur numéro de licence et le numéro de fédération de leur club pour qu’ils soient rattachés au club dès leur inscription.</li>
+					<li>Permettre au club de valider des licenciés “manquants” qui veulent se rattacher au club.</li>
+					<li>Envoyer les informations des évènements crées aux catégories concernées</li>
+					<li>Faire des rappels pour les évènements auxquelles l’utilisateur est inscrit...</li>
+				</ul>
+				<li>Afficher des images associées aux évènements : gérer leur stockage, leur affichage...</li>
+				<li>Améliorer la fonction recherche pour pouvoir obtenir les informations que l’on souhaite même si tout n’est pas précisé correctement. (gestion de la casse, recherche de mots non complets dans les champs des tables...)</li>
+				<li>Générer un calendrier dans la page d’accueil plutôt qu’un affichage non ordonné des évènements</li>
+				<li>Gérer la communication entre clubs et/ou ligues en permettant à des clubs d’en suivre d’autres également. Ceci implique l’ajout d’une nouvelle table dans la base de données.</li>
+				<li>Gérer des membres qui ne sont pas des licenciés et donc qui ne sont pas rattachés à des clubs de base mais qui peuvent suivre tous les clubs qu’ils veulent et s’inscrire uniquement aux évènements Public, pas réservés aux licenciés. A l’heure actuelle, tout les évènements sont réservés aux licenciés. Ceci implique d’ajouter une nouvelle table dans la base de données.</li>
+				<li>Permettre au club de déposer un fichier contenant toutes les licences et mettre à jour la base de données avec ce fichier évitant ainsi que le club ajoute ses licences une par une à la main.<li>
+			</ul>
+		</p>
+		</div>
+		<div class="diapo" id="conclusion">
+		<h2>Conclusion</h2>
+		<p>
+			Le site actuel représente le produit minimal que nous voulions pour ce projet. Bien que beaucoup de fonctionnalités n’ont pas pu être mises en place par manque de temps et de connaissances, le site reste fonctionnel et permet d’avoir un aperçu du site “patron” demandé par la start-up MatchMe. En effet, les exigences principales du cahier des charges ont été satisfaites. Par ailleurs, nous offrons un site vitrine qui est basique visuellement car le projet de la start-up est de le traduire en PHP par la suite et d’inclure leur CSS comme signature.
+		</p>
+		</div>
+		</article>
+	</body>
+</html>
