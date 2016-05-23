@@ -317,10 +317,10 @@ def profileClub(login):
 			return redirect(url_for('profileClub',login=session['username'])) 
 		
 		elif request.form['subBtn'] == 'Creer des Evenements':
-			return redirect(url_for('createEvent',loginClub=login))
+			return redirect(url_for('createEvent',loginClub=session['username']))
 			
 		elif request.form['subBtn'] == 'Ajouter des Licences': 
-			return redirect(url_for('addLicense',loginClub=login))
+			return redirect(url_for('addLicense',loginClub=session['username']))
 				
 		#suivre
 		elif request.form['subBtn']=='Suivre':
