@@ -424,6 +424,7 @@ def profileMember(login):
 	else : #affichage debut
 			#nom, prenom, categorie, club, email 
 		result = server_function.getMemberProfile(session['username']) 
+		print "RESULT :"
 		print result
 		if result [0] != False :
 			userName=result[0]+" "+result[1]
@@ -568,6 +569,10 @@ def profileEvent(eventName):
 			clubLogged=True
 	
 		return render_template("profileEvent.html",eventName=nomEv,image=result[8],descEvent=result[7],cityEvent=result[6],dateEvent=result[2],startHour=result[3],categorie=result[1],nbPlaceStillAvailable=result[4],clubLogged=clubLogged,alreadyRegistered=alreadyRegistered) #AAAAA VOIR 
+
+@app.route('/about')
+def about():
+	return render_template('about.html')
 # ............................................................................................... #
 #lancement appli
 if __name__ == '__main__':
