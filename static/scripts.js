@@ -41,10 +41,12 @@ function resultSearch(){
 			var el = document.getElementById("result");
 			var errase = el.innerHTML.replace(/<a[\s\S]*\/a>/,"");
 			document.getElementById("result").innerHTML=errase;
+			errase = el.innerHTML.replace(/<section[\s\S]*\/section>/, "");
+			document.getElementById("result").innerHTML=errase;
 			
-			if (response.resSearch[0]=="null"){
+			if (response.resSearch[0]==null || response.resSearch[0]=="null"){
 				console.log ("pas de réponse" );
-				document.getElementById("result").innerHTML += "\n\t<section id='element'><p>Aucune réponse ne correspond à votre recherche</p></section>";
+				document.getElementById("result").innerHTML += "\n\t<section id='no_result'><p>Aucune réponse ne correspond à votre recherche</p></section>";
 			}
 			else{
 				console.log(response.resSearch[0]);
@@ -126,7 +128,9 @@ function testDate(id){
         }
      if (id=="start"){
         document.getElementById(id).setAttribute("min",resultat);
+        document.getElementById(id).setAttribute("placeholder",resultat);
         document.getElementById("end").setAttribute("min",resultat);
+        document.getElementById("end").setAttribute("placeholder", resultat);
         }
 }
 
@@ -142,6 +146,7 @@ function testHour(){
 		hour=''+hours+':'+minutes+'';
 		console.log(hour);
 		document.getElementById("hour").setAttribute("min",hour);
+		document.getElementById("hour").setAttribute("placeholder",hour);
 	}
 }
 
