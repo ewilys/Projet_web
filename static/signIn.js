@@ -31,6 +31,61 @@ function checkLog() {
        	});
 }
 
+function checkDupLicence(id, i) {
+		
+		var outbound_message = {
+	   			'licence': document.getElementById(id).value,
+	   			'num':""+i+"",
+	   			'action': "chkDupLi",
+  		};
+		$.ajax({
+        		type: 'POST',
+		     url: document.URL,
+		     data: JSON.stringify(outbound_message),         
+	    		dataType: 'json',
+	    		contentType: 'application/json; charset=utf-8', 
+		       
+		     success: function(response) {
+		     	if(response.dL !== ""){
+		     		console.log(response.dL)
+		     		$("#test_duplicate_licence").text(response.dL);
+		     		var el=document.getElementById("test_duplicate_licence");
+		     		el.setAttribute("value", "Filled")
+		     	}
+		     },
+		     error: function() {
+		           console.log("do not work");
+		     }
+       	});
+}
+
+function checkDupEmail(id, i) {
+		
+		var outbound_message = {
+	   			'email': document.getElementById(id).value,
+	   			'num':""+i+"",
+	   			'action': "chkDupEm",
+  		};
+		$.ajax({
+        		type: 'POST',
+		     url: document.URL,
+		     data: JSON.stringify(outbound_message),         
+	    		dataType: 'json',
+	    		contentType: 'application/json; charset=utf-8', 
+		       
+		     success: function(response) {
+		     	if(response.dE !== ""){
+		     		$("#test_duplicate_email").text(response.dE);
+		     		var el=document.getElementById("test_duplicate_email");
+		     		el.setAttribute("value", "Filled")
+		     	}
+		     },
+		     error: function() {
+		           console.log("do not work");
+		     }
+       	});
+}
+
 function checkSignUpMember() {
 		
 		var outbound_message = {
@@ -120,13 +175,11 @@ function checkSignUpClub() {
        	});
 }
 
-
-
-
 function checkNameEvent() {
 		
 		var outbound_message = {
 	   			'nameE': $("#nameEvent").val(),
+	   			
   		};
 		$.ajax({
         		type: 'POST',
@@ -140,62 +193,6 @@ function checkNameEvent() {
 		     		$("#test_duplicate_name").text(response.nameE);
 		     		var el=document.getElementById("test_duplicate_name");
 		     		el.setAttribute("value", "Filled");
-		     	}
-		     },
-		     error: function() {
-		           console.log("do not work");
-		     }
-       	});
-}
-
-
-function checkDupLicence(id, i) {
-		
-		var outbound_message = {
-	   			'licence': document.getElementById(id).value,
-	   			'num':""+i+"",
-	   			'action': "chkDupLi",
-  		};
-		$.ajax({
-        		type: 'POST',
-		     url: document.URL,
-		     data: JSON.stringify(outbound_message),         
-	    		dataType: 'json',
-	    		contentType: 'application/json; charset=utf-8', 
-		       
-		     success: function(response) {
-		     	if(response.dL !== ""){
-		     		console.log(response.dL)
-		     		$("#test_duplicate_licence").text(response.dL);
-		     		var el=document.getElementById("test_duplicate_licence");
-		     		el.setAttribute("value", "Filled")
-		     	}
-		     },
-		     error: function() {
-		           console.log("do not work");
-		     }
-       	});
-}
-
-function checkDupEmail(id, i) {
-		
-		var outbound_message = {
-	   			'email': document.getElementById(id).value,
-	   			'num':""+i+"",
-	   			'action': "chkDupEm",
-  		};
-		$.ajax({
-        		type: 'POST',
-		     url: document.URL,
-		     data: JSON.stringify(outbound_message),         
-	    		dataType: 'json',
-	    		contentType: 'application/json; charset=utf-8', 
-		       
-		     success: function(response) {
-		     	if(response.dE !== ""){
-		     		$("#test_duplicate_email").text(response.dE);
-		     		var el=document.getElementById("test_duplicate_email");
-		     		el.setAttribute("value", "Filled")
 		     	}
 		     },
 		     error: function() {
